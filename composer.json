@@ -1,0 +1,11 @@
+{
+    "name": "framework/framework",
+    "require": {
+    },
+    "autoload": {
+    	"psr-4": {
+    		"framework\\": "vendor/framework" ,
+    		"app\\": "app" 
+    	}
+    }
+}
