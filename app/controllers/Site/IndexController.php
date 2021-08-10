@@ -1,7 +1,6 @@
 <?php 
 
 namespace app\controllers\Site;
-
 use  app\models\Index;
 
 class IndexController extends \framework\core\Controller{ 
@@ -10,8 +9,7 @@ class IndexController extends \framework\core\Controller{
 	{
 		$page = "main page";
 
-
-
+		//$this->logger->log('Успех!' , 'success_register');
 		$this->render('index' , compact('page'));
 	}
 

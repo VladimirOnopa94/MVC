@@ -46,3 +46,16 @@ return $data;
 
 <?php app\widgets\Footer::widget(); ?>
 
+----------------------------------------
+
+*******************ЛОГИРОВАНИЕ******************* 
+
+Вызываем в коде $this->logger->log('text' , 'success_register');
+
+где "text" текст который нужно записать,
+
+"success_register" - файлов для записи указываем в config.php в кностанте LOG_PARAM['logs']['name_log' => 'path_to_file_log',..]
+
+ 
+
+

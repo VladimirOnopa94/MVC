@@ -1,6 +1,7 @@
 <?php 
 
 namespace framework\core;
+use Exception;
 
 /**
  * 
@@ -24,19 +25,32 @@ class Widget
 			extract($result);
 		}
 
-
-		$view = ltrim($result['view'],'/');
+		try{
+		   	/*Если не установлен путь к виду*/
+			if (isset($result['view'])){
+				$view = ltrim($result['view'],'/');
 		
-		$file_view = APP . "/views/" . $view . ".php";
+				$file_view = APP . "/views/" . $view . ".php";
+			}else{
+		    	throw new Exception("View path not set");
+		    }
 
-		if (is_file($file_view)){
 
-			require_once $file_view;
+		    try{
+		   		/*Если нет такого вида по заданому пути*/
+				if (is_file($file_view)){
+					require_once $file_view;
+				}else{
+			    	throw new Exception("View " . $file_view . " not found !");
+			    }
+			} 
+			catch (Exception $ex) {
+			    echo $ex->getMessage();
+			}
 
-		}else{
-
-			echo "View " . $file_view . " not found !";
-
+		} 
+		catch (Exception $ex) {
+		    echo $ex->getMessage();
 		}
 
 		

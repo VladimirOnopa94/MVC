@@ -3,15 +3,19 @@
  * 
  */
 namespace framework\core;
+use framework\core\Logger;
 
 abstract class Controller 
 {
 
 	public $layout;
+	public $logger;
 
 	function __construct($layout = '')
 	{
 		$this->layout = $layout ?: LAYOUT;
+		$this->logger = new Logger;
+
 
 	}
 

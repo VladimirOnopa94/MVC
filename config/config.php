@@ -12,7 +12,16 @@ define("CONFIG", dirname(__DIR__).'/config');
 define("APP", dirname(__DIR__).'/app');
 /* Корень сайта */
 define("ROOT", dirname(__DIR__));
-/* Каталог кэша */
-define("CACHE", dirname(__DIR__).'/cache');
+/* Логи */
+define("LOG_PARAM", 
+	[
+		'log_dir' =>  ROOT . '/log' , // директория логов
+		'maxLogSize' => 10240 , // максимальный размер файла, после которогор файл будет очищен
+		'logs' => [ //массив файлов логов
+			'success_register' => ROOT . '/log/register/success.log',
+			'fail_payment' => ROOT . '/log/payment/fail.log'
+		] 
+	]
+);
 /* Шаблон по умолчанию */
 define("LAYOUT", 'default');

@@ -3,8 +3,9 @@
 namespace app\widgets;
 use framework\core\Widget;
 
+
 /*
-$data['data'] = array('1','2'); не обязательній параметр данных для вида
+$data['data'] = array('1','2'); не обязательный параметр данных для вида
 $data['view'] = 'widgets/sidebar' обязательный параметр , передаем путь к виду виджета;
 */
 
@@ -20,4 +21,4 @@ class Sidebar extends \framework\core\Widget{
 
 
 	
-}
+} 
