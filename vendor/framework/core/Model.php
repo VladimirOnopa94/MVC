@@ -3,7 +3,7 @@
 
 namespace framework\core;
 
-use vendor\core\Db;
+use \framework\core\Db;
 
 abstract class Model
 {

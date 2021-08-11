@@ -1,5 +1,6 @@
 <?php 
 namespace framework\core;
+use Exception;
 
 /**
  * Логика роутинга приложения
@@ -11,7 +12,7 @@ class Router
 
 	function __construct()
 	{
-		$this->router = require_once CONFIG.'/router.php' ;
+		$this->router = require_once CONFIG . '/router.php' ;
 
 		$this->default_route = 'default' ;
 
@@ -167,19 +168,19 @@ class Router
 
 				} else {
 
-					die("Method {$method} not exsist in {$controller} ");
+					throw new Exception("Method {$method} not exsist in {$controller}");
 
 				}
 
 			} else {
 
-				die("Class {$controller} not exsist");
+				throw new Exception("Class {$controller} not exsist");
 
 			}
 
 		} else {
 
-			die('Not found variable $routeStr');
+			throw new Exception('Not found variable $routeStr');
 
 		}
 
@@ -195,13 +196,10 @@ class Router
 		if ( $url =  $this->getUrl() ) {
 			
  			if ($response = $this->matchRoute($url)) {
-
  				$this->callControllerMethod ($response);
-
  			} else {
-
- 				echo '404 page';
-
+ 				http_response_code(404);
+ 				include APP . '/views/404.html';
  			}
 	
 		}

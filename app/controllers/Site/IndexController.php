@@ -1,7 +1,8 @@
 <?php 
 
 namespace app\controllers\Site;
-use  app\models\Index;
+use app\models\Index;
+
 
 class IndexController extends \framework\core\Controller{ 
 
@@ -9,7 +10,6 @@ class IndexController extends \framework\core\Controller{
 	{
 		$page = "main page";
 
-		//$this->logger->log('Успех!' , 'success_register');
 		$this->render('index' , compact('page'));
 	}
 
@@ -21,15 +21,15 @@ class IndexController extends \framework\core\Controller{
 
 	public function Category($request)
 	{
-		$category = "cat 1";
+		//$category = "cat 1";
 
 		$index = new Index();
 
-		$data = $index->getUser($request->catAlias);
+		$categorys = $index->getCategory($request->id);
 
+		//dd($category);
 		
-		
-		$this->render('category/index' , compact('category'));
+		$this->render('category/index' , compact('categorys'));
 
 	}
 	

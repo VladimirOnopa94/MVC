@@ -4,6 +4,7 @@
  */
 namespace framework\core;
 use framework\core\Logger;
+use framework\core\ErrorHandler;
 
 abstract class Controller 
 {
@@ -15,8 +16,7 @@ abstract class Controller
 	{
 		$this->layout = $layout ?: LAYOUT;
 		$this->logger = new Logger;
-
-
+		new ErrorHandler();	
 	}
 
 	//

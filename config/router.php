@@ -3,6 +3,6 @@
 return [
 	'' 								    => 'Site\IndexController@Index',
 	'category/{catAlias}/{prodAlias}'	=> 'Site\IndexController@Product',
-	'category/{catAlias}' 				=> 'Site\IndexController@Category',
+	'category/{id}' 					=> 'Site\IndexController@Category',
 ];
 

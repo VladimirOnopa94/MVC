@@ -1,9 +1,5 @@
 <?php 
 
-ini_set('display_startup_errors', 1);
-ini_set('display_errors', 1);
-error_reporting(-1);
-
 /* Публичный каталог */
 define("PUBLIC", dirname(__DIR__).'/public');
 /* Каталог конфига */
@@ -12,12 +8,15 @@ define("CONFIG", dirname(__DIR__).'/config');
 define("APP", dirname(__DIR__).'/app');
 /* Корень сайта */
 define("ROOT", dirname(__DIR__));
+
+define("DEBUG", true);
 /* Логи */
 define("LOG_PARAM", 
 	[
-		'log_dir' =>  ROOT . '/log' , // директория логов
+		'log_dir' =>  ROOT . '/log' , 
 		'maxLogSize' => 10240 , // максимальный размер файла, после которогор файл будет очищен
-		'logs' => [ //массив файлов логов
+		'logs' => [ //массив файлов лога
+			'error' => ROOT . '/log/error.log',
 			'success_register' => ROOT . '/log/register/success.log',
 			'fail_payment' => ROOT . '/log/payment/fail.log'
 		] 

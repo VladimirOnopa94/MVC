@@ -21,8 +21,8 @@ class Logger
 				$file =  LOG_PARAM['logs'][$file] ;
 				
 				if (file_exists($file)) {
-					
-					if (filesize($file) > LOG_PARAM['maxLogSize']) {
+					/*Очищаем файл если он превысил размер */
+					if (filesize($file) > LOG_PARAM['maxLogSize']) { 
 						file_put_contents($file, "");
 					}
 
@@ -33,9 +33,11 @@ class Logger
 					$dir = implode('/', $dir);
 
 					try{
-						if (!mkdir($dir, 0777, true)){
-								throw new Exception("Impossible to create dir " . $dir );
-							}
+						if (!file_exists($dir)) {
+							if (!mkdir($dir, 0777, true)){
+									throw new Exception("Impossible to create dir " . $dir );
+								}
+							} 
 						} 
 					catch (Exception $ex) {
 					    echo $ex->getMessage();
@@ -44,10 +46,13 @@ class Logger
 
 				$d_t = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 				$f_elem = array_shift($d_t);
-
-				$massage  =  date('Y-m-d H:i:s') . ' '. $f_elem['file'] . ':' . $f_elem['line']  . ' message : ' . $massage;
+				if (is_array($massage)) {
+					$massage  =  '['. date('Y-m-d H:i:s') . '] '. implode(' ', $massage);
+				}elseif (is_string($massage)) {
+					$massage  =  '['. date('Y-m-d H:i:s') . '] '. $f_elem['file'] . ':' . $f_elem['line']  . ' message : ' . $massage;
+				}
 				
-				error_log(  $massage . PHP_EOL, 3, $file);
+				error_log($massage . PHP_EOL, 3, $file);
 			}else{
 				throw new Exception("Undefined index: " . $file . ' in config "LOG_PARAM[`logs`]"'  );
 			}
