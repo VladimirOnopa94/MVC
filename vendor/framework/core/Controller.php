@@ -4,6 +4,7 @@
  */
 namespace framework\core;
 use framework\core\Logger;
+use framework\core\Language;
 use framework\core\ErrorHandler;
 
 abstract class Controller 
@@ -25,11 +26,19 @@ abstract class Controller
 
 	public function render($view = '', $data = array() )
 	{
-
 		$view = new View($view, $data, $this->layout);
-
 		$view->getView();
 
 	}
+
+	/*
+	Подключение языкового файла
+	*/
+	public function language($view)
+	{
+		Language::init($_COOKIE['lang'], $view);
+	}
+
+	
 	
 }

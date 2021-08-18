@@ -1,0 +1,8 @@
+[2021-08-17 14:42:22] /var/www/wmiv0G/vag.wmi.biz.ua/app/controllers/Site/IndexController.php 11 Class 'app\controllers\Site\Language' not found
+[2021-08-17 14:46:22] /var/www/wmiv0G/vag.wmi.biz.ua/app/controllers/Site/IndexController.php 12 Call to undefined method app\controllers\Site\IndexController::l_trns()
+[2021-08-17 14:50:13] /var/www/wmiv0G/vag.wmi.biz.ua/app/controllers/Site/IndexController.php 12 Call to undefined method app\controllers\Site\IndexController::l_trns()
+[2021-08-17 14:50:39] /var/www/wmiv0G/vag.wmi.biz.ua/app/controllers/Site/IndexController.php 12 Call to undefined method app\controllers\Site\IndexController::l_trns()
+[2021-08-17 14:51:24] /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Language.php 20 Undefined variable: view
+[2021-08-17 15:03:40] /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Language.php 23 syntax error, unexpected 'if' (T_IF)
+[2021-08-17 15:06:05] /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Language.php 26 syntax error, unexpected ';', expecting ')'
+[2021-08-18 01:42:23] /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Controller.php 39 Undefined index: lang

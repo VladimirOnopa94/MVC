@@ -1,6 +1,7 @@
 <?php 
 
 namespace framework\core;
+use framework\core\Language;
 use Exception;
 
 /**
@@ -30,7 +31,7 @@ class Widget
 			if (isset($result['view'])){
 				$view = ltrim($result['view'],'/');
 		
-				$file_view = APP . "/views/" . $view . ".php";
+				$file_view = ROOT . "/vendor/framework/widgets/views/" . $view . ".php";
 			}else{
 		    	throw new Exception("View path not set");
 		    }
@@ -52,8 +53,13 @@ class Widget
 		catch (Exception $ex) {
 		    echo $ex->getMessage();
 		}
-
-		
+	}
+	/*
+	Подключение языкового файла
+	*/
+	public function language($view)
+	{
+		Language::init($_COOKIE['lang'], $view);
 	}
 
 

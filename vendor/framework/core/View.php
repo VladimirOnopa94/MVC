@@ -26,6 +26,7 @@ class View
 
 	public function getView ()
 	{
+		
 		$view = ltrim($this->view,'/');
 		
 		$file_view = APP . "/views/" . $view . ".php";

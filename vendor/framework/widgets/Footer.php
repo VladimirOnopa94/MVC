@@ -1,6 +1,6 @@
 <?php 
 
-namespace app\widgets;
+namespace framework\widgets;
 use framework\core\Widget;
 
 /*
@@ -13,7 +13,7 @@ class Footer extends \framework\core\Widget{
 	public  function run()
 	{
 		$data['footer_data'] = 'footer_data';
-		$data['view'] = 'widgets/footer';
+		$data['view'] = 'footer';
 
 		return $data;
 	}

@@ -9,13 +9,14 @@ class IndexController extends \framework\core\Controller{
 	public function index()
 	{
 		$page = "main page";
-
+		$this->language('index');
 		$this->render('index' , compact('page'));
 	}
 
 
 	public function Product($request)
 	{
+		echo "Product";
 
 	}
 
@@ -27,7 +28,7 @@ class IndexController extends \framework\core\Controller{
 
 		$categorys = $index->getCategory($request->id);
 
-		//dd($category);
+		
 		
 		$this->render('category/index' , compact('categorys'));
 

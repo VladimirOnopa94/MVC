@@ -11,16 +11,24 @@ define("ROOT", dirname(__DIR__));
 
 define("DEBUG", true);
 /* Логи */
-define("LOG_PARAM", 
-	[
-		'log_dir' =>  ROOT . '/log' , 
-		'maxLogSize' => 10240 , // максимальный размер файла, после которогор файл будет очищен
-		'logs' => [ //массив файлов лога
-			'error' => ROOT . '/log/error.log',
-			'success_register' => ROOT . '/log/register/success.log',
-			'fail_payment' => ROOT . '/log/payment/fail.log'
-		] 
-	]
-);
+define("LOG_PARAM", [
+	'log_dir' =>  ROOT . '/log' , 
+	'maxLogSize' => 10240 , // максимальный размер файла, после которогор файл будет очищен
+	'logs' => [ //массив файлов лога
+		'error' => ROOT . '/log/error.log',
+		'success_register' => ROOT . '/log/register/success.log',
+		'fail_payment' => ROOT . '/log/payment/fail.log'
+	] 
+]);
+/*Языки*/
+define("LANG", [
+	'def_lang' => 'ru',
+	'langs' =>  [ // список языков
+		'ru' => [ 'name' => 'Русский', 'image' => ''], 
+		'ua' => [ 'name' => 'Украинский', 'image' => ''], 
+		'en' => [ 'name' => 'Английский', 'image' => ''], 
+	] , 
+	'show_default' =>  true // отображать язык по умолчанию в url
+]);
 /* Шаблон по умолчанию */
 define("LAYOUT", 'default');

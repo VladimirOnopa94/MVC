@@ -12,7 +12,7 @@ class Router
 
 	function __construct()
 	{
-		$this->router = require_once CONFIG . '/router.php' ;
+		$this->router = require_once CONFIG . '/route.php' ;
 
 		$this->default_route = 'default' ;
 
@@ -26,16 +26,26 @@ class Router
 	
 
 	private  function getUrl (){
-
+		$url = '';
 		if ( isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '' ) {
-
-			return trim($_SERVER['QUERY_STRING']);
-
-		} elseif ( $_SERVER['QUERY_STRING'] == '' ) { // Метод по умолчанию указан в router.php как пустой ( '' => 'SomeController' )
-
-			return $this->default_route;
-
+			$url = trim($_SERVER['QUERY_STRING']);
 		}
+
+	/*
+		$url = explode('/', $url);
+		if (LANG['show_default'] && array_search($url[0], LANG['langs'])) {
+			
+			unset($url[0]);
+		}
+		$url = rtrim(implode('/', $url),'/');*/
+			
+		
+
+		if ( $url == '' ) { // Метод по умолчанию указан в route.php как пустой ( '' => 'SomeController' )
+			$url = $this->default_route;
+		}
+
+		return $url;
 
 	}
 
@@ -44,7 +54,7 @@ class Router
 	//
 
 	private function matchRoute ($url) {
-
+		
 		$urlOriginal = $url;
 
 		$url = explode('/', $url);
@@ -54,7 +64,7 @@ class Router
 			$routePattern = explode('/', ltrim($pattern, '/'));
 
 			// сразу сравниваем кол. параметров массивов роут строки и url адресса
-
+			
 			if ( count($routePattern) != count($url) ) { 
 				continue;
 			}
@@ -62,16 +72,20 @@ class Router
 			$resultUrl = array();
 
 			foreach ($routePattern as $k => $routeParam) {
-
+				
 				preg_match('/^{\w+}/', $routeParam, $matches);
 
-				// Если найден параметр {N}
+				if ( !empty($routeParam) && empty($matches) && strpos($routeParam, $url[$k]) === false ) {		
+					break;	
+				}
 
-				if ( !empty($routeParam) && !empty($matches) ) {
+				
+				if ( !empty($routeParam) && !empty($matches)  ) {
 					
 					// заменяем параметр {N} параметром из url
 
 					$resultUrl[] = preg_replace('/^{\w+}/', $url[$k], $routeParam);
+
 
 					$routeParamReplace = str_replace('{', '', $routeParam);	
 
@@ -106,7 +120,7 @@ class Router
 					
 					$resultUrl[] = $routeParam;
 
-				}
+				}	
 				
 			}
 
@@ -126,9 +140,14 @@ class Router
 
 			} else {
 
-				return false;
+				continue;
 
 			}
+			
+		
+			
+
+			
 			
 		}
 	
@@ -146,7 +165,7 @@ class Router
 
 		
 		if($request){
-
+			
 			$str = explode('@', $request['controller']);
 
 
@@ -194,8 +213,8 @@ class Router
 	public function run (){
 
 		if ( $url =  $this->getUrl() ) {
-			
  			if ($response = $this->matchRoute($url)) {
+
  				$this->callControllerMethod ($response);
  			} else {
  				http_response_code(404);

@@ -1,7 +1,8 @@
+<?php framework\widgets\Lang::widget(); ?>
 
 <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
   <div class="sidebar-module sidebar-module-inset">
-    <h4><?php echo $title; ?></h4>
+    <h4> <?php echo  __("title_sidebar") ?> </h4>
     <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
   </div>
   <div class="sidebar-module">
