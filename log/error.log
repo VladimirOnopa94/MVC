@@ -6,3 +6,7 @@
 [2021-08-17 15:03:40] /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Language.php 23 syntax error, unexpected 'if' (T_IF)
 [2021-08-17 15:06:05] /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Language.php 26 syntax error, unexpected ';', expecting ')'
 [2021-08-18 01:42:23] /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Controller.php 39 Undefined index: lang
+[2021-08-18 14:56:41] /var/www/wmiv0G/vag.wmi.biz.ua/app/controllers/Site/LangController.php 15 Cannot modify header information - headers already sent by (output started at /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Language.php:54)
+[2021-08-18 15:22:46] /var/www/wmiv0G/vag.wmi.biz.ua/app/controllers/Site/LangController.php 13 Cannot modify header information - headers already sent by (output started at /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Language.php:60)
+[2021-08-18 18:21:42] /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Widget.php 62 Call to undefined method framework\core\Language::init()
+[2021-08-18 18:24:08] /var/www/wmiv0G/vag.wmi.biz.ua/vendor/framework/core/Widget.php 62 Call to undefined method framework\core\Language::init()

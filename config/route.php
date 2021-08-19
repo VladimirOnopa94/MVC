@@ -1,9 +1,8 @@
 <?php 
 
 return [
-	'' 								    => 'Site\IndexController@Index',
-	'category/{catAlias}/{prodAlias}'	=> 'Site\IndexController@Product',
-	'category/{id}' 					=> 'Site\IndexController@Category',
-	'language/{code}' 					=> 'Site\LangController@SetLang',
+	'{lang}' 								    => 'Site\IndexController@Index',
+	'{lang}/category/{catAlias}/{prodAlias}'	=> 'Site\IndexController@Product',
+	'{lang}/category/{id}' 					=> 'Site\IndexController@Category',
 ];
 

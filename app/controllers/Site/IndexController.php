@@ -2,9 +2,9 @@
 
 namespace app\controllers\Site;
 use app\models\Index;
+use framework\core\Controller;
 
-
-class IndexController extends \framework\core\Controller{ 
+class IndexController extends Controller{ 
 
 	public function index()
 	{
@@ -22,13 +22,9 @@ class IndexController extends \framework\core\Controller{
 
 	public function Category($request)
 	{
-		//$category = "cat 1";
-
 		$index = new Index();
 
 		$categorys = $index->getCategory($request->id);
-
-		
 		
 		$this->render('category/index' , compact('categorys'));
 

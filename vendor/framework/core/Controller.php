@@ -36,7 +36,7 @@ abstract class Controller
 	*/
 	public function language($view)
 	{
-		Language::init($_COOKIE['lang'], $view);
+		Language::includeLang($_COOKIE['lang'], $view);
 	}
 
 	

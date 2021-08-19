@@ -1,6 +1,7 @@
 <?php 
 namespace framework\core;
 use Exception;
+use framework\core\Language;
 
 /**
  * Логика роутинга приложения
@@ -14,7 +15,7 @@ class Router
 	{
 		$this->router = require_once CONFIG . '/route.php' ;
 
-		$this->default_route = 'default' ;
+		$this->default_route = '' ;
 
 		$this->run() ;
 
@@ -24,26 +25,18 @@ class Router
 	//Извлекаем url
 	//
 	
-
 	private  function getUrl (){
 		$url = '';
 		if ( isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '' ) {
 			$url = trim($_SERVER['QUERY_STRING']);
-		}
-
-	/*
-		$url = explode('/', $url);
-		if (LANG['show_default'] && array_search($url[0], LANG['langs'])) {
-			
-			unset($url[0]);
-		}
-		$url = rtrim(implode('/', $url),'/');*/
-			
-		
-
-		if ( $url == '' ) { // Метод по умолчанию указан в route.php как пустой ( '' => 'SomeController' )
+		}elseif ( $url == '' ) { // Метод по умолчанию указан в route.php как пустой ( '' => 'SomeController' )
 			$url = $this->default_route;
 		}
+		
+		/*Если переключен язык производится редирект , иначе ничего не происходит*/
+		Language::isLangSwitch($url);  
+		/*Формирование url с учетом языка*/
+		$url = Language::transformUrl($url);
 
 		return $url;
 
@@ -143,11 +136,6 @@ class Router
 				continue;
 
 			}
-			
-		
-			
-
-			
 			
 		}
 	

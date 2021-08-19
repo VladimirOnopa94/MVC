@@ -1,24 +1,24 @@
 *******АРХИТЕКТУРА ФРЕЙМВОРКА*******
 
---app
-	--controllers
-	--models
-	--views
-	--language
-		--ru
-		--en
-		--ua
---config
---log
---public
-	--css
-	--js
---vendor
-	--composer
-	--framework
-		--core
-		--widgets
-			--views
+app
+	controllers
+	models
+	views
+	language
+		ru
+		en
+		ua
+config
+log
+public
+	css
+	js
+vendor
+	composer
+	framework
+		core
+		widgets
+			views
 
 
 
@@ -98,7 +98,25 @@ $this->language('index');
 
 <?php echo  __("title_sidebar") ?>
 
- 
+----
+
+Переключение языков проиходит по url : 
+
+language/{code}
+
+где code - код выбраного языка
+
+---
+
+Для формирования ссылок в видах используем функцию 
+
+lLink('/someUrl') 
+
+которая выводит ссылку сформированую с выбраным языком 
+
+/someUrl будет преобразована в {code}/someUrl
+
+где {code} будет подставлен выбраный язык пользователя
 
 
 
