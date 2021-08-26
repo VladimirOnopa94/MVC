@@ -1,7 +1,10 @@
 <?php 
 
 return [
-	'dsn' => 'mysql:host=localhost;dbname=rip;charset=utf8',
+	'host' => 'localhost',
+	'driver' => 'mysql',
+	'dbname' => 'rip',
 	'user' => 'u_ripdap',
-	'password' => 'Jud8eyYv'
+	'password' => 'Jud8eyYv',
+	'charset' => 'utf8'
 ];

@@ -16,7 +16,7 @@ class Language
 	public static function includeLang ($code = LANG['def_lang'], $view )
 	{
 
-		$lang_file = APP . '/language/' . $code . '/' .$view . '.php';
+		$lang_file = APP . '/language/' . $code . '/' . $view . '.php';
 		
 		if (file_exists($lang_file)) {
 			self::$lang_data = require_once $lang_file;
@@ -46,6 +46,13 @@ class Language
 		$isHasLang =  array_key_exists ($url[0], LANG['langs']);
 		$isDefLang =  $_COOKIE['lang'] == LANG['def_lang'];
 
+		//для AJAX запросов 
+		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+			array_unshift($url, $_COOKIE['lang']);
+			$resultUrl = rtrim(implode('/', $url),'/');
+			return $resultUrl;
+		}
+
 		/*Если в $_COOKIE['lang'] язык по умолч. и отключен показ языка по умолч. 
 		и в юрл языка нет то добавим для работы роутера*/
 		if (!$isHasLang && !LANG['show_default'] && $isDefLang) {
@@ -53,6 +60,7 @@ class Language
 			$resultUrl = rtrim(implode('/', $url),'/');
 			return $resultUrl;
 		}
+
 		/*Если в $_COOKIE['lang'] язык по умолч. и отключен показ языка по умолч. 
 		и в юрл есть язык то вірежем его из url и перенаправим без него*/
 		if ($isHasLang && !LANG['show_default'] && $isDefLang) {
@@ -90,7 +98,7 @@ class Language
 			setcookie('lang' , $code, time() +3600*24*7, '/');
 		}
 
-		header("Location: " . $_SERVER['REDIRECT_HTTP_REFERER']);die;
+		header("Location: " . $_SERVER['REDIRECT_HTTP_REFERER'] , true);die;
 	}
 
 	/*

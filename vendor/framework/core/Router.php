@@ -2,6 +2,7 @@
 namespace framework\core;
 use Exception;
 use framework\core\Language;
+use framework\core\Csrf;
 
 /**
  * Логика роутинга приложения
@@ -10,15 +11,19 @@ class Router
 {
 	
 	protected $router = [];
+	
 
 	function __construct()
 	{
+		session_start();
+
+		CSRF::getCSRFToken();
+
 		$this->router = require_once CONFIG . '/route.php' ;
 
 		$this->default_route = '' ;
 
-		$this->run() ;
-
+		$this->run();
 	}
 
 	//	
@@ -48,6 +53,27 @@ class Router
 
 	private function matchRoute ($url) {
 		
+		
+		$getParamArray = array();
+
+		// Обрабатываем $_GET параметры из url если они есть
+
+		if ( strpos($url, '=') ) { 
+			if (strpos($url, '?')) { 
+				$getParamArray = explode('?', $url);
+				$getParamArray = array_slice($get_par,1);
+				$url = strtok($url, '?');
+			}elseif (strpos($url, '&')) { 
+				$getParamArray = explode('&', $url);
+				$getParamArray = array_slice($getParamArray,1);
+				$url = strtok($url, '&');
+			}
+			foreach ($getParamArray as $key => $value) {
+				$get_part = explode('=', $value);
+				$response['params'][$get_part[0]] = $get_part[1]; 
+			}
+		}
+
 		$urlOriginal = $url;
 
 		$url = explode('/', $url);
@@ -68,10 +94,9 @@ class Router
 				
 				preg_match('/^{\w+}/', $routeParam, $matches);
 
-				if ( !empty($routeParam) && empty($matches) && strpos($routeParam, $url[$k]) === false ) {		
+				if ( !empty($routeParam) && empty($matches) && strpos($routeParam, $url[$k]) === false ) {	
 					break;	
 				}
-
 				
 				if ( !empty($routeParam) && !empty($matches)  ) {
 					
@@ -79,32 +104,21 @@ class Router
 
 					$resultUrl[] = preg_replace('/^{\w+}/', $url[$k], $routeParam);
 
-
 					$routeParamReplace = str_replace('{', '', $routeParam);	
 
 					$routeParamReplace = str_replace('}', '', $routeParamReplace);
 
+			
+					/* Если есть $_GET параметр news ( пример /category/news )
 
-					// Обрабатываем $_GET параметры из url
+					или параметр about ( пример /page/about ) и т.п. */
 
-					$get_params = explode('&', $url[$k]);
-
-					foreach ($get_params as $key => $value) {
-
-						if ( strpos($value, '=') ) { // Если есть $_GET параметр ( пример var=1 )
-							
-							$str = explode('=', $value);
-
-							$response['params'][$str[0]] = $str[1]; 
-						} else {
-
-							/* Если есть $_GET параметр news ( пример /category/news )
-
-							или параметр about ( пример /page/about ) и т.п. */
-
-							$response['params'][$routeParamReplace] = $value;
-						}		
-
+					foreach ($url as $key => $value) {
+						$isLang =  array_key_exists ($value, LANG['langs']);
+						if (!$isLang) {/*Игнорируем параметр языка в массиве*/
+							$response['params'][$value] = $value; 
+						}
+						
 					}
 
 				}// Если найден статический параметр
@@ -117,7 +131,10 @@ class Router
 				
 			}
 
+
+			
 			$resultUrl = rtrim(implode('/', $resultUrl),'/');
+
 
 			if ( $resultUrl == $urlOriginal ) {
 
@@ -170,7 +187,7 @@ class Router
 				$controllerObj = new $controller;
 
 				if ( method_exists($controllerObj, $method)) {
-
+					
 					$controllerObj->$method($request);
 
 				} else {
@@ -211,6 +228,8 @@ class Router
 	
 		}
 	}
+
+
 
 
 }

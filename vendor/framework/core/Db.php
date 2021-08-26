@@ -1,6 +1,7 @@
 <?php 
 
 namespace framework\core;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 /**
  *  DB
@@ -8,19 +9,29 @@ namespace framework\core;
 
 class Db 
 {
-	protected $pdo;
 	protected static $instance;
 
 	protected function __construct()
 	{
 		$db = require ROOT . '/config/db.php';
 
-		$options = [
-			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-			\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
-		];
+		$capsule = new Capsule;
 
-		$this->pdo = new \PDO ( $db['dsn'], $db['user'], $db['password'], $options);
+		$capsule->addConnection([
+		    'driver' => $db['driver'],
+		    'host' => $db['host'],
+		    'database' => $db['dbname'],
+		    'username' => $db['user'],
+		    'password' => $db['password'],
+		    'charset' => $db['charset'],
+		    'collation' => 'utf8_unicode_ci',
+		    'prefix' => '',
+		]);
+
+		$capsule->setAsGlobal();  //this is important
+		$capsule->bootEloquent();
+		
+
 	}
 
 	public static function instance() 
@@ -31,23 +42,4 @@ class Db
 		return self::$instance;
 	}
 
-	public  function execute($sql ,$params = []) 
-	{
-		$stmp = $this->pdo->prepare($sql);
-
-		return $stmp->execute($params);
-	}
-
-	public  function query($sql,$params = []) 
-	{
-		$stmp = $this->pdo->prepare($sql);
-
-		$res = $stmp->execute($params);
-
-		if ($res !== false) {
-			return $stmp->fetchAll();
-		}
-
-		return [];
-	}
 }

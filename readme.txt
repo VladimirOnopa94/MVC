@@ -118,6 +118,45 @@ lLink('/someUrl')
 
 где {code} будет подставлен выбраный язык пользователя
 
+---
+Ajax запросы нужно производить без указания в запросе метки языка 
+
+
+$.ajax({
+  url: "/page/some",
+  data: {test:'test'},
+  success: function(){
+  }
+});
+
+в массиве роутов запишем с указанием метки языка {lang}
+
+'{lang}/page/some' 	=> 'Site\IndexController@Page'
+
+
+********************Валидация форм*******************
+
+Используется библиотека respect-validation
+DOCS https://respect-validation.readthedocs.io/en/latest/
+
+Пример валидации 
+if (isset($_POST)) {
+
+	$credentials = array('email' => $_POST['email'] , 'password' => $_POST['password']);
+
+	$validator = v::key('email', v::email()->notEmpty())
+            	->key('password', v::length(6,null));
+	try {
+		$validator->assert($credentials);
+		.....
+		
+	} catch(NestedValidationException $exception) {
+	   print_r($exception->getMessages());
+	}
+	
+}
+
+
 
 
 

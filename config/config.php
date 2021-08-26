@@ -1,5 +1,5 @@
 <?php 
-
+ini_set('memory_limit', '256M');
 /* Публичный каталог */
 define("PUBLIC", dirname(__DIR__).'/public');
 /* Каталог конфига */

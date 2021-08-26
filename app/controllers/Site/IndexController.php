@@ -1,6 +1,6 @@
 <?php 
-
 namespace app\controllers\Site;
+
 use app\models\Index;
 use framework\core\Controller;
 
@@ -17,7 +17,11 @@ class IndexController extends Controller{
 	public function Product($request)
 	{
 		echo "Product";
+	}
 
+	public function Page($request)
+	{
+		echo "Page";
 	}
 
 	public function Category($request)

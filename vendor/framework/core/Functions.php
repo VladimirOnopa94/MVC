@@ -18,3 +18,8 @@ function getLang()
 {
 	echo \framework\core\Language::getLang();
 }
+//Вывести текущий язык
+function getCsrfToken() 
+{
+	return \framework\core\Csrf::getCSRFToken();
+}
