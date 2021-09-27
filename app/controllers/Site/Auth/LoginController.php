@@ -3,26 +3,25 @@ namespace app\controllers\Site\Auth;
 
 use app\models\Index;
 use framework\core\Controller;
-use framework\core\Auth\Authenticate;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException;
 
 
 class LoginController extends Controller{ 
 
-	use Authenticate;
 
 	//public $csrf = false;
 
-	public function index()
+	public function Index()
 	{
+		$this->setTitle('Вход');
+		
 		$this->render('Auth/AuthLogin');
 	}
 
 	public function Login()
 	{
 		
-		//var_dump($request);
 		if (isset($_POST)) {
 
 			$credentials = array('email' => $_POST['email'] , 'password' => $_POST['password']);
@@ -32,8 +31,9 @@ class LoginController extends Controller{
 			try {
 				$validator->assert($credentials);
 
-				if ($this->Auth($credentials)) {
-					var_dump("s");
+				if ($this->Auth($credentials, false)) {
+					flashMessage('success', 'Успешно вошли');
+					redirect('/');
 				}
 				
 			} catch(NestedValidationException $exception) {
@@ -42,6 +42,11 @@ class LoginController extends Controller{
 			
 		}
 
+	}
+
+	public function Logout() /*TODO*/
+	{
+		$this->logoutUser();
 	}
 
 

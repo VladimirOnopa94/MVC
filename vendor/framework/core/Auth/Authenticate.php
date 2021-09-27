@@ -3,62 +3,74 @@ namespace framework\core\Auth;
 use app\models\Auth\User;
 
 trait Authenticate{    
-
+    
 	/*
-		Аутентификация пользователя по полям переданым полям 
-		password являеться обязательным полем по умолчанию  
-		email являеться обязательным но может содержать и другое поле например login 
+		Аутентификация пользователя 
+        $afterRegisteration - true  если вызов функции после регистрации, false если не после регистрации
 	*/
-    public function Auth($credentials) {
-
-        return true;
-        return $credentials;
-    } 
-
-    /* 
-    	Регистрация пользователя 
-    */
-    public function Register($credentials) {
-        if (!self::checkUserExist($credentials)) {
-
-            /*TODO*/
-            
-            //return $user; 
+    public function Auth($user, $afterRegisteration) {
+         
+        if (gettype($user) !== 'object') { /*Преоразовывем в объект если нужно*/
+            $user = (object) $user;
         }
-        //return true;
-        return null;    
+        /*Если вызов с страницы например логина проверим 
+        есть ли такой пользователь если есть идем дальше иначе 
+        возвращаем false */
+        if (!$afterRegisteration) { 
+            $userDb = self::userByEmail($user->email);
+           
+            if (empty($userDb) || $userDb->password !== md5($user->password)) {
+                return false;
+            }else{
+                $user = $userDb;
+            }
+        }
         
+        $userObj = new User;
+
+        if ($user = $userObj->checkUserExist($user->email)) {
+
+            unset($_SESSION['user']);
+            if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+                $_SESSION['user']['email'] = $user->email; 
+                $_SESSION['user']['user_id'] = $user->id; 
+                return true;
+            }
+        }
+        return null;    
     } 
+   
+    /*
+        Проверка залогинен ли пользователь
+    */
+    public static function checkAuth() {
+        if (isset($_SESSION['user']) || !empty($_SESSION['user'])) {
+            return $_SESSION['user'];
+        }
+        return false;
+    }
 
     /*
-        Проверка существует ли пользователь
+        Получение пользователя по id
     */
-    public static function checkUserExist($data) {
+    public static function userById($id) {
         $user = new User;
-        unset($data['password']);
-
-        /*Если указано поле login*/
-        if (array_key_exists('login', $data) ) {
-            $user = $user->getUserByField('login', $data['login']); 
-        }elseif (array_key_exists('email', $data)) { /*Если указано поле email*/
-            $user = $user->getUserByField('email', $data['email']); 
-        }
-        if (!empty($user)) {
-            return $user; 
-        }
-        return null; 
-        
+        return $user->getUserById($id);
     }
-    /*Проверка залогинен ли пользователь*/
-    public static function checkAuth() {
 
+    /*
+        Получение пользователя по email
+    */
+    public static function userByEmail($email) {
+        $user = new User;
+        return $user->getUserByEmail($email);
     }
-    /*Получение пользователя*/
-    public static function user() {
-
+    /*
+        Разлогинить юзера
+    */
+    public function logoutUser() {
+        unset($_SESSION['user']);
+        redirectBack();die;
     }
-    /*Получение id пользователя*/
-    public static function id() {
-
-    }
+  
 }

@@ -90,7 +90,7 @@ class Language
 	}
 
 	/*
-		Переключаем язык и редиректиб на url с которого было нажатие
+		Переключаем язык и редиректим на url с которого было нажатие
 	*/
 	public static function SetLang($code)
 	{	
@@ -98,7 +98,7 @@ class Language
 			setcookie('lang' , $code, time() +3600*24*7, '/');
 		}
 
-		header("Location: " . $_SERVER['REDIRECT_HTTP_REFERER'] , true);die;
+		redirectBack();die;
 	}
 
 	/*
@@ -136,8 +136,7 @@ class Language
 			}else{
 				array_unshift($url, $_COOKIE['lang']);
 			}
-			$resultLink = rtrim(implode('/', $url),'/');
-
+			$resultLink = '/' . rtrim(implode('/', $url),'/');
 			return $resultLink;
 		}
 

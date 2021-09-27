@@ -101,24 +101,31 @@ class Router
 				if ( !empty($routeParam) && !empty($matches)  ) {
 					
 					// заменяем параметр {N} параметром из url
-
+					
 					$resultUrl[] = preg_replace('/^{\w+}/', $url[$k], $routeParam);
 
 					$routeParamReplace = str_replace('{', '', $routeParam);	
 
 					$routeParamReplace = str_replace('}', '', $routeParamReplace);
 
-			
+					
 					/* Если есть $_GET параметр news ( пример /category/news )
 
 					или параметр about ( пример /page/about ) и т.п. */
+					if ($routeParamReplace != 'lang') {
+						$response['params'][$routeParamReplace] = $url[$k];
+					}
 
 					foreach ($url as $key => $value) {
 						$isLang =  array_key_exists ($value, LANG['langs']);
 						if (!$isLang) {/*Игнорируем параметр языка в массиве*/
-							$response['params'][$value] = $value; 
+							if (isset($_POST) && $_POST) { //Пишем POST параметры в response
+								foreach ($_POST as $k_post => $v_post) {
+									$response['params'][$k_post] = $v_post; 
+								}
+							}
+							//$response['params'][$value] = $value; // ?????
 						}
-						
 					}
 
 				}// Если найден статический параметр
@@ -223,7 +230,7 @@ class Router
  				$this->callControllerMethod ($response);
  			} else {
  				http_response_code(404);
- 				include APP . '/views/404.html';
+ 				include APP . '/views/404.php';
  			}
 	
 		}

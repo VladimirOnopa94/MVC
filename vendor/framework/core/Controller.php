@@ -5,6 +5,8 @@
 namespace framework\core;
 use framework\core\Logger;
 use framework\core\Language;
+use framework\core\Mail;
+use framework\core\Auth\Authenticate;
 use Exception;
 
 //use framework\core\ErrorHandler;
@@ -12,9 +14,12 @@ use Exception;
 abstract class Controller 
 {
 
+	public $title;
 	public $layout;
 	public $logger;
 	public $csrf ;
+	
+	use Authenticate;
 
 	function __construct($layout = '')
 	{
@@ -31,28 +36,47 @@ abstract class Controller
 	
 	/*
 		Передаем имя вида , данные , и вызываем файл вида
-	*/
-		
+	*/	
 	public function render($view = '', $data = array() )
 	{
-		$view = new View($view, $data, $this->layout);
+		$view = new View($view, $data, $this->layout,  $this->title);
 		$view->getView();
-
 	}
 
 	/*
 		Подключение языкового файла
 	*/
-
 	public function language($view)
 	{
 		Language::includeLang($_COOKIE['lang'], $view);
 	}
 
 	/*
+		Функция отправки писем
+	*/
+	public function sendMail($subject, $message, $to, $headers, $view, $data)
+	{
+		$mail = new Mail($subject, $message, $to, $headers, $view, $data);
+		$mail = $mail->init();
+	}
+
+	/*
+		Задать заголовок
+	*/
+	public function setTitle($title)
+	{
+		if (isset($title) && !empty($title)) {
+			$this->title = $title;
+			return;
+		}
+		$this->title = '';
+		return;
+		
+	}
+	
+	/*
 		Проверка наличия и валидности переданого CSRF токена 
 	*/
-
 	private function checkCSRF ()
 	{
 		if ($this->csrf) { 

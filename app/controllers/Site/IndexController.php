@@ -1,15 +1,19 @@
 <?php 
 namespace app\controllers\Site;
 
-use app\models\Index;
+use app\models\Category;
 use framework\core\Controller;
 
 class IndexController extends Controller{ 
 
+	public $csrf = false; 
+
 	public function index()
 	{
-		$page = "main page";
+		$page = "Главная";
 		$this->language('index');
+		$this->setTitle('Главная');
+		
 		$this->render('index' , compact('page'));
 	}
 

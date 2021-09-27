@@ -1,9 +1,10 @@
 <?php 
 
 namespace framework\core;
+//use framework\core\Auth\Authenticate;
 
 /**
- * 
+ *  View class
  */
 class View 
 {
@@ -11,12 +12,15 @@ class View
 	public $view ;
 	public $data ;
 	public $layout ;
+	public $title ;
+	//use Authenticate;
 
-	function __construct($view, $data, $layout)
+	function __construct($view, $data, $layout, $title)
 	{
 		$this->view = $view;
 		$this->data = $data;
 		$this->layout = $layout;
+		$this->title = $title;
 
 	}
 
@@ -60,6 +64,18 @@ class View
 			echo "Layout " . $file_layout . " not found !";
 
 		}
+	}
+	
+	/*
+		Получить заголовок страницы
+	*/
+	public function getTitle()
+	{
+		if (isset($this->title) && !empty($this->title)) {
+			return $this->title;
+		}
+		return '';
+		
 	}
 
 }

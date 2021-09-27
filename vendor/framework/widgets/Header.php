@@ -9,13 +9,13 @@ $data['data'] = array('1','2'); не обязательный параметр �
 $data['view'] = 'widgets/sidebar' обязательный параметр , передаем путь к виду виджета;
 */
 
-class Sidebar extends \framework\core\Widget{ 
+class Header extends \framework\core\Widget{ 
 
 	public  function run()
 	{
-		$data['title'] = 'sidebar';
-		$data['view'] = 'sidebar';
-		$this->language('sidebar');
+		$data['title'] = 'Header';
+		$data['view'] = 'header';
+		$this->language('header');
 
 		return $data;
 	}

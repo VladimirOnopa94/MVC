@@ -3,8 +3,8 @@
 return [
 	'host' => 'localhost',
 	'driver' => 'mysql',
-	'dbname' => 'rip',
-	'user' => 'u_ripdap',
-	'password' => 'Jud8eyYv',
+	'dbname' => 'frameworkvag',
+	'user' => 'u_frameworkv',
+	'password' => 'nHCrsFBg',
 	'charset' => 'utf8'
 ];

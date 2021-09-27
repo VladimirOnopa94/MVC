@@ -2,6 +2,7 @@
 
 namespace framework\core;
 use framework\core\Language;
+//use framework\core\Auth\Authenticate;
 use Exception;
 
 /**
@@ -9,11 +10,11 @@ use Exception;
  */
 class Widget 
 {
+	//use Authenticate;
 
 	//
 	//Подключаем файл вида и передаем переменные 
 	//
-
 	public static function widget ()
 	{
 

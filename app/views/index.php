@@ -1,16 +1,31 @@
-<div class="col-sm-8 blog-main">
-          <div class="blog-post">
-            <h2 class="blog-post-title"><?php echo __("title"); ?> </h2>
-            <p class="blog-post-meta">January 1, 2014 by <a href="/<?php lLink('someUrl') ?>">Mark</a></p>
+<div class=" blog-main">
+    
+    <h2 class="blog-post-title"><?php echo __("title"); ?></h2>
 
-            <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>
-            <hr>
-            <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
-            <blockquote>
-              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            </blockquote>
-      
-          </div><!-- /.blog-post -->
+    <?php if ($messege = flashMessage('success')) { ?>
+     <div class="alert alert-success" role="alert">
+        <?php echo $messege;  ?>
+      </div>
+    <?php } ?>
+
+    <div class="jumbotron">
+      <h1 class="display-4">Hello, world!</h1>
+      <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+      <hr class="my-4">
+      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+      <p class="lead">
+        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+      </p>
+    </div>
+
+    <figure class="text-center">
+      <blockquote class="blockquote">
+        <p>A well-known quote, contained in a blockquote element.</p>
+      </blockquote>
+      <figcaption class="blockquote-footer">
+        Someone famous in <cite title="Source Title">Source Title</cite>
+      </figcaption>
+    </figure>
 
 
 </div><!-- /.blog-main -->
