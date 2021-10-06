@@ -1,7 +1,6 @@
 {
     "name": "framework/framework",
     "require": {
-        "respect/validation": "^2.2",
         "illuminate/database": "^8.55"
     },
     "autoload": {

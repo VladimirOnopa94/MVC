@@ -17,7 +17,7 @@ trait Authenticate{
         есть ли такой пользователь если есть идем дальше иначе 
         возвращаем false */
         if (!$afterRegisteration) { 
-            $userDb = self::userByEmail($user->email);
+            $userDb = self::getUserByName($user->name);
            
             if (empty($userDb) || $userDb->password !== md5($user->password)) {
                 return false;
@@ -28,11 +28,11 @@ trait Authenticate{
         
         $userObj = new User;
 
-        if ($user = $userObj->checkUserExist($user->email)) {
+        if ($user = $userObj->checkUserExist($user->name)) {
 
             unset($_SESSION['user']);
             if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-                $_SESSION['user']['email'] = $user->email; 
+                $_SESSION['user']['name'] = $user->name; 
                 $_SESSION['user']['user_id'] = $user->id; 
                 return true;
             }
@@ -59,11 +59,11 @@ trait Authenticate{
     }
 
     /*
-        Получение пользователя по email
+        Получение пользователя по name
     */
-    public static function userByEmail($email) {
+    public static function getUserByName($name) {
         $user = new User;
-        return $user->getUserByEmail($email);
+        return $user->getUserByName($name);
     }
     /*
         Разлогинить юзера

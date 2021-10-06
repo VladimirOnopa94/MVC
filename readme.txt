@@ -135,27 +135,36 @@ $.ajax({
 '{lang}/page/some' 	=> 'Site\IndexController@Page'
 
 
-********************Валидация форм*******************
+********************Валидация данных*******************
 
-Используется библиотека respect-validation
-DOCS https://respect-validation.readthedocs.io/en/latest/
+Доступные типы валидации
 
+max:10 - макс кол. символов
+min:2 -  мин кол. символов
+required -  поле обязательное
+date -  поле должно быть датой
+email - поле должно содержатьemail
+numeric - поле должно быть числом
+alphanumeriс - поле должно содержать только буквы или цифры
+alpha - поле должно содержать только буквы
+image - файл должен быть изображением
+mimes:xml,rar - файл должен содержать допустимые расширения
+
+-------
 Пример валидации 
-if (isset($_POST)) {
 
-	$credentials = array('email' => $_POST['email'] , 'password' => $_POST['password']);
+	$credentials = array('name' => $_POST['name'] , 'password' => $_POST['password'], 'file' => $_POST['file']);
 
-	$validator = v::key('email', v::email()->notEmpty())
-            	->key('password', v::length(6,null));
-	try {
-		$validator->assert($credentials);
-		.....
-		
-	} catch(NestedValidationException $exception) {
-	   print_r($exception->getMessages());
-	}
+	VD::load($credentials);
+
+	$errors = VD::validate([
+		'name' => 'required|alpha' , 
+		'password' => 'required|numeric|max:10|min:2' , 
+		'file' => 'required|mimes:xml' , 
+	]); 
+
+в переменную $errors записываются все ошибки
 	
-}
 
 ********************Временные сообщения *******************
 
@@ -219,3 +228,4 @@ $this->sendMail(
 	'mail/mail', //шаблон письма 
 	compact('var')	//Переменные в шаблон письма
 );
+

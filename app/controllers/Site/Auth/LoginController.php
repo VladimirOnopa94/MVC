@@ -3,9 +3,7 @@ namespace app\controllers\Site\Auth;
 
 use app\models\Index;
 use framework\core\Controller;
-use Respect\Validation\Validator as v;
-use Respect\Validation\Exceptions\NestedValidationException;
-
+use framework\core\Validate as VD;
 
 class LoginController extends Controller{ 
 
@@ -18,26 +16,36 @@ class LoginController extends Controller{
 		
 		$this->render('Auth/AuthLogin');
 	}
-
+	
+	/*
+		Обработка логина пользователя
+	*/
 	public function Login()
 	{
-		
 		if (isset($_POST)) {
 
-			$credentials = array('email' => $_POST['email'] , 'password' => $_POST['password']);
+			$credentials = array('name' => $_POST['name'] , 'password' => $_POST['password'], 'file' => $_POST['file']);
 
-			$validator = v::key('email', v::email()->notEmpty())
-                    	->key('password', v::length(6,null));
-			try {
-				$validator->assert($credentials);
+			VD::load($credentials);
 
+			$errors = VD::validate([
+				'name' => 'required|alphanumeriс' , 
+				'password' => 'required|max:10|min:2' , 
+				'file' => 'required|mimes:xml,jpg' , 
+			]); 
+			
+			if (empty($errors)) {
 				if ($this->Auth($credentials, false)) {
 					flashMessage('success', 'Успешно вошли');
 					redirect('/');
+				}else{
+					flashMessage('error', 'Что то пошло не так');
+					redirect('/login');exit;
 				}
-				
-			} catch(NestedValidationException $exception) {
-			   print_r($exception->getMessages());
+	
+			}else{
+				flashMessage('error', implode('<br>', $errors));
+				redirect('/login');exit;
 			}
 			
 		}
