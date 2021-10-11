@@ -194,7 +194,23 @@ class Router
 				$controllerObj = new $controller;
 
 				if ( method_exists($controllerObj, $method)) {
-					
+
+					//Middlewares 
+					foreach ($controllerObj->getMiddlewares() as  $middleware) { 
+						// Если в Middleware передан параметр метода
+						if (!empty($middleware->actions)) { 
+							foreach ($middleware->actions as $key => $action) {
+								// Если переданный параметр совпадает с вызывающим
+								if ($action == $method) { 
+									$middleware->execute();
+								}
+							}
+						}else{ 
+							//Или применяем на весь контроллер который установил Middleware
+							$middleware->execute();
+						}
+	 				}//Middlewares END
+
 					$controllerObj->$method($request);
 
 				} else {
@@ -226,11 +242,13 @@ class Router
 
 		if ( $url =  $this->getUrl() ) {
  			if ($response = $this->matchRoute($url)) {
-
  				$this->callControllerMethod ($response);
  			} else {
  				http_response_code(404);
- 				include APP . '/views/404.php';
+ 				$controller = new Error\ErrorController();
+ 				$controller->ShowError();
+ 				
+ 				//include APP . '/views/404.php';
  			}
 	
 		}

@@ -9,12 +9,13 @@ use framework\core\Mail;
 use framework\core\Auth\Authenticate;
 use Exception;
 
-//use framework\core\ErrorHandler;
+use framework\core\ErrorHandler;
 
 abstract class Controller 
 {
 
 	public $title;
+	protected $middlewares = [];
 	public $layout;
 	public $logger;
 	public $csrf ;
@@ -30,15 +31,32 @@ abstract class Controller
 		(!isset($this->csrf)) ? $this->csrf = true : $this->csrf;
 
 		$this->checkCSRF();
-		//new ErrorHandler();	
+
+		new ErrorHandler();	
 	}
 
+	/*
+		Получает экземпляр Middleware
+	*/
+	public function getMiddlewares():array
+	{
+		return $this->middlewares;
+	}
+
+	/*
+		Устанавливает Middleware
+	*/
+	public function Middleware(Middleware $middleware)
+	{
+		$this->middlewares[] = $middleware;
+	}
 	
 	/*
 		Передаем имя вида , данные , и вызываем файл вида
 	*/	
 	public function render($view = '', $data = array() )
 	{
+		
 		$view = new View($view, $data, $this->layout,  $this->title);
 		$view->getView();
 	}

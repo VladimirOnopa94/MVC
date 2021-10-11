@@ -29,7 +29,6 @@ class ErrorHandler
 		Обработчик ошибок
 		*/
 		public function errorHandler($errno, $errstr, $errfile, $errline){
-			
 			$this->logger->log(array($errfile, $errline, $errstr)  , 'error');
 
 			$this->displayError($errno, $errstr, $errfile, $errline);
@@ -48,8 +47,8 @@ class ErrorHandler
 		*/
 		public function fatalErrorHandler(){
 			$error = error_get_last();
-
-			if (!empty($error) && $error['type'] & [E_ERROR | E_PARSE | E_COMPILE_ERROR | E_CORE_ERROR]) {
+			var_dump($error);
+			if (!empty($error) && ($error['type'] === E_ERROR || $error['type'] === E_PARSE || $error['type'] === E_COMPILE_ERROR || $error['type'] === E_CORE_ERROR ) ) {
 				$this->logger->log(array( $error['file'], $error['line'], $error['type'], $error['message'])  , 'error');
 				ob_end_clean();
 				$this->displayError($error['type'], $error['message'], $error['file'], $error['line'] );
@@ -65,13 +64,14 @@ class ErrorHandler
 			http_response_code($response);
 			
 			if ($response == 404) {
-				require APP . '/views/404.html';
-				die;
+ 				$controller = new Error\ErrorController();
+ 				$controller->ShowError();
 			}
 			if (DEBUG) {
 				echo $errfile . ':' . $errline . ' ' . $errstr;
 			}else{
-				require APP . '/views/404.html';
+				$controller = new Error\ErrorController();
+ 				$controller->ShowError();
 			}
 			die;
 

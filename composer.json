@@ -1,7 +1,6 @@
 {
     "name": "framework/framework",
     "require": {
-        "illuminate/database": "^8.55"
     },
     "autoload": {
     	"psr-4": {

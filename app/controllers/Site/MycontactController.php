@@ -31,7 +31,7 @@ class MycontactController extends Controller{
 
 		$users = $userObj->getUsersInformation();
 		$countries = $countriesObj->getCountries();
-
+		
 		$contacts = array();
 
 		foreach ($users as $key => $user) {

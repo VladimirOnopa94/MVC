@@ -13,10 +13,8 @@ class Country extends \framework\core\Model
             get list countries
       */
 	public function getCountries(){
-		return DB::table($this->table)
-            ->select('*')  
-            ->get()
-            ->toArray();
+
+            return $this->findAll();
 	}
 
 	

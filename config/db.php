@@ -1,10 +1,7 @@
 <?php 
 
 return [
-	'host' => 'localhost',
-	'driver' => 'mysql',
-	'dbname' => 'frameworkvag',
+	'dsn' => 'mysql:host=localhost;dbname=frameworkvag;charset=utf8',
 	'user' => 'u_frameworkv',
-	'password' => 'nHCrsFBg',
-	'charset' => 'utf8'
-];
+	'password' => 'nHCrsFBg'
+]; 

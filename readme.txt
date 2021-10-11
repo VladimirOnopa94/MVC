@@ -19,6 +19,8 @@ vendor
 		core
 		widgets
 			views
+		middlewares
+			views
 
 
 
@@ -228,4 +230,26 @@ $this->sendMail(
 	'mail/mail', //шаблон письма 
 	compact('var')	//Переменные в шаблон письма
 );
+
+
+******************** Middlewares*******************
+
+Что бы использовать промежуточное ПО в файле контроллера объявляем конструктор ,
+и указываем нужный нам Middleware 
+
+$this->Middleware(new \framework\middlewares\UserMiddleware(['Login']));
+
+Если Middleware нужно использовать на все методы контроллера, не передаем аргументы классу Middleware
+иначе, указываем нужный нам метод в массиве можно через запятую  ['Login' , 'Index']
+
+В конце обязательно вызываеам родительский конструктор parent::__construct();
+
+Пример
+
+public function __construct(){
+	$this->Middleware(new \framework\middlewares\UserMiddleware(['Login']));
+	$this->Middleware(new \framework\middlewares\RoleCheckMiddleware());
+	parent::__construct();
+}
+
 

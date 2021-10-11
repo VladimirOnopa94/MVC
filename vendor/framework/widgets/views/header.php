@@ -25,9 +25,9 @@
           <li class="nav-item <?php if(currLoc() == url('login')){ echo 'active'; } ?>">
             <a class="nav-link" href="<?php echo url('login') ?>"><?php echo __("login_title"); ?></a>
           </li>
-          <!-- <li class="nav-item <?php if(currLoc() == url('register')){ echo 'active'; } ?>">
+          <li class="nav-item <?php if(currLoc() == url('register')){ echo 'active'; } ?>">
             <a class="nav-link" href="<?php echo url('register') ?>"><?php echo __("signin_title"); ?></a>
-          </li> -->
+          </li> 
         <?php } ?>
       </ul>
 

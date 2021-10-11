@@ -1,17 +1,26 @@
 <?php 
 namespace app\controllers\Site\Auth;
 
+
 use app\models\Index;
 use framework\core\Controller;
 use framework\core\Validate as VD;
 
+
 class LoginController extends Controller{ 
 
 
-	//public $csrf = false;
+	public $csrf = true;
+
+	public function __construct(){
+		$this->Middleware(new \framework\middlewares\UserMiddleware(['Login']));
+		$this->Middleware(new \framework\middlewares\RoleCheckMiddleware());
+		parent::__construct();
+	}
 
 	public function Index()
 	{
+		
 		$this->setTitle('Вход');
 		
 		$this->render('Auth/AuthLogin');
@@ -24,22 +33,23 @@ class LoginController extends Controller{
 	{
 		if (isset($_POST)) {
 
-			$credentials = array('name' => $_POST['name'] , 'password' => $_POST['password'], 'file' => $_POST['file']);
+			$credentials = array('name' => $_POST['name'] , 'password' => $_POST['password']);
 
 			VD::load($credentials);
 
 			$errors = VD::validate([
-				'name' => 'required|alphanumeriс' , 
-				'password' => 'required|max:10|min:2' , 
-				'file' => 'required|mimes:xml,jpg' , 
+				'name' => 'required' , 
+				'password' => 'required' , 
 			]); 
 			
 			if (empty($errors)) {
-				if ($this->Auth($credentials, false)) {
+				$response = $this->Auth($credentials, false);
+				
+				if (is_bool($response) === true) {
 					flashMessage('success', 'Успешно вошли');
 					redirect('/');
 				}else{
-					flashMessage('error', 'Что то пошло не так');
+					flashMessage('error', $response);
 					redirect('/login');exit;
 				}
 	

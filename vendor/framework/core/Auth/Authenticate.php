@@ -13,23 +13,23 @@ trait Authenticate{
         if (gettype($user) !== 'object') { /*Преоразовывем в объект если нужно*/
             $user = (object) $user;
         }
+
         /*Если вызов с страницы например логина проверим 
         есть ли такой пользователь если есть идем дальше иначе 
         возвращаем false */
         if (!$afterRegisteration) { 
             $userDb = self::getUserByName($user->name);
-           
-            if (empty($userDb) || $userDb->password !== md5($user->password)) {
-                return false;
+            if (empty((array)$userDb) || $userDb->password !== md5($user->password)) {
+                return 'Неверный логин или пароль';
             }else{
                 $user = $userDb;
             }
-        }
-        
+        } 
+        //действия после регистрации пользователя
         $userObj = new User;
+        $userObj = $userObj->getUserByName($user->name);
 
-        if ($user = $userObj->checkUserExist($user->name)) {
-
+        if ($user = (object) array_shift($userObj)) {
             unset($_SESSION['user']);
             if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
                 $_SESSION['user']['name'] = $user->name; 
@@ -38,6 +38,9 @@ trait Authenticate{
             }
         }
         return null;    
+        
+        
+        
     } 
    
     /*
@@ -55,7 +58,9 @@ trait Authenticate{
     */
     public static function userById($id) {
         $user = new User;
-        return $user->getUserById($id);
+        $user = $user->getUserById($id);
+
+        return (object) array_shift($user);
     }
 
     /*
@@ -63,7 +68,9 @@ trait Authenticate{
     */
     public static function getUserByName($name) {
         $user = new User;
-        return $user->getUserByName($name);
+        $user = $user->getUserByName($name);
+
+        return (object) array_shift($user);
     }
     /*
         Разлогинить юзера
