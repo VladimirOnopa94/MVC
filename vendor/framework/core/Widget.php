@@ -32,7 +32,7 @@ class Widget
 			if (isset($result['view'])){
 				$view = ltrim($result['view'],'/');
 		
-				$file_view = ROOT . "/vendor/framework/widgets/views/" . $view . ".php";
+				$file_view = APP . "/components/widgets/views/" . $view . ".php";
 			}else{
 		    	throw new Exception("View path not set");
 		    }

@@ -4,6 +4,7 @@ namespace app\controllers\Site\Auth;
 
 use app\models\Index;
 use framework\core\Controller;
+//use app\components\events\RegisterUserEvent;
 use framework\core\Validate as VD;
 
 
@@ -12,15 +13,19 @@ class LoginController extends Controller{
 
 	public $csrf = true;
 
-	public function __construct(){
-		$this->Middleware(new \framework\middlewares\UserMiddleware(['Login']));
-		$this->Middleware(new \framework\middlewares\RoleCheckMiddleware());
+	/*public function __construct(){
+		$this->Middleware(new \app\components\middlewares\UserMiddleware(['Login']));
+		$this->Middleware(new \app\components\middlewares\RoleCheckMiddleware());
 		parent::__construct();
-	}
+	}*/
 
 	public function Index()
 	{
-		
+
+		$array = ['data'=>'value'];
+
+		//new RegisterUserEvent($array);
+
 		$this->setTitle('Вход');
 		
 		$this->render('Auth/AuthLogin');

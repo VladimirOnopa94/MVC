@@ -1,5 +1,5 @@
 <?php 
-namespace framework\middlewares;
+namespace app\components\middlewares;
 use framework\core\Middleware;
 
 class RoleCheckMiddleware extends Middleware

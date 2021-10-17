@@ -1,16 +1,14 @@
 <?php 
- /**
- * 
- */
 namespace framework\core;
+
+use framework\core\Mail;
+use framework\core\Csrf;
 use framework\core\Logger;
 use framework\core\Language;
-use framework\core\Mail;
 use framework\core\Auth\Authenticate;
-use Exception;
-
-use framework\core\ErrorHandler;
-
+ /**
+ * Класс контроллера приложения
+ */
 abstract class Controller 
 {
 
@@ -28,11 +26,12 @@ abstract class Controller
 
 		$this->logger = new Logger;
 
+		CSRF::getCSRFToken(); // Пишем в сессию CSRFToken
+
 		(!isset($this->csrf)) ? $this->csrf = true : $this->csrf;
 
 		$this->checkCSRF();
-
-		new ErrorHandler();	
+		
 	}
 
 	/*
@@ -55,8 +54,7 @@ abstract class Controller
 		Передаем имя вида , данные , и вызываем файл вида
 	*/	
 	public function render($view = '', $data = array() )
-	{
-		
+	{	
 		$view = new View($view, $data, $this->layout,  $this->title);
 		$view->getView();
 	}
@@ -101,9 +99,9 @@ abstract class Controller
 			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				if (!isset($_POST['token'])) {
 					die("CSRF not passed");
-					if (!hash_equals($_SESSION['token'], $_POST['token'])) {
-						die("CSRF is invalid");
-					}
+				}
+				if (!hash_equals($_SESSION['token'], $_POST['token'])) {
+					die("CSRF is invalid");
 				}
 			}
 		}

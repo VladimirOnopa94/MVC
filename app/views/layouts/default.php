@@ -24,13 +24,13 @@
 
   <body>
 
-    <?php framework\widgets\Header::widget(); ?>
+    <?php app\components\widgets\Header::widget(); ?>
 
     <div class="main container" style="padding-top: 10px;">
       <?php echo $content; ?>
     </div>
 
-    <?php framework\widgets\Footer::widget(); ?>
+    <?php app\components\widgets\Footer::widget(); ?>
 
 
   </body>

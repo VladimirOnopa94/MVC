@@ -2,14 +2,12 @@
 namespace framework\core;
 use Exception;
 use framework\core\Language;
-use framework\core\Csrf;
-
+use framework\core\ErrorHandler;
 /**
  * Логика роутинга приложения
  */
 class Router
 {
-	
 	protected $router = [];
 	
 
@@ -17,13 +15,14 @@ class Router
 	{
 		session_start();
 
-		CSRF::getCSRFToken();
+		new ErrorHandler();	// Устанавливаем обработчик ошибок
 
 		$this->router = require_once CONFIG . '/route.php' ;
 
 		$this->default_route = '' ;
 
 		$this->run();
+
 	}
 
 	//	
@@ -138,10 +137,7 @@ class Router
 				
 			}
 
-
-			
 			$resultUrl = rtrim(implode('/', $resultUrl),'/');
-
 
 			if ( $resultUrl == $urlOriginal ) {
 
@@ -175,11 +171,9 @@ class Router
 
 	private function callControllerMethod ($request) {
 
-		
 		if($request){
 			
 			$str = explode('@', $request['controller']);
-
 
 			$controller = 'app\controllers\\'.$str[0];
 
@@ -237,7 +231,6 @@ class Router
 	//
 	//Запуск роутинга
 	//
-
 	public function run (){
 
 		if ( $url =  $this->getUrl() ) {
@@ -247,8 +240,6 @@ class Router
  				http_response_code(404);
  				$controller = new Error\ErrorController();
  				$controller->ShowError();
- 				
- 				//include APP . '/views/404.php';
  			}
 	
 		}

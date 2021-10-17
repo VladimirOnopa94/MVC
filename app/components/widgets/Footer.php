@@ -1,6 +1,6 @@
 <?php 
 
-namespace framework\widgets;
+namespace app\components\widgets;
 use framework\core\Widget;
 
 /*

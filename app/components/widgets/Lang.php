@@ -1,6 +1,6 @@
 <?php 
 
-namespace framework\widgets;
+namespace app\components\widgets;
 use framework\core\Widget;
 
 
@@ -9,13 +9,12 @@ $data['data'] = array('1','2'); не обязательный параметр �
 $data['view'] = 'widgets/sidebar' обязательный параметр , передаем путь к виду виджета;
 */
 
-class Header extends \framework\core\Widget{ 
+class Lang extends \framework\core\Widget{ 
 
 	public  function run()
 	{
-		$data['title'] = 'Header';
-		$data['view'] = 'header';
-		$this->language('header');
+		$data['langs'] = LANG['langs'];
+		$data['view'] = 'lang';
 
 		return $data;
 	}

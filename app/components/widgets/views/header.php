@@ -31,7 +31,7 @@
         <?php } ?>
       </ul>
 
-       <?php framework\widgets\Lang::widget(); ?> 
+       <?php app\components\widgets\Lang::widget(); ?> 
     </div>
   </nav>
 </header>

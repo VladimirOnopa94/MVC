@@ -2,6 +2,13 @@
 
 app
 	controllers
+	components
+		events
+		listeners
+		widgets
+			views
+		middlewares
+			views
 	models
 	views
 	language
@@ -17,10 +24,7 @@ vendor
 	composer
 	framework
 		core
-		widgets
-			views
-		middlewares
-			views
+		
 
 
 
@@ -61,7 +65,7 @@ public function index($request){
 
 Напирмер Footer.php и унаследовать класс \framework\core\Widget
 
-Далее импортируем класс виджетов use framework\core\Widget;
+Далее используем класс виджетов use framework\core\Widget;
 
 Создадим  метод run где вернем данные пути к виду (обязательно) , и даные (не обязательно)
 
@@ -73,7 +77,7 @@ return $data;
 
 И в виде вызываем метод вывода виджета 
 
-<?php app\widgets\Footer::widget(); ?>
+<?php app\components\widgets\Footer::widget(); ?>
 
 ----------------------------------------
 
@@ -237,7 +241,7 @@ $this->sendMail(
 Что бы использовать промежуточное ПО в файле контроллера объявляем конструктор ,
 и указываем нужный нам Middleware 
 
-$this->Middleware(new \framework\middlewares\UserMiddleware(['Login']));
+$this->Middleware(new \app\components\middlewares\UserMiddleware(['Login']));
 
 Если Middleware нужно использовать на все методы контроллера, не передаем аргументы классу Middleware
 иначе, указываем нужный нам метод в массиве можно через запятую  ['Login' , 'Index']
@@ -247,9 +251,46 @@ $this->Middleware(new \framework\middlewares\UserMiddleware(['Login']));
 Пример
 
 public function __construct(){
-	$this->Middleware(new \framework\middlewares\UserMiddleware(['Login']));
-	$this->Middleware(new \framework\middlewares\RoleCheckMiddleware());
+	$this->Middleware(new \app\components\middlewares\UserMiddleware(['Login']));
+	$this->Middleware(new \app\components\middlewares\RoleCheckMiddleware());
 	parent::__construct();
 }
 
+
+******************** Events *******************
+
+Что бы использовать события, для начала добавим их и слушателей listeners
+в файл конфигурации событий config\events.php
+
+return [
+	'app\components\events\RegisterUserEvent' => [
+		'app\components\listeners\RegisterListener',
+		'....'
+	],
+	'....'
+];
+
+Создадим класс события app\components\events\RegisterUserEvent
+класс будет использовать конструктор вызывающий родительский конструктор,
+конструктор принимает необязательный параметр(для обработки в listener)
+
+public function __construct($data='')
+    {
+    	parent::__construct($data);
+    }
+
+Создадим класс слушателя app\components\listeners\RegisterListener
+классе нужно объявить метод handle который может принимать аргуметы с класа события(если переданы)
+
+public function handle ($data){
+    //тут делаем то что нужно после того как событие настало		
+}
+
+В конце используем созданое событие в коде 
+
+Импортируем класс
+use app\components\events\RegisterUserEvent; 
+
+И вызовем класс, и передадим аргументы если нужно
+new RegisterUserEvent($someVar);
 

@@ -47,7 +47,7 @@ class ErrorHandler
 		*/
 		public function fatalErrorHandler(){
 			$error = error_get_last();
-			var_dump($error);
+
 			if (!empty($error) && ($error['type'] === E_ERROR || $error['type'] === E_PARSE || $error['type'] === E_COMPILE_ERROR || $error['type'] === E_CORE_ERROR ) ) {
 				$this->logger->log(array( $error['file'], $error['line'], $error['type'], $error['message'])  , 'error');
 				ob_end_clean();
@@ -68,7 +68,7 @@ class ErrorHandler
  				$controller->ShowError();
 			}
 			if (DEBUG) {
-				echo $errfile . ':' . $errline . ' ' . $errstr;
+				echo $errno . ' ' . $errfile . ':' . $errline . ' ' . $errstr;
 			}else{
 				$controller = new Error\ErrorController();
  				$controller->ShowError();
