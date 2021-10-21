@@ -9,14 +9,15 @@ use Exception;
 */ 
 abstract class Event 
 {
-	private $eventsList = [];
-	private $data ;
+	private $eventsList;
+	private $eventVariables;
 
-    public function __construct($data=''){
+    public function __construct(){
 
-    	$this->data = $data;
     	$this->eventsList = require CONFIG . '/events.php' ; //файл событий-обработчиков
+
     	$event = get_called_class();
+    	$this->eventVariables = get_object_vars($this);//получим переменные из пользовательского события
 
     	if (!array_key_exists($event, $this->eventsList)) {
     		throw new Exception("Event not exist in events.php" );
@@ -33,8 +34,13 @@ abstract class Event
     	foreach ($this->eventsList[$event] as $key => $listenerClass) {
     		try{
 				if (class_exists($listenerClass)) {
+					//удалим лишние переменные
+					unset($this->eventVariables['eventsList']);
+					unset($this->eventVariables['eventVariables']);
+					//Создадим слушателя который назначен событию
 					$listner = new $listenerClass();
-					$listner->handle($this->data);
+					//Вызовем функцию handle слушаетля и передадим все аргументы переданые событию
+					call_user_func_array(array($listner, 'handle'), $this->eventVariables);
 	    		}else{
 	    		 	throw new Exception("Listener class {$listenerClass}  not found " );
 	    		}

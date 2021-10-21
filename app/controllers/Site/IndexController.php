@@ -2,7 +2,7 @@
 namespace app\controllers\Site;
 
 use app\models\Category;
-use framework\core\Controller;
+use app\controllers\Controller;
 
 class IndexController extends Controller{ 
 
@@ -10,6 +10,7 @@ class IndexController extends Controller{
 
 	public function index()
 	{
+
 		$page = "Главная";
 		$this->language('index');
 		$this->setTitle('Главная');

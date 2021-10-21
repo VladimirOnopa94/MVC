@@ -2,7 +2,7 @@
 namespace app\controllers\Site;
 
 use app\models\Auth\User;
-use framework\core\Controller;
+use app\controllers\Controller;
 
 class PhonebookController extends Controller{ 
 

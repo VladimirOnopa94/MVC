@@ -23,6 +23,7 @@
   </head>
 
   <body>
+     
 
     <?php app\components\widgets\Header::widget(); ?>
 
@@ -32,6 +33,6 @@
 
     <?php app\components\widgets\Footer::widget(); ?>
 
-
   </body>
+
 </html>

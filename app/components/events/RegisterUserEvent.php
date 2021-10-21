@@ -6,11 +6,15 @@ use framework\core\Event;
 
 class RegisterUserEvent extends Event
 {
-	//public $data;
 
-    public function __construct($data='')
+	public $data;
+	public $text;
+	
+    public function __construct()
     {
-    	parent::__construct($data);
+    	$this->data = $data;
+    	$this->text = $text;
+    	parent::__construct($this->text,$this->data);
     }
 
 }

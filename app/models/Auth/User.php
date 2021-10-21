@@ -10,9 +10,28 @@ class User extends \framework\core\Model
 
 	protected $table = 'users';
 
-	/*public function getUserByField($key, $value){
+/*	public function testQuery($id,$country_id){
 
-		
+        $query = "SELECT * FROM {$this->table} ";
+        
+        $query .= " WHERE id = ?";
+        $pararms[] = $id;
+
+        if ($country_id == 8) {
+            $query .= " AND country_id = ?";
+            $pararms[] = $country_id;
+        }
+
+        if ($country_id == 8) {
+            $query .= ' LIMIT 1';
+        }
+
+		 $result = $this->findBySql(
+            $query, 
+            $pararms
+        );
+
+         return $result;
 	}*/
 
 	/*

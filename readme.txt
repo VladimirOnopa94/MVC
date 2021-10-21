@@ -1,4 +1,4 @@
-*******АРХИТЕКТУРА ФРЕЙМВОРКА*******
+*******АРХИТЕКТУРА ПРИЛОЖЕНИЯ*******
 
 app
 	controllers
@@ -16,6 +16,7 @@ app
 		en
 		ua
 config
+	routes
 log
 public
 	css
@@ -56,6 +57,23 @@ public function index($request){
 	$request->somecat // Доступ к свойствам 
 
 }
+
+Так же в каждом контроллере можно получить доступ к методам и свойствам объявленых в главном контроллере 
+
+по пути app\controllers\Controller
+
+для этого объявим переменную
+
+public $cart; // это свойство будет доступно во всех контроллерах 
+
+public function __construct(){
+    $this->cart = 'somedata';   
+    
+    parent::__construct();
+}
+
+
+
 
 ------------------------------
 
@@ -272,18 +290,25 @@ return [
 
 Создадим класс события app\components\events\RegisterUserEvent
 класс будет использовать конструктор вызывающий родительский конструктор,
-конструктор принимает необязательный параметр(для обработки в listener)
+конструктор принимает переданые параметр(для обработки в listener)
 
-public function __construct($data='')
-    {
-    	parent::__construct($data);
-    }
+public $data;
+public $text;
+
+public function __construct($data,$text)
+{
+	$this->data = $data;
+	$this->text = $text;
+	parent::__construct($this->data, $this->text);
+}
 
 Создадим класс слушателя app\components\listeners\RegisterListener
 классе нужно объявить метод handle который может принимать аргуметы с класа события(если переданы)
 
-public function handle ($data){
-    //тут делаем то что нужно после того как событие настало		
+public function handle ($data, $text){
+	var_dump($text);
+	var_dump($data);
+	//тут делаем то что нужно после того как событие настало		
 }
 
 В конце используем созданое событие в коде 
@@ -292,5 +317,5 @@ public function handle ($data){
 use app\components\events\RegisterUserEvent; 
 
 И вызовем класс, и передадим аргументы если нужно
-new RegisterUserEvent($someVar);
+new RegisterUserEvent($array,'text');
 

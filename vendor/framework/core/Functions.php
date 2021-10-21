@@ -52,6 +52,7 @@ function Auth()
 {
 	return framework\core\Auth\Authenticate::checkAuth();
 }
+
 //Вернем 404 ответ
 function abort($code=404) 
 {
@@ -68,7 +69,7 @@ function flashMessage($name, $data = '')
 	}
 
 	if (!empty($name) && !empty($data)) {//Запишем временное сообщение в сесию
-		$massage = ( $_SESSION[$name] = $data );
+		$massage = ($_SESSION[$name] = $data);
 		return $massage ;
 	}	
 }

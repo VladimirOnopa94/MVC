@@ -2,7 +2,7 @@
 namespace app\controllers\Site\Auth;
 
 use app\models\Index;
-use framework\core\Controller;
+use app\controllers\Controller;
 use framework\core\Validate as VD;
 use app\models\Auth\User;
 

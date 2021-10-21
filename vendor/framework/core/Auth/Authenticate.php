@@ -37,10 +37,7 @@ trait Authenticate{
                 return true;
             }
         }
-        return null;    
-        
-        
-        
+        return null;     
     } 
    
     /*

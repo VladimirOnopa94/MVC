@@ -1,6 +1,8 @@
 <?php 
 
 namespace framework\core;
+use Exception;
+
 //use framework\core\Auth\Authenticate;
 
 /**
@@ -21,13 +23,11 @@ class View
 		$this->data = $data;
 		$this->layout = $layout;
 		$this->title = $title;
-
 	}
 
 	//
 	//Подключаем файл вида 
 	//
-
 	public function getView ()
 	{
 		
@@ -42,13 +42,9 @@ class View
 		}
 
 		if (is_file($file_view)){
-
 			require_once $file_view;
-
 		}else{
-
-			echo "View " . $file_view . " not found !";
-
+			throw new Exception("View {$file_view} not found !");
 		}
 
 		$content = ob_get_clean(); // Выводим переменную в layout шаблоне
@@ -56,13 +52,9 @@ class View
 		$file_layout = APP . '/views/layouts/' . $this->layout . '.php';
 
 		if (is_file($file_layout)){
-
 			require_once $file_layout;
-
 		}else{
-
-			echo "Layout " . $file_layout . " not found !";
-
+			throw new Exception("Layout {$file_layout} not found !");
 		}
 	}
 	

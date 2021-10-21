@@ -3,7 +3,7 @@ namespace app\controllers\Site;
 
 use app\models\Auth\User;
 use app\models\Country;
-use framework\core\Controller;
+use app\controllers\Controller;
 
 class MycontactController extends Controller{ 
 

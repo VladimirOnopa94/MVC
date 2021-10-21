@@ -10,19 +10,38 @@ class Router
 {
 	protected $router = [];
 	
-
 	function __construct()
 	{
 		session_start();
 
 		new ErrorHandler();	// Устанавливаем обработчик ошибок
 
-		$this->router = require_once CONFIG . '/route.php' ;
+		$this->includeRoutesFiles(); // Подключаем все файлы роутинга
 
 		$this->default_route = '' ;
 
 		$this->run();
 
+	}
+
+	/*
+		Подключаем все файлы роутинга из папки routes
+	*/
+	private function includeRoutesFiles(){
+		$path    = CONFIG . '/routes';
+		$files = scandir($path);
+		$files = array_diff(scandir($path), array('.', '..'));
+
+		$routeResult = [];
+
+		if (!empty($files)) {
+			foreach ($files as $key => $route) {
+				$routeResult[] = require_once CONFIG . '/routes/' . $route ;
+			}
+			$this->router = array_reduce($routeResult, 'array_merge', array());
+		}else{
+			throw new Exception("Can't find route files in {$path}");
+		}
 	}
 
 	//	
@@ -51,8 +70,7 @@ class Router
 	//
 
 	private function matchRoute ($url) {
-		
-		
+
 		$getParamArray = array();
 
 		// Обрабатываем $_GET параметры из url если они есть
@@ -107,7 +125,6 @@ class Router
 
 					$routeParamReplace = str_replace('}', '', $routeParamReplace);
 
-					
 					/* Если есть $_GET параметр news ( пример /category/news )
 
 					или параметр about ( пример /page/about ) и т.п. */
@@ -208,23 +225,16 @@ class Router
 					$controllerObj->$method($request);
 
 				} else {
-
 					throw new Exception("Method {$method} not exsist in {$controller}");
-
 				}
 
 			} else {
-
 				throw new Exception("Class {$controller} not exsist");
-
 			}
 
 		} else {
-
 			throw new Exception('Not found variable $routeStr');
-
 		}
-
 
 	}
 

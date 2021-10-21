@@ -3,7 +3,7 @@ namespace app\controllers\Site\Auth;
 
 
 use app\models\Index;
-use framework\core\Controller;
+use app\controllers\Controller;
 //use app\components\events\RegisterUserEvent;
 use framework\core\Validate as VD;
 
@@ -22,9 +22,9 @@ class LoginController extends Controller{
 	public function Index()
 	{
 
-		$array = ['data'=>'value'];
+		//$array = ['data'=>'value'];
 
-		//new RegisterUserEvent($array);
+		//new RegisterUserEvent($array,'test');
 
 		$this->setTitle('Вход');
 		

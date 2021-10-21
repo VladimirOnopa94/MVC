@@ -1,13 +1,13 @@
 <?php 
 /* Публичный каталог */
-define("PUBLIC", dirname(__DIR__).'/public');
+define("PUBLIC", dirname(__DIR__) . '/public');
 /* Каталог конфига */
-define("CONFIG", dirname(__DIR__).'/config');
+define("CONFIG", dirname(__DIR__) . '/config');
 /* Каталог приложения */
-define("APP", dirname(__DIR__).'/app');
+define("APP", dirname(__DIR__) . '/app');
 /* Корень сайта */
 define("ROOT", dirname(__DIR__));
-
+/* Отладка */
 define("DEBUG", true);
 /* Логи */
 define("LOG_PARAM", [
