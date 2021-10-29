@@ -8,25 +8,33 @@ class IndexController extends Controller{
 
 	public $csrf = false; 
 
-	public function index()
+	public function index($request)
 	{
 
-		$page = "Главная";
+		$page = "Главная"; 
+		$var1 = "test2"; 
 		$this->language('index');
-		$this->setTitle('Главная');
-		
-		$this->render('index' , compact('page'));
+		//$this->setTitle('Главная');
+
+		$this->render('index' , compact('page','var1'));
+	}
+
+	public function Api($request)
+	{
+
+		var_dump("api");
 	}
 
 
 	public function Product($request)
 	{
+
 		echo "Product";
 	}
 
 	public function Page($request)
 	{
-		echo "Page";
+		var_dump($request);
 	}
 
 	public function Category($request)

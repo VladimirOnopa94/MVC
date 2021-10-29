@@ -2,7 +2,10 @@
 
 /*Укороченая функция дампа*/
 function dd($var){ 
-	var_dump($var);exit;
+	echo '<pre>';
+	var_dump($var);
+	echo '</pre>';
+	exit;
 }
 
 //Получение фразы перевода по ключу
@@ -52,11 +55,62 @@ function Auth()
 {
 	return framework\core\Auth\Authenticate::checkAuth();
 }
+//Вернуть  url сайта без строки запроса 
+function siteUrl() 
+{
+	return  (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+}
 
 //Вернем 404 ответ
 function abort($code=404) 
 {
 	http_response_code($code);
+}
+
+//Обработать теги html
+function encode_var($value) 
+{
+	return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
+
+//Рандомная строка
+function randomToken($length) 
+{
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
+//Получить значение из файла конфига
+function config_get($configKey) 
+{
+	$path  = CONFIG;
+	$files = glob(CONFIG.'/*.{php}', GLOB_BRACE);
+	$configResult = [];
+
+	if (!empty($files)) {
+		foreach ($files as $key => $config) {
+			$info = pathinfo($config);
+			$configResult[$info['filename']] = $config ;
+		}
+		$configKey = explode('.', $configKey);
+		if (isset($configResult[$configKey[0]])) {
+			$config = require $configResult[$configKey[0]];
+			if (isset($config[$configKey[1]])) {
+				return $config[$configKey[1]];
+			}else{
+				throw new Exception("Can't find key '{$configKey[1]}' in '{$configKey[0]}' config file");
+			}
+		}else{
+			throw new Exception("Can't find '{$configKey[0]}' config file");
+		}
+	}else{
+		throw new Exception("Can't find config files in {$path}");
+	}
 }
 
 //Установить или отобразить временное сообщение

@@ -11,8 +11,10 @@ $data['view'] = 'widgets/sidebar' обязательный параметр , п
 
 class Header extends \framework\core\Widget{ 
 
+	//public $csrf = true;
 	public  function run()
 	{
+		
 		$data['title'] = 'Header';
 		$data['view'] = 'header';
 		$this->language('header');

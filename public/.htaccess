@@ -1,6 +1,13 @@
 Options +SymLinksIfOwnerMatch
+
 RewriteEngine On
+
+#Uncommet if need remove end slash from url
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(.*)/$ /$1  [L,R=301]
+
+RewriteRule ^public/(.*)$ /$1 [R=301,L]
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule (.*) index.php?$1 [L,QSA]
+RewriteRule ^ index.php [L]

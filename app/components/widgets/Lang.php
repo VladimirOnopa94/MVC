@@ -13,7 +13,14 @@ class Lang extends \framework\core\Widget{
 
 	public  function run()
 	{
-		$data['langs'] = LANG['langs'];
+		$langSettings = config_get('kernel.language');
+
+		if ($langSettings && count($langSettings['langs']) > 1) {
+			$data['langs'] = $langSettings['langs'];
+		}else{
+			$data['langs'][] = array_shift($langSettings['langs']);
+		}
+		
 		$data['view'] = 'lang';
 
 		return $data;

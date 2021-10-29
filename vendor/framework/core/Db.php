@@ -13,14 +13,14 @@ class Db
 
 	protected function __construct()
 	{
-		$db = require ROOT . '/config/db.php';
+		//$db = require ROOT . '/config/db.php';
 
 		$options = [
 			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
 			\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
 		];
 
-		$this->pdo = new \PDO ( $db['dsn'], $db['user'], $db['password'], $options);
+		$this->pdo = new \PDO ( config_get('db.dsn'), config_get('db.user'), config_get('db.password'), $options);
 	}
 
 	public static function instance() 

@@ -70,4 +70,27 @@ class View
 		
 	}
 
+	/*
+		Передаем имя вида , данные , и вызываем файл вида
+	*/	
+	public function render($view = '', $data = array())
+	{	
+
+		$view = ltrim($view,'/');
+		
+		$file_view = APP . "/views/" . $view . ".php";
+		
+		if (isset($data)) { //Извлекаем переменные из контроллера для view
+			extract($data);
+		}
+
+		if (is_file($file_view)){
+			require_once $file_view;
+		}else{
+			throw new Exception("View {$file_view} not found !");
+		}
+
+
+	}
+
 }

@@ -16,13 +16,15 @@ class Logger
 	public static function log ($massage , string $file)
 	{
 		try{
-			if (array_key_exists($file , LOG_PARAM['logs'])) {
+			$log_param = config_get('kernel.log_param');
+			
+			if (array_key_exists($file , $log_param['logs'])) {
 				
-				$file =  LOG_PARAM['logs'][$file] ;
+				$file =  $log_param['logs'][$file] ;
 				
 				if (file_exists($file)) {
 					/*Очищаем файл если он превысил размер */
-					if (filesize($file) > LOG_PARAM['maxLogSize']) { 
+					if (filesize($file) > $log_param['maxLogSize']) { 
 						file_put_contents($file, "");
 					}
 

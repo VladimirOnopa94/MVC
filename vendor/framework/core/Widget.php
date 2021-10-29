@@ -2,7 +2,7 @@
 
 namespace framework\core;
 use framework\core\Language;
-//use framework\core\Auth\Authenticate;
+use framework\core\Csrf;
 use Exception;
 
 /**
@@ -10,18 +10,30 @@ use Exception;
  */
 class Widget 
 {
-	//use Authenticate;
+	public $csrf ;
+	
+	function __construct()
+	{
+		CSRF::getCSRFToken(); // Пишем в сессию CSRFToken
+
+		(!isset($this->csrf)) ? $this->csrf = true : $this->csrf;
+
+		$this->checkCSRF();
+		
+	}
 
 	//
 	//Подключаем файл вида и передаем переменные 
 	//
 	public static function widget ()
 	{
+		//Получаем переменные переданые методу из view виджета
+		$variables = func_get_args();
 
 		$class = get_called_class();
 		$obj = new $class;
-
-		$result = $obj->run();
+		//Вызываем функцию вызваного виджета и передаем переменные
+		$result = call_user_func_array(array($obj, "run"), $variables);
 
 		if (isset($result)) { //Извлекаем переменные из контроллера для view
 			extract($result);
@@ -61,6 +73,24 @@ class Widget
 	public function language($view)
 	{
 		Language::includeLang($_COOKIE['lang'], $view);
+	}
+
+	/*
+		Проверка наличия и валидности переданого CSRF токена 
+	*/
+	private function checkCSRF ()
+	{
+		if ($this->csrf) { 
+			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+				if (!isset($_POST['token'])) {
+					die("CSRF not passed");
+				}
+				if (!hash_equals($_SESSION['token'], $_POST['token'])) {
+					die("CSRF is invalid");
+				}
+			}
+		}
+		
 	}
 
 

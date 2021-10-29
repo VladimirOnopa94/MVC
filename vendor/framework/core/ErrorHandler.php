@@ -13,7 +13,7 @@ class ErrorHandler
 		public $logger ; 
 
 		public function  __construct(){
-			if (DEBUG) {
+			if (DEBUG['enable']) {
 				error_reporting(-1);
 			}else{
 				error_reporting(0);
@@ -67,7 +67,9 @@ class ErrorHandler
  				$controller = new Error\ErrorController();
  				$controller->ShowError();
 			}
-			if (DEBUG) {
+			if (DEBUG['enable'] && (!empty(DEBUG['ip']) && in_array($_SERVER['REMOTE_ADDR'], DEBUG['ip']))) {
+				echo $errno . ' ' . $errfile . ':' . $errline . ' ' . $errstr;
+			}elseif (DEBUG['enable'] && (empty(DEBUG['ip']) && !in_array($_SERVER['REMOTE_ADDR'], DEBUG['ip']))) {
 				echo $errno . ' ' . $errfile . ':' . $errline . ' ' . $errstr;
 			}else{
 				$controller = new Error\ErrorController();

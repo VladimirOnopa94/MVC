@@ -21,22 +21,21 @@ class Router
 		$this->default_route = '' ;
 
 		$this->run();
-
 	}
+
 
 	/*
 		Подключаем все файлы роутинга из папки routes
 	*/
 	private function includeRoutesFiles(){
-		$path    = CONFIG . '/routes';
+		$path  = ROOT . '/routes';
 		$files = scandir($path);
 		$files = array_diff(scandir($path), array('.', '..'));
-
 		$routeResult = [];
 
 		if (!empty($files)) {
 			foreach ($files as $key => $route) {
-				$routeResult[] = require_once CONFIG . '/routes/' . $route ;
+				$routeResult[] = require_once $path . '/' . $route ;
 			}
 			$this->router = array_reduce($routeResult, 'array_merge', array());
 		}else{
@@ -49,21 +48,49 @@ class Router
 	//
 	
 	private  function getUrl (){
+
 		$url = '';
-		if ( isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '' ) {
-			$url = trim($_SERVER['QUERY_STRING']);
+		if ( isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] != '' ) {
+			$url = trim($_SERVER['REQUEST_URI']);
 		}elseif ( $url == '' ) { // Метод по умолчанию указан в route.php как пустой ( '' => 'SomeController' )
 			$url = $this->default_route;
 		}
 		
 		/*Если переключен язык производится редирект , иначе ничего не происходит*/
 		Language::isLangSwitch($url);  
-		/*Формирование url с учетом языка*/
-		$url = Language::transformUrl($url);
-
+		/*Нормализируем URL если нужно*/
+		//$url = $this->normalizeUrl($url);
+		
+		/*Являеться ли url сервисным*/
+		if ($this->isServiceUrl($url) === false) {
+			/*Формирование url с учетом языка*/
+			$url = Language::transformUrl($url);
+		}
 		return $url;
-
 	}
+
+	private  function isServiceUrl($url){
+		if (!empty($url)) {
+			$servicePrefix = config_get('kernel.service_prefix');
+			$parts = explode('/', ltrim($url , '/'));
+			if (in_array($parts[0], $servicePrefix)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/*Нормализируем URL */
+	/*private  function normalizeUrl ($url){
+		$normalizeUrl = config_get('kernel.normalizeUrl');
+		
+		if ($normalizeUrl['enable'] === true) {
+			if (substr($_SERVER['REQUEST_URI'], -1) == '/' && $_SERVER['REQUEST_URI'] != '/') { 
+				redirect('/'. rtrim(ltrim($url, '/'), '/'));
+			}
+		}
+		return $url;
+	}*/
 
 	//	
 	// Ищем совпадения в файле router.php с указаным в адрес. строке url
@@ -71,14 +98,15 @@ class Router
 
 	private function matchRoute ($url) {
 
-		$getParamArray = array();
+		$langSettings = config_get('kernel.language');
 
 		// Обрабатываем $_GET параметры из url если они есть
-
+		$getParamArray = array();
 		if ( strpos($url, '=') ) { 
 			if (strpos($url, '?')) { 
 				$getParamArray = explode('?', $url);
-				$getParamArray = array_slice($get_par,1);
+				$getParamArray = array_slice($getParamArray,1);
+				$getParamArray = explode('&', $getParamArray[0]);
 				$url = strtok($url, '?');
 			}elseif (strpos($url, '&')) { 
 				$getParamArray = explode('&', $url);
@@ -91,9 +119,10 @@ class Router
 			}
 		}
 
-		$urlOriginal = $url;
 
-		$url = explode('/', $url);
+		$urlOriginal = ltrim($url, '/');
+
+		$url = explode('/', ltrim($url, '/'));
 
 		foreach ($this->router as $pattern => $route) {
 
@@ -104,14 +133,13 @@ class Router
 			if ( count($routePattern) != count($url) ) { 
 				continue;
 			}
-
+			
 			$resultUrl = array();
-
+			
 			foreach ($routePattern as $k => $routeParam) {
 				
 				preg_match('/^{\w+}/', $routeParam, $matches);
-
-				if ( !empty($routeParam) && empty($matches) && strpos($routeParam, $url[$k]) === false ) {	
+				if ( !empty($url[$k]) && !empty($routeParam) && empty($matches) && strpos($routeParam, $url[$k]) === false ) {	
 					break;	
 				}
 				
@@ -133,7 +161,7 @@ class Router
 					}
 
 					foreach ($url as $key => $value) {
-						$isLang =  array_key_exists ($value, LANG['langs']);
+						$isLang =  array_key_exists ($value, $langSettings['langs']);
 						if (!$isLang) {/*Игнорируем параметр языка в массиве*/
 							if (isset($_POST) && $_POST) { //Пишем POST параметры в response
 								foreach ($_POST as $k_post => $v_post) {
@@ -153,6 +181,7 @@ class Router
 				}	
 				
 			}
+
 
 			$resultUrl = rtrim(implode('/', $resultUrl),'/');
 
@@ -247,7 +276,7 @@ class Router
  			if ($response = $this->matchRoute($url)) {
  				$this->callControllerMethod ($response);
  			} else {
- 				http_response_code(404);
+ 				abort(404) ;
  				$controller = new Error\ErrorController();
  				$controller->ShowError();
  			}

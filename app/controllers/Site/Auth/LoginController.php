@@ -19,7 +19,7 @@ class LoginController extends Controller{
 		parent::__construct();
 	}*/
 
-	public function Index()
+	public function Index($request)
 	{
 
 		//$array = ['data'=>'value'];

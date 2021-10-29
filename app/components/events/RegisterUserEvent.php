@@ -10,7 +10,7 @@ class RegisterUserEvent extends Event
 	public $data;
 	public $text;
 	
-    public function __construct()
+    public function __construct($data,$text)
     {
     	$this->data = $data;
     	$this->text = $text;

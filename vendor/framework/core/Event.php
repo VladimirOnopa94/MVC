@@ -14,7 +14,7 @@ abstract class Event
 
     public function __construct(){
 
-    	$this->eventsList = require CONFIG . '/events.php' ; //файл событий-обработчиков
+    	$this->eventsList = config_get('kernel.events'); //файл событий-обработчиков
 
     	$event = get_called_class();
     	$this->eventVariables = get_object_vars($this);//получим переменные из пользовательского события

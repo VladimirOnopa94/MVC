@@ -10,9 +10,10 @@ return [
 	'{lang}/register' 			=> 'Site\Auth\RegisterController@Index', 
 	'{lang}/signup' 			=> 'Site\Auth\RegisterController@Signup',
 	/*pages*/
-	'{lang}/phonebook' 			=> 'Site\PhonebookController@Index',
+	'{lang}/phonebook' 			=> 'Site\IndexController@Page',
 	'{lang}/mycontact' 			=> 'Site\MycontactController@Index',
 	'{lang}/savecontact' 		=> 'Site\MycontactController@Store',
+	'{lang}/offline' 		    => 'Site\MaintenanceController@inWork',
 
 ];
 
