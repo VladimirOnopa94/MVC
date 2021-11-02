@@ -3,6 +3,7 @@ namespace app\controllers\Site;
 
 use app\models\Category;
 use app\controllers\Controller;
+use framework\core\App;
 
 class IndexController extends Controller{ 
 
@@ -14,7 +15,9 @@ class IndexController extends Controller{
 		$page = "Главная"; 
 		$var1 = "test2"; 
 		$this->language('index');
-		//$this->setTitle('Главная');
+		$this->setTitle('Главная');
+
+		//var_dump(App::request()->get('test'));
 
 		$this->render('index' , compact('page','var1'));
 	}
@@ -34,7 +37,7 @@ class IndexController extends Controller{
 
 	public function Page($request)
 	{
-		var_dump($request);
+		echo "s";
 	}
 
 	public function Category($request)

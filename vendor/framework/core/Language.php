@@ -49,20 +49,13 @@ class Language
 		if (!isset($_COOKIE['lang'])) {
 			$_COOKIE['lang'] = $def_lang;
 		}
-		/*
-		if (stristr($url, '?', true)) {
-			$url = stristr($url, '?', true);
-		}
-		if (stristr($url, '&', true)) {
-			$url =  stristr($url, '&', true); 
-		}
-		
-		$url =  rtrim($url, '/'); */
-		$url = explode('/', ltrim($url, '/'));
+
+		$url = parse_url(siteUrl() . $_SERVER['REQUEST_URI']); 
+		$url = explode('/', ltrim($url['path'], '/'));
 
 		$isHasLang =  array_key_exists ($url[0], $langs);
 		$isDefLang =  $_COOKIE['lang'] == $def_lang;
-
+		
 		//для AJAX запросов 
 		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 			array_unshift($url, $_COOKIE['lang']);
@@ -164,20 +157,32 @@ class Language
 		$isDefLang =  $_COOKIE['lang'] == $def_lang;
 
 		if (isset($url)) {
+			$originalUrl = $url;
 			if (($isDefLang && $langSettings['show_default'] === true) || $isDefLang === false) {
+
 				$url = explode('/', ltrim($url, '/'));
 				$isHasLang =  array_key_exists ($url[0],  $langSettings['langs']);
 				if ($isHasLang) {
 					array_shift($url);
 					array_unshift($url, $_COOKIE['lang']);
 				}else{
-					array_unshift($url, $_COOKIE['lang']);
+					//если ссылка относительная не добавляем в нее префикс языка
+					if (strripos($originalUrl, '/') === 0) { 
+						array_unshift($url, $_COOKIE['lang']);
+					}
+					
 				}
-				$resultLink = '/' . rtrim(implode('/', $url),'/');
+				$resultLink = rtrim(implode('/', $url),'/');
 			}else{
-				$resultLink = '/' . ltrim(rtrim($url,'/'), '/');
+				$resultLink = ltrim(rtrim($url,'/'), '/');
 			}
 
+			if (strripos($originalUrl, '/') === 0) { 
+				$resultLink = '/' . str_replace('/?', '?', $resultLink);
+			}else{ 
+				$resultLink = ltrim(str_replace('/?', '?', $resultLink) , '/');
+			}
+			
 			return $resultLink;
 		}
 

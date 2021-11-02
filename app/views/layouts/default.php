@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="<?php echo getLang() ?>">
   <head>
+    <base href="<?php echo base(); ?>/">
     <meta charset="utf-8">
     <meta name="csrf-token" content="<?php echo getCsrfToken(); ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,7 +25,6 @@
 
   <body>
      
-
     <?php app\components\widgets\Header::widget(); ?>
 
     <div class="main container" style="padding-top: 10px;">

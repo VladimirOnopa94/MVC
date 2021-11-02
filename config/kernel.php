@@ -38,7 +38,7 @@ return [
 	/*
 		Префиксы в url на которые не распостраняется формирование ссылки с языком
 	*/
-	'service_prefix' => ['api'],
+	'service_prefix' => ['api','panel_adm'],
 
 	
 

@@ -1,6 +1,6 @@
 <?php 
 
 return [
-	//'{lang}/test' 				=> 'Admin\Auth\LoginController@Index',
+	//'/panel_adm/login' 				=> 'Admin\LoginController@Index',
 ];
 

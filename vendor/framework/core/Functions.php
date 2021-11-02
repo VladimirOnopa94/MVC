@@ -55,10 +55,17 @@ function Auth()
 {
 	return framework\core\Auth\Authenticate::checkAuth();
 }
-//Вернуть  url сайта без строки запроса 
+
+//Получить url сайта без строки запроса 
 function siteUrl() 
 {
 	return  (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+}
+
+//Получить полный юрл текущей страницы
+function base() 
+{
+	return  (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 }
 
 //Вернем 404 ответ

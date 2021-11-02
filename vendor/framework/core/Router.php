@@ -58,17 +58,19 @@ class Router
 		
 		/*Если переключен язык производится редирект , иначе ничего не происходит*/
 		Language::isLangSwitch($url);  
-		/*Нормализируем URL если нужно*/
-		//$url = $this->normalizeUrl($url);
 		
-		/*Являеться ли url сервисным*/
+		
 		if ($this->isServiceUrl($url) === false) {
 			/*Формирование url с учетом языка*/
 			$url = Language::transformUrl($url);
 		}
+
 		return $url;
 	}
 
+	/*
+		Проверяем являеться ли url сервисным
+	*/
 	private  function isServiceUrl($url){
 		if (!empty($url)) {
 			$servicePrefix = config_get('kernel.service_prefix');
@@ -80,37 +82,25 @@ class Router
 		return false;
 	}
 
-	/*Нормализируем URL */
-	/*private  function normalizeUrl ($url){
-		$normalizeUrl = config_get('kernel.normalizeUrl');
-		
-		if ($normalizeUrl['enable'] === true) {
-			if (substr($_SERVER['REQUEST_URI'], -1) == '/' && $_SERVER['REQUEST_URI'] != '/') { 
-				redirect('/'. rtrim(ltrim($url, '/'), '/'));
-			}
-		}
-		return $url;
-	}*/
-
-	//	
-	// Ищем совпадения в файле router.php с указаным в адрес. строке url
-	//
-
+	/*
+		Ищем совпадения в файле router.php с указаным в адрес. строке url
+	*/
 	private function matchRoute ($url) {
 
 		$langSettings = config_get('kernel.language');
 
 		// Обрабатываем $_GET параметры из url если они есть
-		$getParamArray = array();
-		if ( strpos($url, '=') ) { 
-			if (strpos($url, '?')) { 
-				$getParamArray = explode('?', $url);
-				$getParamArray = array_slice($getParamArray,1);
-				$getParamArray = explode('&', $getParamArray[0]);
+
+		$fullUrl = parse_url(siteUrl() . $_SERVER['REQUEST_URI']);
+
+		if (  isset($fullUrl['query']) ) { 
+			$getParamArray = array();
+
+			if (strpos($fullUrl['query'], '?')) { 
+				$getParamArray = explode('?', $fullUrl['query']);
 				$url = strtok($url, '?');
-			}elseif (strpos($url, '&')) { 
-				$getParamArray = explode('&', $url);
-				$getParamArray = array_slice($getParamArray,1);
+			}elseif (strpos($fullUrl['query'], '&')) { 
+				$getParamArray = explode('&', $fullUrl['query']);
 				$url = strtok($url, '&');
 			}
 			foreach ($getParamArray as $key => $value) {
@@ -118,7 +108,6 @@ class Router
 				$response['params'][$get_part[0]] = $get_part[1]; 
 			}
 		}
-
 
 		$urlOriginal = ltrim($url, '/');
 
@@ -144,6 +133,11 @@ class Router
 				}
 				
 				if ( !empty($routeParam) && !empty($matches)  ) {
+
+					//фикс для url главной стр. типа (/ru  и т.д.)
+					if (!array_key_exists($url[$k], $langSettings['langs'])) {
+						continue;
+					}
 					
 					// заменяем параметр {N} параметром из url
 					
@@ -213,7 +207,6 @@ class Router
 	Переменная $request всегда доступна в методе контроллера 
 	и содерижит свойства params (переданые параметры в url) и 
 	controller (вызываемый контроллер и метод ) */
-	
 
 	private function callControllerMethod ($request) {
 
