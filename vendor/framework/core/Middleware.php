@@ -4,10 +4,12 @@
  	перед передачей запроса пользовательскому контроллеру
  */
 namespace framework\core;
-
+use framework\core\Auth\Authenticate;
 
 abstract class Middleware
 {
+
+	use Authenticate;
 
 	public function __construct($actions = [])
 	{

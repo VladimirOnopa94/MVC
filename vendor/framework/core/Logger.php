@@ -16,7 +16,7 @@ class Logger
 	public static function log ($massage , string $file)
 	{
 		try{
-			$log_param = config_get('kernel.log_param');
+			$log_param = config('kernel.log_param');
 			
 			if (array_key_exists($file , $log_param['logs'])) {
 				

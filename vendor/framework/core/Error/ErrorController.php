@@ -13,6 +13,15 @@ class ErrorController extends Controller{
 		$this->render('404');
 	}
 	
+	public function ShowForbbiden()
+	{
+		abort(403);
+		
+		$this->setTitle('403');
+		
+		$this->render('403');
+	}
+	
 
 	
 }

@@ -65,7 +65,18 @@ function siteUrl()
 //Получить полный юрл текущей страницы
 function base() 
 {
-	return  (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+	$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+	return rtrim($url, '/');
+}
+
+//Сформировать абсолютный путь к ресурсу
+function resource($url) 
+{
+	if (isset($url) && !empty($url)) {
+		$url = ltrim($url, '/');
+		return siteUrl() . '/' . $url ;
+	}
+	return '';
 }
 
 //Вернем 404 ответ
@@ -93,7 +104,7 @@ function randomToken($length)
 }
 
 //Получить значение из файла конфига
-function config_get($configKey) 
+function config($configKey) 
 {
 	$path  = CONFIG;
 	$files = glob(CONFIG.'/*.{php}', GLOB_BRACE);

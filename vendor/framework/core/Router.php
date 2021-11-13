@@ -73,7 +73,7 @@ class Router
 	*/
 	private  function isServiceUrl($url){
 		if (!empty($url)) {
-			$servicePrefix = config_get('kernel.service_prefix');
+			$servicePrefix = config('kernel.service_prefix');
 			$parts = explode('/', ltrim($url , '/'));
 			if (in_array($parts[0], $servicePrefix)) {
 				return true;
@@ -87,7 +87,7 @@ class Router
 	*/
 	private function matchRoute ($url) {
 
-		$langSettings = config_get('kernel.language');
+		$langSettings = config('kernel.language');
 
 		// Обрабатываем $_GET параметры из url если они есть
 
@@ -229,22 +229,36 @@ class Router
 				if ( method_exists($controllerObj, $method)) {
 
 					//Middlewares 
-					foreach ($controllerObj->getMiddlewares() as  $middleware) { 
-						// Если в Middleware передан параметр метода
-						if (!empty($middleware->actions)) { 
-							foreach ($middleware->actions as $key => $action) {
-								// Если переданный параметр совпадает с вызывающим
-								if ($action == $method) { 
-									$middleware->execute();
-								}
-							}
-						}else{ 
-							//Или применяем на весь контроллер который установил Middleware
-							$middleware->execute();
-						}
-	 				}//Middlewares END
+					$middlewaresList = $controllerObj->getMiddlewares();
+					$middlewareResponse = true;
 
-					$controllerObj->$method($request);
+					if (isset($middlewaresList) && !empty($middlewaresList)) {
+
+						foreach ($middlewaresList as  $middleware) { 
+							// Если в Middleware передан параметр метода
+							
+							if (!empty($middleware->actions)) { 
+								foreach ($middleware->actions as $key => $action) {
+									// Если переданный параметр совпадает с вызывающим
+									if ($action == $method) { 
+										$middlewareResponse = $middleware->execute();
+									}
+								}
+							}else{ 
+								//Или применяем на весь контроллер который установил Middleware
+								$middlewareResponse = $middleware->execute();
+							}
+							//Остановим если один из middleware вернул false
+							if ($middlewareResponse === false) {
+								break;
+							}
+		 				}
+	 				}
+	 				//Middlewares END
+
+	 				if ($middlewareResponse === true ) {
+	 					$controllerObj->$method($request);
+	 				}
 
 				} else {
 					throw new Exception("Method {$method} not exsist in {$controller}");

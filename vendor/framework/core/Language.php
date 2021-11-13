@@ -15,7 +15,7 @@ class Language
 	*/
 	public static function includeLang ($code = null, $view )
 	{
-		$langSettings = config_get('kernel.language');
+		$langSettings = config('kernel.language');
 		if (is_null($code)) {
 			$code = $langSettings['langs'];
 		}		
@@ -40,7 +40,7 @@ class Language
 	*/
 	public static function transformUrl ($url)
 	{
-		$langSettings = config_get('kernel.language');
+		$langSettings = config('kernel.language');
 		$def_lang = $langSettings['def_lang'];
 		$langs = $langSettings['langs'];
 		$show_default = $langSettings['show_default'];
@@ -102,7 +102,7 @@ class Language
 	*/
 	private static function SetLang($code)
 	{	
-		$langSettings = config_get('kernel.language');
+		$langSettings = config('kernel.language');
 		if (array_key_exists($code, $langSettings['langs'] ) ) {
 			setcookie('lang' , $code, time() +3600*24*7, '/');
 		}
@@ -130,7 +130,7 @@ class Language
 	*/
 	public static function isLangSwitch ($url)
 	{	
-		$langSettings = config_get('kernel.language');
+		$langSettings = config('kernel.language');
 		$url = explode('/', ltrim($url, '/'));
 		if ($url[0] == 'language' && array_key_exists ($url[1],  $langSettings['langs'])) {
 			self::SetLang($url[1]);
@@ -151,7 +151,8 @@ class Language
 		Преобразовать ссылку url в соответствии с языком
 	*/
 	public static function createLink($url){
-		$langSettings = config_get('kernel.language');
+
+		$langSettings = config('kernel.language');
 
 		$def_lang = $langSettings['def_lang'];
 		$isDefLang =  $_COOKIE['lang'] == $def_lang;
@@ -161,27 +162,20 @@ class Language
 			if (($isDefLang && $langSettings['show_default'] === true) || $isDefLang === false) {
 
 				$url = explode('/', ltrim($url, '/'));
+
 				$isHasLang =  array_key_exists ($url[0],  $langSettings['langs']);
 				if ($isHasLang) {
 					array_shift($url);
 					array_unshift($url, $_COOKIE['lang']);
 				}else{
-					//если ссылка относительная не добавляем в нее префикс языка
-					if (strripos($originalUrl, '/') === 0) { 
-						array_unshift($url, $_COOKIE['lang']);
-					}
-					
+					array_unshift($url, $_COOKIE['lang']);					
 				}
 				$resultLink = rtrim(implode('/', $url),'/');
 			}else{
 				$resultLink = ltrim(rtrim($url,'/'), '/');
 			}
-
-			if (strripos($originalUrl, '/') === 0) { 
-				$resultLink = '/' . str_replace('/?', '?', $resultLink);
-			}else{ 
-				$resultLink = ltrim(str_replace('/?', '?', $resultLink) , '/');
-			}
+			
+			$resultLink = siteUrl() . '/' . str_replace('/?', '?', $resultLink);
 			
 			return $resultLink;
 		}
@@ -192,7 +186,7 @@ class Language
 		Получить текущий язык
 	*/
 	public static function getLang(){
-		$langSettings = config_get('kernel.language');
+		$langSettings = config('kernel.language');
 		if (isset($_COOKIE['lang'])) {
 			return $_COOKIE['lang'];
 		}else{

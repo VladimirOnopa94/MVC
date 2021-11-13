@@ -8,19 +8,23 @@ use Exception;
  */
 class Validate 
 {
+
 	private static $data; 
 	private static $errors; 
-	private static $allowedImageExtension = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg', 'webp']; 
+	private static $allowedImageExtension = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg', 'webp'];
 	private static $regexes = array(
         'date'        => "#^[0-9]{1,2}[-/][0-9]{1,2}[-/][0-9]{4}$#",
         'alpha'       => '#^[A-Za-z]+[A-Za-z \\s]*$#',
         'alphanumeriс'     => "#^[a-zA-Z0-9_]*$#",
     );
 
+    	
+    
+
     /*
     	Загружаем данные в переменную data
     */
-	public static function load ($array){
+	public static function load ($array){		
 		if (!empty($array)) {
 			self::$data = $array;
 		}
@@ -30,6 +34,9 @@ class Validate
 		Валидируем данные в соответсвии с передаными полями и правилами
 	*/
 	public static function validate ($rules){
+		if (is_null(self::$data)) {
+			throw new Exception('Data for validation is not set, use VD::load($data) ');
+		}
 		if (!empty($rules)) {
 			foreach ($rules as $key_rule => $rule) {
 				$rule = explode('|', $rule);

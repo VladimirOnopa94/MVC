@@ -53,10 +53,10 @@ abstract class Controller
 	/*
 		Передаем имя вида , данные , и вызываем файл вида
 	*/	
-	public function render($view = '', $data = array())
+	public function render($view = '', $data = array(), $returnHtml = false)
 	{	
 		$view = new View($view, $data, $this->layout, $this->title);
-		$view->getView();
+		$view->getView($returnHtml);
 	}
 
 	/*

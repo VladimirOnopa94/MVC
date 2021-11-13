@@ -10,25 +10,22 @@ class User extends \framework\core\Model
 
 	protected $table = 'users';
 
-/*	public function testQuery($id,$country_id){
+/*	public function testQuery($ids,$country = NULL){
 
         $query = "SELECT * FROM {$this->table} ";
         
-        $query .= " WHERE id = ?";
-        $pararms[] = $id;
+        $query .= " WHERE id = :id";
+        $params['id'] = $ids; 
+        
 
-        if ($country_id == 8) {
-            $query .= " AND country_id = ?";
-            $pararms[] = $country_id;
-        }
-
-        if ($country_id == 8) {
-            $query .= ' LIMIT 1';
+        if (!is_null($country)) {
+            $params['country'] = $country; 
+            $query .= " AND country_id = :country";
         }
 
 		 $result = $this->findBySql(
             $query, 
-            $pararms
+            $params
         );
 
          return $result;

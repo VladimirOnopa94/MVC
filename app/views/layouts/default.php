@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="<?php echo getLang() ?>">
   <head>
-    <base href="<?php echo base(); ?>/">
+    <base href="<?php echo base(); ?>">
     <meta charset="utf-8">
     <meta name="csrf-token" content="<?php echo getCsrfToken(); ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,17 +17,20 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="/js/app.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="<?php echo resource('/js/app.js') ?>"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo resource('/css/style.css') ?>">
 
     <title><?php echo $this->getTitle(); ?></title>
   </head>
 
+
   <body>
-     
+
     <?php app\components\widgets\Header::widget(); ?>
+     
 
     <div class="main container" style="padding-top: 10px;">
+      <?php app\components\widgets\Breadcrumbs::widget(array('name' => 'Главная', 'href' => url('/'))); ?>
       <?php echo $content; ?>
     </div>
 

@@ -1,6 +1,7 @@
 <?php 
 namespace framework\core\Auth;
 use app\models\Auth\User;
+use Exception;
 
 trait Authenticate{    
     
@@ -75,6 +76,20 @@ trait Authenticate{
     public function logoutUser() {
         unset($_SESSION['user']);
         redirectBack();die;
+    }
+
+    /*
+        Разлогинить юзера
+    */
+    public function checkRole($role, $userRole) {
+        $roles = config('kernel.roles');
+        if (isset($role) && isset($userRole)) {
+            if ($roles[$role] !== intval($userRole)) {
+               return false;
+            }else{
+                return true;
+            }
+        }
     }
   
 }

@@ -3,6 +3,7 @@ namespace app\controllers\Site\Auth;
 
 use app\models\Index;
 use app\controllers\Controller;
+use app\components\widgets\Breadcrumbs;
 use framework\core\Validate as VD;
 use app\models\Auth\User;
 
@@ -15,7 +16,8 @@ class RegisterController extends Controller{
 	public function Index()
 	{
 
-
+		Breadcrumbs::$param['breadcrumbs'][] = array('name' => 'Регистрация' );
+		
 		$this->setTitle('Регистрация');
 
 		$this->render('Auth/AuthRegister');

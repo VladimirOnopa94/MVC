@@ -37,7 +37,11 @@ class IndexController extends Controller{
 
 	public function Page($request)
 	{
-		echo "s";
+		/*$page = "Главная"; 
+		$var1 = "test2";
+		$this->language('index');
+		echo  $this->render('index' , compact('page','var1'), true);die;*/
+		
 	}
 
 	public function Category($request)

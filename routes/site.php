@@ -4,6 +4,7 @@ return [
 	'{lang}' 					=> 'Site\IndexController@Index',
 	/*login*/
 	'{lang}/login' 				=> 'Site\Auth\LoginController@Index',
+	'{lang}/test-page' 			=> 'Site\Auth\LoginController@TestPage',
 	'{lang}/logout' 			=> 'Site\Auth\LoginController@Logout',
 	'{lang}/signin' 			=> 'Site\Auth\LoginController@Login',
 	/*register*/

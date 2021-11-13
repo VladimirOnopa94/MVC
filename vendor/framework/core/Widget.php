@@ -11,6 +11,7 @@ use Exception;
 class Widget 
 {
 	public $csrf ;
+	public static $param ;
 	
 	function __construct()
 	{

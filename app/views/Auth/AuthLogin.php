@@ -1,4 +1,5 @@
 <div class="container">
+
    <?php if ($error = flashMessage('error')) { ?>
      <div class="alert alert-danger" role="alert">
         <?php echo $error;  ?>

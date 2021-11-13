@@ -33,12 +33,20 @@ return [
 			'en' => [ 'name' => 'Английский', 'image' => ''], 
 		], 
 		// отображать язык по умолчанию в url
-		'show_default' =>  true 
+		'show_default' =>  false 
 	],
 	/*
 		Префиксы в url на которые не распостраняется формирование ссылки с языком
 	*/
 	'service_prefix' => ['api','panel_adm'],
+	/*
+		Роли 
+	*/
+	'roles' => [
+		'USER' => 1,
+		'MANAGER' => 2,
+		'ADMIN' => 3
+	],
 
 	
 

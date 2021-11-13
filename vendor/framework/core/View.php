@@ -28,7 +28,7 @@ class View
 	//
 	//Подключаем файл вида 
 	//
-	public function getView ()
+	public function getView ($returnHtml)
 	{
 		
 		$view = ltrim($this->view,'/');
@@ -46,7 +46,12 @@ class View
 		}else{
 			throw new Exception("View {$file_view} not found !");
 		}
-
+		
+		if ($returnHtml) {
+			$html = ob_get_clean(); 
+			echo json_encode($html);
+			return true;
+		}	
 		$content = ob_get_clean(); // Выводим переменную в layout шаблоне
 
 		$file_layout = APP . '/views/layouts/' . $this->layout . '.php';
