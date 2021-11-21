@@ -26,8 +26,9 @@ abstract class Event
     	}
     }
 
-    /*
-   		 Метод вызова слушателей события
+   /**
+    * Метод вызова слушателей события
+    * @param  string $event 
     */
     private function callListener($event){
 

@@ -10,9 +10,11 @@ class Language
 
 	public static $lang_data = [];
 
-	/*
-		Подключение файлов по имени вида
-	*/
+	/**
+	 * Подключение файлов по имени вида
+	 * @param  string $code [description]
+	 * @param  string $view 
+	 */
 	public static function includeLang ($code = null, $view )
 	{
 		$langSettings = config('kernel.language');
@@ -27,17 +29,20 @@ class Language
 
 	}
 
-	/*
-		Получить фразу по ключу 
-	*/
+	/**
+	 * Получить фразу по ключу 
+	 * @param  string $key 
+	 */
 	public static function getPhrase ($key)
 	{
 		return isset(self::$lang_data[$key]) ? self::$lang_data[$key] : $key;
 	}
 
-	/*
-		Формирование юрл с учетом языка
-	*/
+
+	/**
+	 * Формирование юрл с учетом языка
+	 * @param  string $url 
+	 */
 	public static function transformUrl ($url)
 	{
 		$langSettings = config('kernel.language');
@@ -50,9 +55,9 @@ class Language
 			$_COOKIE['lang'] = $def_lang;
 		}
 
-		$url = parse_url(siteUrl() . $_SERVER['REQUEST_URI']); 
-		$url = explode('/', ltrim($url['path'], '/'));
-
+		$url = self::buildUrl(); 
+		$url = explode('/', ltrim($url, '/'));
+		
 		$isHasLang =  array_key_exists ($url[0], $langs);
 		$isDefLang =  $_COOKIE['lang'] == $def_lang;
 		
@@ -63,16 +68,18 @@ class Language
 			return $resultUrl;
 		}
 
+
 		/*Если в $_COOKIE['lang'] язык по умолч. и отключен показ языка по умолч. 
 		и в юрл языка нет то добавим для работы роутера*/
 		if (!$isHasLang && !$show_default && $isDefLang) {
 			array_unshift($url, $_COOKIE['lang']);
 			$resultUrl = rtrim(implode('/', $url),'/');
+
 			return $resultUrl;
 		}
 
 		/*Если в $_COOKIE['lang'] язык по умолч. и отключен показ языка по умолч. 
-		и в юрл есть язык то вірежем его из url и перенаправим без него*/
+		и в юрл есть язык то вырежем его из url и перенаправим без него*/
 		if ($isHasLang && !$show_default && $isDefLang) {
 			array_shift($url);
 			self::redirect($url);
@@ -97,9 +104,33 @@ class Language
 		return $resultUrl;
 	}
 
-	/*
-		Переключаем язык и редиректим на url с которого было нажатие
-	*/
+	/**
+	 * Формирование url
+	 * @return string Свормированая строка url
+	 */
+	private static function buildUrl(){
+		$url_original = parse_url(siteUrl() . $_SERVER['REQUEST_URI']); 
+		$url = $url_original; 
+		
+		if (isset($url['path'])) {
+			$url = explode('/', $url['path']);
+			$url  = array_values(array_filter($url));
+		}
+
+		if (isset($url_original['query'])) {
+			if (count($url) > 0) {  
+				$index = count($url) - 1; 
+				$url[$index] = $url[$index] . '?' . $url_original['query'];
+			}
+		}
+		return implode('/', $url);
+		
+	}
+
+	/**
+	 * Переключаем язык и редиректим на url с которого было нажатие
+	 * @param  string $code 
+	 */	
 	private static function SetLang($code)
 	{	
 		$langSettings = config('kernel.language');
@@ -108,48 +139,75 @@ class Language
 		}
 		
 		//Заменяем старый язык в url на новый и редиректим
+		//
 		$url = str_replace(siteUrl(), '', $_SERVER['HTTP_REFERER']); 
+		
 		$url = ltrim($url, '/');
-		$url = explode('/', $url);
+	
+		$url_parse = parse_url($url);
 
-		if ($url && count($url) > 1 ) {
+		if (isset($url_parse['path'])) {
+			$url = explode('/', $url_parse['path']);
+		}else{
+			$url = str_replace(siteUrl(), '', $_SERVER['HTTP_REFERER']); 
+			$url = explode('/', $url);
+		}
+		
+		if ($url && count($url) > 1 && array_key_exists($url[0], $langSettings['langs'])) {
 			array_shift($url);
 		}elseif ( $url && count($url) == 1 && array_key_exists($url[0], $langSettings['langs'])) { 
 			$url = [];
 		}
 
+		$url = array_filter($url);
+
 		array_unshift($url, $code);
 
+		$res_url = 	implode('/', $url);
+		$res_url = 	parse_url($res_url);
+
+		if (isset($url_parse['query']) && !isset($res_url['query'])) {
+			if (count($url) > 0) {
+				$index = count($url) - 1;
+				$url[$index] = $url[$index] . '?' . $url_parse['query'];
+			}
+		}
+
 		redirect('/' . implode('/', $url));
+		
 		die;
 	}
 
-	/*
-		Если пользователь меняет язык, отловим это , 
-		для того что бы в Router корректно отработал метод
-	*/
+	/**
+	 * Если пользователь меняет язык, отловим это , для того что бы в Router корректно отработал метод
+	 * @param  string $url 
+	 */	
 	public static function isLangSwitch ($url)
 	{	
+
 		$langSettings = config('kernel.language');
 		$url = explode('/', ltrim($url, '/'));
+
 		if ($url[0] == 'language' && array_key_exists ($url[1],  $langSettings['langs'])) {
 			self::SetLang($url[1]);
 		}
 	}
 
-	/*
-		Преобразование в строку и редирект по указаному url
-	*/
+	/**
+	 * Преобразование в строку и редирект по указаному url
+	 * @param  string $url 
+	 */
 	private static function redirect($url){
 
 		$resultUrl = rtrim(implode('/', $url),'/');
-		header("Location: /" . $resultUrl);
+		redirect('/' . $resultUrl);
 		die;
 	}
 
-	/*
-		Преобразовать ссылку url в соответствии с языком
-	*/
+	/**
+	 * Преобразовать ссылку url в соответствии с языком
+	 * @param  string $url 
+	 */
 	public static function createLink($url){
 
 		$langSettings = config('kernel.language');
@@ -182,9 +240,10 @@ class Language
 
 	}
 
-	/*
-		Получить текущий язык
-	*/
+	/**
+	 * Получить текущий язык
+	 * @return string
+	 */
 	public static function getLang(){
 		$langSettings = config('kernel.language');
 		if (isset($_COOKIE['lang'])) {

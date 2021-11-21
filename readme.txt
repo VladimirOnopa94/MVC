@@ -62,10 +62,9 @@ vendor
 	объявив $this->layout 
 
 	public function index($request)
-		{
-			$this->layout = 'somelayout';
-
-		}
+	{
+		$this->layout = 'somelayout';
+	}
 
 	Где somelayout шаблон somelayout.php который находиться в папке /app/views/layouts
 
@@ -164,10 +163,7 @@ vendor
 
 	Для формирования ссылок в видах используем функцию 
 
-	url('/someUrl') для формирования обсолютных ссылок
-	или  
-	url('someUrl') - для формирования относительных ссылок
-	
+	url('/someUrl')
 
 	которая выводит ссылку сформированую с выбраным языком 
 
@@ -226,14 +222,11 @@ admin/someUrl или api/someMethod
 	Пример валидации 
 
 		$credentials = array('name' => $_POST['name'] , 'password' => $_POST['password'], 'file' => $_POST['file']);
-
-		VD::load($credentials);
-
-		$errors = VD::validate([
-			'name' => 'required|alpha' , 
-			'password' => 'required|numeric|max:10|min:2' , 
-			'file' => 'required|mimes:xml' , 
-		]); 	
+	
+		$errors = VD::load($credentials)->validate([
+			'name' => 'required' , 
+			'password' => 'required' , 
+		]); 
 			
 		if (empty($errors)) {
 			//do some
@@ -279,31 +272,31 @@ admin/someUrl или api/someMethod
 
 ********************Функция отправки писем *******************
 
-	$this->sendMail($subject, $message, $to, $headers, $view, $variables);
-
 	$subject (обязательный) - тема письма
-	$message (необязательный) - сообщение, если не указан шаблон письма передаем пустую строку
+	$text (необязательный) - сообщение
 	$to (обязательный) - получатели, массив получателей или один получатель строкой 'test@gmail.com'
-	$headers (необязательный) - заголовки, если нет заголовков передаем пустую строку
-	$view (необязательный) - шаблон, указываем путь к файлу php от папки views пример (mail/mail) значит что шаблон находится app/views/mail/mail.php, если не нужен передаем пустую строку
-	$variables (необязательный) - переменные, для передачи в шаблон письма , если нет передаем пустую строку
+	$headers (необязательный) - заголовки
+	$view (необязательный) - шаблон, указываем путь к файлу php от папки views пример (mail/mail) значит что шаблон находится app/views/mail/mail.php
+	$data (необязательный) - переменные, для передачи в шаблон письма
 
 	-------
 
 	Пример 
 
+	use framework\core\Mail;
+
 	$var = 'Информация';
 
 	$headers = "Content-Type: text/html; charset=UTF-8\r\n";
 
-	$this->sendMail(
-		'Тема фреймоврк', //тема письма  
-		'', //Текст если не указан шаблон
-		['test@gmail.com', 'test2@mail.ru'], //получатели письма
-		$headers, //Заголовки письма
-		'mail/mail', //шаблон письма 
-		compact('var')	//Переменные в шаблон письма
-	);
+	$mail = new Mail();
+	$mail->subject('Register')
+		 ->to('wowaonopa1991@gmail.com')
+		 ->view('mail/mail') 
+		 ->text('some text') 
+		 ->headers($headers)
+		 ->data(compact('var'))
+		 ->send();
 
 
 ******************** Middlewares*******************
@@ -380,3 +373,117 @@ admin/someUrl или api/someMethod
 	Получим данные 
 
 	echo \framework\core\Registry::get('cart'); 
+
+
+******************** Пагинация  *******************
+
+
+В контроллере передаем переменные для пагинации в вид
+
+$page = App::request()->get('page', 1); //кол. страниц
+$limit = 5; //елементов на странице
+
+$users = new User; //выборка пользователей для пагинации
+$users = $users->getUsers($page,$limit);
+
+$total = (isset($users['total'])) ? count($users['total']) : [] ;
+$users = (isset($users['result'])) ? $users['result'] : [] ;
+
+$this->render('users_list' , compact('total', 'page', 'limit', 'users'));
+
+--------
+
+В виде  вызываем виджет пагинации
+
+<?php 	if ($users) {
+	app\components\widgets\PaginationW::widget($total, $page, $limit );
+} ?>
+
+---Виджет пагинации
+
+use framework\core\Pagination;
+
+public  function run($total, $page, $limit)
+{
+	
+	$pagination = new Pagination($total, $page, $limit, '?page=');
+	$result['pagination'] = $pagination->get();
+
+	$result['view'] = 'pagination';
+
+	return $result ; 
+}
+
+
+-----
+Вид 
+
+<?php echo $pagination; ?>
+
+
+******************** Breadcrumbs  *******************
+
+В шаблоне выведем хлебные крошки (layout/default.php) и установим Главную
+
+<?php app\components\widgets\Breadcrumbs::widget(array('name' => 'Главная', 'href' => url('/'))); ?>
+
+
+в контроллере или виде добавим елемент для хлебной крошки 
+
+use app\components\widgets\Breadcrumbs;
+
+
+Breadcrumbs::$param['breadcrumbs'][] = array('name' => __('login_title') );
+
+
+В виджетах 
+
+class Breadcrumbs extends Widget{ 
+
+	public  function run($breadcrumbs)
+	{
+		if (isset($breadcrumbs) && !is_null(Widget::$param['breadcrumbs'])) {
+			array_unshift(Widget::$param['breadcrumbs'], $breadcrumbs); 
+		}
+
+		if ($breadcrumbs = Widget::$param['breadcrumbs']) {
+			$i = 0;
+			$numItems = count($breadcrumbs);
+			foreach ($breadcrumbs  as $key => $value) {
+				$href = '';
+				if (isset($value['href'])) {
+					$href = $value['href'];
+				}
+				$result['breadcrumbs'][$key]['name'] = $value['name'];
+				$result['breadcrumbs'][$key]['href'] = $href;
+				if(++$i != $numItems) {
+				    $result['breadcrumbs'][$key]['delimiter'] = '>';
+				}  
+		   } 
+		}
+
+		$result['view'] = 'breadcrumbs';
+
+		return $result;
+	}
+
+-------------
+
+в виде виджета 
+
+<?php if (isset($breadcrumbs)) { ?>
+	<div class="breadcrumbs">
+		<?php foreach ($breadcrumbs as $key => $breadcrumb) { ?>
+			<?php if (isset($breadcrumb['href']) && !empty($breadcrumb['href'])) { ?>
+				<a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['name']; ?></a>
+				<?php if (isset($breadcrumb['delimiter'])) { echo $breadcrumb['delimiter'];} ?>
+			<?php }else{ ?>
+				<span><?php echo $breadcrumb['name']; ?></span>
+				<?php if (isset($breadcrumb['delimiter'])) { echo $breadcrumb['delimiter'];} ?>
+			<?php } ?>
+			
+		<?php } ?>
+	</div>
+<?php } ?>
+
+	

@@ -53,7 +53,7 @@ class ErrorHandler
 				ob_end_clean();
 				$this->displayError($error['type'], $error['message'], $error['file'], $error['line'] );
 			}else{
-				ob_end_flush();
+				flush ();
 			}
 
 		}

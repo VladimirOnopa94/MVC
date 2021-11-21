@@ -1,59 +1,108 @@
 <?php 
-
 namespace framework\core;
+use Exception;
 
 /**
- *  Mail class
+ *  Класс отправки почты
  */
 class Mail 
 {
 	
-	public $subject ;
-	public $message ;
-	public $to ;
-	public $headers ;
-	public $view ;
-	public $data ;
+	public $subject ; /*Тема письма*/	
+	public $message; /*Сообщение письма*/	
+	public $to ; /*Адресат письма*/	
+	public $headers = '' ; /*Заголовки письма*/	
+	public $view; /*Шаблон письма*/	
+	public $data ; /*Переменные письма*/	
 
-	function __construct($subject, $message, $to, $headers = '', $view = '', $data = '')
-	{	
-		$this->subject = $subject;
-		$this->message = $message;
-		$this->to = $to;
-		$this->headers = $headers;
-		$this->view = $view;
-		$this->data = $data;
-	}
-
-	//
-	//Подключаем файл шаблона письма, передаем переменные 
-	//
-
-	public function init ()
+	/**
+	 * Установить заголовки
+	 * @param  string $headers 
+	 * @return object
+	 */
+	public function headers($headers)
 	{
-
+		$this->headers = $headers;
+		return $this;
+	}
+	/**
+	 * Установить тему письма
+	 * @param  string $subject 
+	 * @return object
+	 */
+	public function subject($subject)
+	{
+		$this->subject = $subject;
+		return $this;
+	}
+	/**
+	 * Установить получателя
+	 * @param  string $to 
+	 * @return object
+	 */
+	public function to($to)
+	{
+		$this->to = $to;
+		return $this;
+	}
+	/**
+	 * Установить сообщение письма
+	 * @param  string $message 
+	 * @return object
+	 */
+	public function text($message)
+	{
+		$this->message = $message;
+		return $this;
+	}
+	/**
+	 * Установить шаблон письма
+	 * @param  string $view 
+	 * @return object
+	 */
+	public function view($view)
+	{
+		$this->view = $view;
+		return $this;
+	}
+	/**
+	 * Установить переменные письма
+	 * @param  string $data 
+	 * @return object
+	 */
+	public function data($data)
+	{
+		$this->data = $data;
+		return $this;
+	}
+	/**
+	 * Отправить письмо
+	 */
+	public function send()
+	{
 		if (isset($this->view) && !empty($this->view)) {
 
 			if (isset($this->data)) { //Извлекаем переменные из контроллера 
 				extract($this->data);
 			}
-				
+			
 			ob_start();
 
-			$file_layout =  APP . '/views/' .$this->view . '.php';
+			$template =  APP . '/views/' .$this->view . '.php';
 
-			if (is_file($file_layout)){
-				include $file_layout;
+			if (is_file($template)){
+				include $template;
 			}else{
-				echo "Views " . $file_layout . " not found !";
+				throw new Exception("View " . $template . " not found !");
 			}
-			$content = ob_get_contents();
+			
+			$content = ob_get_clean ();
 
 			ob_end_clean();
 		}else{
+
 			$content = $this->message; 
 		}
-
 
         if (is_array($this->to)) {
 	        $mailTo = implode(', ', $this->to);	        
@@ -62,8 +111,9 @@ class Mail
         }
         
         mail($mailTo, $this->subject, $content, $this->headers);
-		
 	}
 	
 
 }
+
+

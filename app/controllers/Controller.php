@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use framework\core\View;
+
 //use framework\core\Registry;
 
 class Controller extends \framework\core\Controller

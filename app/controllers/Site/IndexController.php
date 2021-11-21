@@ -1,9 +1,11 @@
 <?php 
 namespace app\controllers\Site;
 
+use app\models\Auth\User;
 use app\models\Category;
 use app\controllers\Controller;
 use framework\core\App;
+
 
 class IndexController extends Controller{ 
 
@@ -12,14 +14,10 @@ class IndexController extends Controller{
 	public function index($request)
 	{
 
-		$page = "Главная"; 
-		$var1 = "test2"; 
 		$this->language('index');
 		$this->setTitle('Главная');
-
-		//var_dump(App::request()->get('test'));
-
-		$this->render('index' , compact('page','var1'));
+		
+		$this->render('index');
 	}
 
 	public function Api($request)

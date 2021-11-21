@@ -10,26 +10,40 @@ class User extends \framework\core\Model
 
 	protected $table = 'users';
 
-/*	public function testQuery($ids,$country = NULL){
 
-        $query = "SELECT * FROM {$this->table} ";
-        
-        $query .= " WHERE id = :id";
-        $params['id'] = $ids; 
-        
+	public function getUsers($page=1, $limit=10){
 
-        if (!is_null($country)) {
-            $params['country'] = $country; 
-            $query .= " AND country_id = :country";
-        }
+        $params['offsets'] = intval(($page-1) * $limit);
 
-		 $result = $this->findBySql(
+        $params['page'] = intval($limit); 
+
+        $query = "SELECT * FROM `{$this->table}` LIMIT :page OFFSET :offsets";
+        $result['result'] = $this->findBySql(
             $query, 
             $params
         );
 
+
+        $query = "SELECT * FROM `{$this->table}` ";
+        $result['total'] = $this->findBySql(
+            $query 
+        );
+
+    
+        
+        /*$query .= " WHERE id = :id";
+        $params['id'] = $ids; */
+        
+
+       /* if (!is_null($country)) {
+            $params['country'] = $country; 
+            $query .= " AND country_id = :country";
+        }*/
+
+		
+
          return $result;
-	}*/
+	}
 
 	/*
 		Создать нового пользователя

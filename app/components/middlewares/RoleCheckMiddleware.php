@@ -12,7 +12,7 @@ class RoleCheckMiddleware extends Middleware
 
     	if ($user !== false) {
 
-	        if ($this->checkRole('USER', 1)) {
+	        if ($this->checkRole('user', 1)) {
 	           	return true;    
 	        }else{
 

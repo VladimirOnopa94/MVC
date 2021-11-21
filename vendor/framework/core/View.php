@@ -3,8 +3,6 @@
 namespace framework\core;
 use Exception;
 
-//use framework\core\Auth\Authenticate;
-
 /**
  *  View class
  */
@@ -15,7 +13,6 @@ class View
 	public $data ;
 	public $layout ;
 	public $title ;
-	//use Authenticate;
 
 	function __construct($view, $data, $layout, $title)
 	{
@@ -25,9 +22,10 @@ class View
 		$this->title = $title;
 	}
 
-	//
-	//Подключаем файл вида 
-	//
+	/**
+	 * Подключаем файл вида 
+	 * @param  boolean $returnHtml 
+	 */
 	public function getView ($returnHtml)
 	{
 		
@@ -63,9 +61,11 @@ class View
 		}
 	}
 	
-	/*
-		Получить заголовок страницы
-	*/
+
+	/**
+	 * Получить заголовок страницы
+	 * @return string
+	 */
 	public function getTitle()
 	{
 		if (isset($this->title) && !empty($this->title)) {
@@ -75,9 +75,11 @@ class View
 		
 	}
 
-	/*
-		Передаем имя вида , данные , и вызываем файл вида
-	*/	
+	/**
+	 * Передаем имя вида , данные , и вызываем файл вида
+	 * @param  string $view 
+	 * @param  array  $data 
+	 */
 	public function render($view = '', $data = array())
 	{	
 

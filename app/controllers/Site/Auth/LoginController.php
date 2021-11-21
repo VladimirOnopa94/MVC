@@ -44,8 +44,9 @@ class LoginController extends Controller{
 
 		
 	}
-	public function TestPage()
+	public function TestPage($request)
 	{
+		//dd($request);
 		$this->setTitle('TEST');
 		
 		$this->render('Auth/AuthLogin');
@@ -53,17 +54,15 @@ class LoginController extends Controller{
 	
 	/*
 		Обработка логина пользователя
-	*/
-	public function Login()
+	*/	
+	public function Login($request)
 	{
-
+		
 		if ($data = App::request()->post()) {
 			
 			$credentials = array('name' => $data['name'] , 'password' => $data['password']);
 
-			VD::load($credentials);
-
-			$errors = VD::validate([
+			$errors = VD::load($credentials)->validate([
 				'name' => 'required' , 
 				'password' => 'required' , 
 			]); 
@@ -91,7 +90,7 @@ class LoginController extends Controller{
 
 	}
 
-	public function Logout() /*TODO*/
+	public function Logout() 
 	{
 		$this->logoutUser();
 	}

@@ -1,16 +1,22 @@
 <?php 
-
 namespace framework\core;
 
+/**
+ * Класс для работы с запросами
+ */
 class App 
 {
-	public static $app = null;
-	public static $request;
+	public static $app = null; // объект
+	public static $request; //тип запроса
 
 	function __construct(){
 		self::$request = $_SERVER['REQUEST_METHOD'];
 	}
 	
+	/**
+	 * Паттерн Singleton
+	 * @return object
+	 */
 	public static function request(){
 
 		if (!self::$app) {
@@ -18,9 +24,11 @@ class App
 		}
 		return self::$app;
 	}
-	/*
-		Получить параметры GET запроса если есть
-	*/ 
+
+	/**
+	 * Получить параметры GET запроса если есть
+	 * @return mixed 
+	 */
 	public static function get($key = null, $value = null){
 		
 		if (self::$request == 'GET') {
@@ -37,9 +45,11 @@ class App
 			return false;
 		}
 	}
-	/*
-		Получить параметры POST запроса если есть
-	*/ 
+
+	/**
+	 * Получить параметры POST запроса если есть
+	 * @return mixed 
+	 */
 	public static function post($key = null, $value = null){
 		
 		if (self::$request == 'POST') {
@@ -56,9 +66,11 @@ class App
 			return false;
 		}
 	}
-	/*
-		Текущий запрос является GET запросом
-	*/ 
+
+	/**
+	 * Текущий запрос является GET запросом 
+	 * @return boolean 
+	 */
 	public static function isGet(){
 		if (self::$request == 'GET') {
 			return true;
@@ -66,9 +78,11 @@ class App
 			return false;
 		}
 	}
-	/*
-		Текущий запрос является POST запросом
-	*/ 
+
+	/**
+	 * Текущий запрос является POST запросом 
+	 * @return boolean 
+	 */
 	public static function isPost(){
 		if (self::$request == 'POST') {
 			return true;
@@ -76,9 +90,11 @@ class App
 			return false;
 		}
 	}
-	/*
-		Текущий запрос является AJAX запросом
-	*/ 
+
+	/**
+	 * Текущий запрос является AJAX запросом 
+	 * @return boolean 
+	 */
 	public static function isAjax(){
 		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){    
 		  return true;  

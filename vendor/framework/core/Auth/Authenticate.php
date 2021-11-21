@@ -35,6 +35,7 @@ trait Authenticate{
             if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
                 $_SESSION['user']['name'] = $user->name; 
                 $_SESSION['user']['user_id'] = $user->id; 
+                $_SESSION['user']['role'] = 1;  //По умолчанию роль пользователя
                 return true;
             }
         }
@@ -79,10 +80,10 @@ trait Authenticate{
     }
 
     /*
-        Разлогинить юзера
+        Проверить роль пользователя
     */
     public function checkRole($role, $userRole) {
-        $roles = config('kernel.roles');
+        $roles = config('roles.roles');
         if (isset($role) && isset($userRole)) {
             if ($roles[$role] !== intval($userRole)) {
                return false;

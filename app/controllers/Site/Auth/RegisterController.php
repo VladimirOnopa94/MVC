@@ -5,6 +5,7 @@ use app\models\Index;
 use app\controllers\Controller;
 use app\components\widgets\Breadcrumbs;
 use framework\core\Validate as VD;
+use framework\core\Mail;
 use app\models\Auth\User;
 
 
@@ -15,7 +16,6 @@ class RegisterController extends Controller{
 	*/
 	public function Index()
 	{
-
 		Breadcrumbs::$param['breadcrumbs'][] = array('name' => 'Регистрация' );
 		
 		$this->setTitle('Регистрация');
@@ -46,7 +46,7 @@ class RegisterController extends Controller{
 
 					if ($user && $this->Auth($user, true)) { /*Если нет  ошибок при регистрации, логинем юзера*/
 
-						$this->sendMailToUser();
+						
 						flashMessage('success', 'Вы успешно зарегистрировались');
 						redirect('/');
 
@@ -83,23 +83,17 @@ class RegisterController extends Controller{
     } 
 
 
-	public function sendMailToUser() 
+/*	public function sendMailToUser() 
     {
-    	$var = 'Информация';
-
-    	$headers = "Content-Type: text/html; charset=UTF-8\r\n";
-
-    	$this->sendMail(
-    		'Тема фреймоврк', //тема письма  
-    		'Текст письма', //Текст если не указан шаблон
-    		['wowaonopa1991@gmail.com'], //получатели письма
-    		$headers, //Заголовки письма
-    		'', //шаблон письма 
-    		''	//Переменные в шаблон письма
-    	);
-
+    	$var1 = 1;
+		$mail = new Mail();
+		$mail->subject('Register')
+			 ->to('wowaonopa1991@gmail.com')
+			 ->view('mail/mail')
+			 ->data(compact('var1'))
+			 ->send();
     }
-
+*/
 
 
 } 

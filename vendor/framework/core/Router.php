@@ -24,9 +24,9 @@ class Router
 	}
 
 
-	/*
-		Подключаем все файлы роутинга из папки routes
-	*/
+	/**
+	 * Подключаем все файлы роутинга из папки routes
+	 */
 	private function includeRoutesFiles(){
 		$path  = ROOT . '/routes';
 		$files = scandir($path);
@@ -43,10 +43,11 @@ class Router
 		}
 	}
 
-	//	
-	//Извлекаем url
-	//
-	
+
+	/**
+	 * Извлекаем url
+	 * @return string
+	 */
 	private  function getUrl (){
 
 		$url = '';
@@ -68,9 +69,12 @@ class Router
 		return $url;
 	}
 
-	/*
-		Проверяем являеться ли url сервисным
-	*/
+
+	/**
+	 * Проверяем являеться ли url сервисным
+	 * @param  string  $url 
+	 * @return boolean     
+	 */
 	private  function isServiceUrl($url){
 		if (!empty($url)) {
 			$servicePrefix = config('kernel.service_prefix');
@@ -82,42 +86,35 @@ class Router
 		return false;
 	}
 
-	/*
-		Ищем совпадения в файле router.php с указаным в адрес. строке url
-	*/
+	/**
+	 * Ищем совпадения в файле router.php с указаным в адрес. строке url
+	 * @param  string $url 
+	 * @return array
+	 */
 	private function matchRoute ($url) {
 
 		$langSettings = config('kernel.language');
 
 		// Обрабатываем $_GET параметры из url если они есть
+		$parts = parse_url(base());
 
-		$fullUrl = parse_url(siteUrl() . $_SERVER['REQUEST_URI']);
-
-		if (  isset($fullUrl['query']) ) { 
-			$getParamArray = array();
-
-			if (strpos($fullUrl['query'], '?')) { 
-				$getParamArray = explode('?', $fullUrl['query']);
-				$url = strtok($url, '?');
-			}elseif (strpos($fullUrl['query'], '&')) { 
-				$getParamArray = explode('&', $fullUrl['query']);
-				$url = strtok($url, '&');
-			}
-			foreach ($getParamArray as $key => $value) {
-				$get_part = explode('=', $value);
-				$response['params'][$get_part[0]] = $get_part[1]; 
+		if (isset($parts['query'])) { 
+			parse_str($parts['query'], $query);
+			foreach ($query as $key => $value) {
+				$response['params'][$key] = $value; 
 			}
 		}
 
 		$urlOriginal = ltrim($url, '/');
 
-		$url = explode('/', ltrim($url, '/'));
+		$url = parse_url($url);
+		$url = explode('/', ltrim($url['path'], '/'));
 
 		foreach ($this->router as $pattern => $route) {
 
 			$routePattern = explode('/', ltrim($pattern, '/'));
 
-			// сразу сравниваем кол. параметров массивов роут строки и url адресса
+			// сравниваем кол. параметров массивов роут строки и url адресса
 			
 			if ( count($routePattern) != count($url) ) { 
 				continue;
@@ -131,14 +128,10 @@ class Router
 				if ( !empty($url[$k]) && !empty($routeParam) && empty($matches) && strpos($routeParam, $url[$k]) === false ) {	
 					break;	
 				}
+
 				
 				if ( !empty($routeParam) && !empty($matches)  ) {
 
-					//фикс для url главной стр. типа (/ru  и т.д.)
-					if (!array_key_exists($url[$k], $langSettings['langs'])) {
-						continue;
-					}
-					
 					// заменяем параметр {N} параметром из url
 					
 					$resultUrl[] = preg_replace('/^{\w+}/', $url[$k], $routeParam);
@@ -151,33 +144,34 @@ class Router
 
 					или параметр about ( пример /page/about ) и т.п. */
 					if ($routeParamReplace != 'lang') {
+
 						$response['params'][$routeParamReplace] = $url[$k];
 					}
 
+
 					foreach ($url as $key => $value) {
-						$isLang =  array_key_exists ($value, $langSettings['langs']);
-						if (!$isLang) {/*Игнорируем параметр языка в массиве*/
-							if (isset($_POST) && $_POST) { //Пишем POST параметры в response
+						if (!array_key_exists ($value, $langSettings['langs'])) {/*Игнорируем параметр языка в массиве*/
+							if (isset($_POST) && $_POST != '') { //Пишем POST параметры в response
 								foreach ($_POST as $k_post => $v_post) {
 									$response['params'][$k_post] = $v_post; 
 								}
 							}
-							//$response['params'][$value] = $value; // ?????
 						}
 					}
 
 				}// Если найден статический параметр
 
 				elseif( !empty($routeParam) && $routeParam == $url[$k] ) {
-					
 					$resultUrl[] = $routeParam;
-
 				}	
 				
 			}
 
 
 			$resultUrl = rtrim(implode('/', $resultUrl),'/');
+
+			$urlOriginal = parse_url($urlOriginal);
+			$urlOriginal = $urlOriginal['path'];
 
 			if ( $resultUrl == $urlOriginal ) {
 
@@ -202,12 +196,13 @@ class Router
 	}
 
 	
-	/*Извлекаем из строки route контроллер и метод.
 
-	Переменная $request всегда доступна в методе контроллера 
-	и содерижит свойства params (переданые параметры в url) и 
-	controller (вызываемый контроллер и метод ) */
-
+	/**
+	 * Извлекаем из строки route контроллер и метод.
+	 * Переменная $request содерижит свойства params (переданые параметры в url) и 
+	 * controller (вызываемый контроллер и метод)
+	 * @param  object $request 
+	 */
 	private function callControllerMethod ($request) {
 
 		if($request){
@@ -274,9 +269,9 @@ class Router
 
 	}
 
-	//
-	//Запуск роутинга
-	//
+	/**
+	 * Запуск роутинга
+	 */
 	public function run (){
 
 		if ( $url =  $this->getUrl() ) {

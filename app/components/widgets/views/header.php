@@ -5,6 +5,9 @@
         <li class="nav-item <?php if(currLoc() == url('/')){ echo 'active'; } ?>">
           <a class="nav-link" id="main_page" href="<?php echo url('/') ?>"><?php echo __("main_title"); ?></a>
         </li>
+        <li class="nav-item <?php if(currLoc() == url('/users')){ echo 'active'; } ?>">
+          <a class="nav-link"  href="<?php echo url('users') ?>">Пользователи</a>
+        </li>
         <li class="nav-item <?php if(currLoc() == url('/phonebook')){ echo 'active'; } ?>">
           <a class="nav-link" id="phonebook_page" href="javascript:void(0);"><?php echo __("phonebook_title"); ?></a>
         </li>

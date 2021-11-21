@@ -4,15 +4,16 @@ namespace framework\core;
 use Exception;
 
 /**
- * 
+ * Класс логирования
  */
 class Logger 
 {
-	//
-	// Запись логов в указаный файл 
-	// Пример $this->logger->log('text' , 'filename_from_config_log');
-	//
 
+	/**
+	 * Запись логов в указаный файл 
+	 * @param  string|array $massage 
+	 * @param  string $file    
+	 */
 	public static function log ($massage , string $file)
 	{
 		try{

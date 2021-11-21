@@ -9,9 +9,25 @@ use Exception;
 class Validate 
 {
 
+	/**
+	 * Загружаем данные
+	 * @var Array
+	 */
 	private static $data; 
+	/**
+	 * Массив ошибок
+	 * @var Array
+	 */
 	private static $errors; 
+	/**
+	 * Массив типов
+	 * @var Array
+	 */
 	private static $allowedImageExtension = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg', 'webp'];
+	/**
+	 * Массив регулярных выражений
+	 * @var Array
+	 */
 	private static $regexes = array(
         'date'        => "#^[0-9]{1,2}[-/][0-9]{1,2}[-/][0-9]{4}$#",
         'alpha'       => '#^[A-Za-z]+[A-Za-z \\s]*$#',
@@ -19,20 +35,23 @@ class Validate
     );
 
     	
-    
-
-    /*
-    	Загружаем данные в переменную data
+   /**
+    * Загружаем данные в переменную data
+    * @param  Array $array 
+    * @return Object       
     */
 	public static function load ($array){		
 		if (!empty($array)) {
 			self::$data = $array;
 		}
+		return new static;
 	}
 
-	/*
-		Валидируем данные в соответсвии с передаными полями и правилами
-	*/
+	/**
+	 * Валидируем данные в соответсвии с передаными полями и правилами
+	 * @param  Array $rules 
+	 * @return Array or null      
+	 */
 	public static function validate ($rules){
 		if (is_null(self::$data)) {
 			throw new Exception('Data for validation is not set, use VD::load($data) ');
@@ -71,7 +90,12 @@ class Validate
 		}
 	}
 
-	/*Валидация максимального кол. символов*/
+	/**
+	 * Валидация максимального кол. символов
+	 * @param  String $field 
+	 * @param  String $args  
+	 * @return errors       
+	 */
 	private static function max ($field, $args){
 		$length = strlen(self::$data[$field]);
 
@@ -79,8 +103,12 @@ class Validate
 			self::$errors[$field][] = "Поле {$field} должно иметь меньше {$args} символов";
 		}
 	}
-
-	/*Валидация минимального кол. символов*/
+	/**
+	 * Валидация минимального кол. символов
+	 * @param  String $field 
+	 * @param  String $args  
+	 * @return errors       
+	 */
 	private static function min ($field, $args){
 		$length = strlen(self::$data[$field]);
 
@@ -88,8 +116,11 @@ class Validate
 			self::$errors[$field][] = "Поле {$field} должно иметь больше {$args} символов";
 		}
 	}
-
-	/*Валидация наличия заполненого поля*/
+	/**
+	 * Валидация наличия заполненого поля
+	 * @param  String $field 
+	 * @return errors      
+	 */
 	private static function required ($field){
 		$data = self::$data[$field];
 
@@ -97,8 +128,11 @@ class Validate
 			self::$errors[$field][] = "Поле {$field} обязательное";
 		}
 	}
-
-	/*Валидация даты*/
+	/**
+	 * Валидация даты
+	 * @param  String $field 
+	 * @return errors      
+	 */
 	private static function date ($field){
 		$data = self::$data[$field];
 		$regex = self::$regexes[__FUNCTION__];
@@ -107,8 +141,11 @@ class Validate
 			self::$errors[$field][] = "Поле {$field} должо быть датой";
 		}
 	}
-
-	/*Валидация email*/
+	/**
+	 * Валидация email
+	 * @param  String $field 
+	 * @return errors      
+	 */
 	private static function email ($field){
 		$data = self::$data[$field];
 
@@ -116,8 +153,11 @@ class Validate
 			self::$errors[$field][] = "Поле {$field} содержит некоректный email";
 		}
 	}
-
-	/*Валидация поля содержащего только цифры*/
+	/**
+	 * Валидация поля содержащего только цифры
+	 * @param  String $field 
+	 * @return errors      
+	 */
 	private static function numeric ($field){
 		$data = self::$data[$field];
 
@@ -125,8 +165,11 @@ class Validate
 			self::$errors[$field][] = "Поле {$field} должно быть числом";
 		}
 	}
-
-	/*Валидация поля содержащего только буквы*/
+	/**
+	 * Валидация поля содержащего только буквы
+	 * @param  String $field 
+	 * @return errors      
+	 */
 	private static function alpha ($field){
 		$data = self::$data[$field];
 		$regex = self::$regexes[__FUNCTION__];
@@ -135,8 +178,11 @@ class Validate
 			self::$errors[$field][] = "Поле {$field} должно содержать только буквы";
 		}
 	}
-
-	/*Валидация поля содержащего только буквы или цифры*/
+	/**
+	 * Валидация поля содержащего только буквы или цифры
+	 * @param  String $field 
+	 * @return errors      
+	 */
 	private static function alphanumeriс ($field){
 		$data = self::$data[$field];
 		$regex = self::$regexes[__FUNCTION__];
@@ -145,8 +191,11 @@ class Validate
 			self::$errors[$field][] = "Поле {$field} должно содержать только буквы или цифры";
 		}
 	}
-
-	/*Валидация поля содержащего только допустимые расширения изображения*/
+	/**
+	 * Валидация поля содержащего только допустимые расширения изображения
+	 * @param  String $field 
+	 * @return errors      
+	 */
 	private static function image ($field){
 		$data = self::$data[$field];
 		$info = pathinfo($data);
@@ -156,8 +205,12 @@ class Validate
 			self::$errors[$field][] = "Поле {$field} содержит некорректное расширение файла допустимые расширения {$fileAllowedStr}";
 		}
 	}
-
-	/*Валидация поля содержащего только допустимые расширения файла*/
+	/**
+	 * Валидация поля содержащего только допустимые расширения файла
+	 * @param  String $field 
+	 * @param  String $arg 
+	 * @return errors      
+	 */
 	private static function mimes ($field, $arg){
 		$data = self::$data[$field];
 		$info = pathinfo($data);

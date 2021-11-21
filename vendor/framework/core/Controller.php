@@ -34,51 +34,64 @@ abstract class Controller
 		
 	}
 
-	/*
-		Получает экземпляр Middleware
-	*/
+	/**
+	 * Получает экземпляр Middleware
+	 * @return array 
+	 */
 	public function getMiddlewares():array
 	{
 		return $this->middlewares;
 	}
 
-	/*
-		Устанавливает Middleware
-	*/
+	/**
+	 * Устанавливает Middleware
+	 * @param Middleware $middleware
+	 */
 	public function Middleware(Middleware $middleware)
 	{
 		$this->middlewares[] = $middleware;
 	}
-	
-	/*
-		Передаем имя вида , данные , и вызываем файл вида
-	*/	
+		
+	/**
+	 * Передаем имя вида , данные , и вызываем файл вида
+	 * @param  string  $view       [description]
+	 * @param  array   $data       [description]
+	 * @param  boolean $returnHtml [description]
+	 */
 	public function render($view = '', $data = array(), $returnHtml = false)
 	{	
 		$view = new View($view, $data, $this->layout, $this->title);
 		$view->getView($returnHtml);
 	}
 
-	/*
-		Подключение языкового файла
-	*/
+	/**
+	 * Подключение языкового файла
+	 * @param  String $view 
+	 */
 	public function language($view)
 	{
 		Language::includeLang($_COOKIE['lang'], $view);
 	}
 
-	/*
-		Функция отправки писем
-	*/
+	/**
+	 * Функция отправки писем
+	 * @param  string $subject 
+	 * @param  string $message 
+	 * @param  array||String $to      
+	 * @param  string $headers 
+	 * @param  string $view    
+	 * @param  mixed $data             
+	 */
 	public function sendMail($subject, $message, $to, $headers, $view, $data)
 	{
 		$mail = new Mail($subject, $message, $to, $headers, $view, $data);
 		$mail = $mail->init();
 	}
 
-	/*
-		Задать заголовок
-	*/
+	/**
+	 * Задать заголовок
+	 * @return none
+	 */
 	public function setTitle($title)
 	{
 		if (isset($title) && !empty($title)) {
@@ -90,9 +103,9 @@ abstract class Controller
 		
 	}
 	
-	/*
-		Проверка наличия и валидности переданого CSRF токена 
-	*/
+	/**
+	 * Проверка наличия и валидности переданого CSRF токена 
+	 */
 	private function checkCSRF ()
 	{
 		if ($this->csrf) { 

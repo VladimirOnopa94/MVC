@@ -6,7 +6,10 @@ namespace framework\core;
  */
 class Csrf
 {
-	
+	/**
+	 * Сгенерировать CSRF токен
+	 * @return string
+	 */
 	public static function getCSRFToken (){
 		if (!isset($_SESSION['token']) || empty($_SESSION['token'])) {
 			$_SESSION['token'] = bin2hex(random_bytes(32));

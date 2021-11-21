@@ -6,11 +6,10 @@ return [
 	*/
 	'log_param' => [
 		'log_dir' =>  ROOT . '/log' , 
-		'maxLogSize' => 10240 , // максимальный размер файла, после которогор файл будет очищен
+		'maxLogSize' => 10240 , // максимальный размер файла, после которогор будет очищен
 		'logs' => [ //массив файлов лога
 			'error' => ROOT . '/log/error.log',
 			'success_register' => ROOT . '/log/register/success.log',
-			'fail_payment' => ROOT . '/log/payment/fail.log'
 		]
 	],
 	/*
@@ -25,10 +24,10 @@ return [
 		Настройка языков
 	*/
 	'language' => [ 
-		'def_lang' => 'ru',
+		'def_lang' => 'ua',
 		// список языков
 		'langs' =>  [ 
-			'ru' => [ 'name' => 'Русский', 'image' => ''], 
+			//'ru' => [ 'name' => 'Русский', 'image' => ''], 
 			'ua' => [ 'name' => 'Украинский', 'image' => ''], 
 			'en' => [ 'name' => 'Английский', 'image' => ''], 
 		], 
@@ -39,16 +38,6 @@ return [
 		Префиксы в url на которые не распостраняется формирование ссылки с языком
 	*/
 	'service_prefix' => ['api','panel_adm'],
-	/*
-		Роли 
-	*/
-	'roles' => [
-		'USER' => 1,
-		'MANAGER' => 2,
-		'ADMIN' => 3
-	],
-
-	
 
 ];
 

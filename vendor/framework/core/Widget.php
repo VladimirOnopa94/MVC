@@ -23,9 +23,10 @@ class Widget
 		
 	}
 
-	//
-	//Подключаем файл вида и передаем переменные 
-	//
+
+	/**
+	 * Подключаем файл вида и передаем переменные 
+	 */
 	public static function widget ()
 	{
 		//Получаем переменные переданые методу из view виджета
@@ -37,6 +38,7 @@ class Widget
 		$result = call_user_func_array(array($obj, "run"), $variables);
 
 		if (isset($result)) { //Извлекаем переменные из контроллера для view
+			
 			extract($result);
 		}
 
@@ -68,17 +70,19 @@ class Widget
 		    echo $ex->getMessage();
 		}
 	}
-	/*
-	Подключение языкового файла
-	*/
+
+	/**
+	 * Подключение языкового файла
+	 * @param  string $view 
+	 */
 	public function language($view)
 	{
 		Language::includeLang($_COOKIE['lang'], $view);
 	}
 
-	/*
-		Проверка наличия и валидности переданого CSRF токена 
-	*/
+	/**
+	 * Проверка наличия и валидности переданого CSRF токена 
+	 */
 	private function checkCSRF ()
 	{
 		if ($this->csrf) { 
