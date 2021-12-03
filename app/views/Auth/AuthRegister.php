@@ -21,7 +21,7 @@
         <input type="checkbox" class="form-check-input" id="exampleCheck1">
         <label class="form-check-label" for="exampleCheck1">Check me out</label>
       </div>
-      <input type="hidden" name="token"  value="<?php echo getCsrfToken(); ?>">
+      <input type="hidden" name="token"  value="<?php echo csrfToken(); ?>">
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>

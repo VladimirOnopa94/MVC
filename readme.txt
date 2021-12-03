@@ -17,7 +17,9 @@ app
 --------ua
 config
 ----routes
-log
+tmp
+----log
+----cache
 public
 ----css
 ----js
@@ -57,16 +59,18 @@ vendor
 
 ********СМЕНА ШАБЛОНОВ В КОНТРОЛЛЕРАХ *******
 
-	В контроллерах есть возможность переопределять шаблон вида
-
-	объявив $this->layout 
+	В контроллерах есть возможность переопределять шаблон вида объявив для конткретного метода 
 
 	public function index($request)
 	{
-		$this->layout = 'somelayout';
+		$this->layout = 'layout1';
 	}
 
-	Где somelayout шаблон somelayout.php который находиться в папке /app/views/layouts
+	или для всего контроллера 
+
+	public $layout = 'layout1';
+
+	Где somelayout шаблон layout1.php который находиться в папке /app/views/layouts
 
 
 	-------------------------
@@ -145,11 +149,15 @@ vendor
 
 	где 'index' , название языкового файла в папке /app/language/{код языка}/index.php
 
-	В файле вида (view) вызываем __($key)
+	В файле вида (view) вызываем __($key, $data)
 
-	Где  $key имя ключа в языковом файле
+	Где $key (обязательно) имя ключа в языковом файле
 
-	<?php echo  __("title_sidebar") ?>
+	Где $data (необязательно) данные для подставления в строке, для замены
+
+	<?php echo  __("title_sidebar", ['text' => 'innerText']) ?>
+
+	В языковом файле 'title_sidebar' => 'Тут добавлен :text',
 
 	----
 
@@ -163,7 +171,9 @@ vendor
 
 	Для формирования ссылок в видах используем функцию 
 
-	url('/someUrl')
+	url('/someUrl') ->> test.com/someUrl
+
+	url('/someUrl', true) //для формирования без домена в url  ->> /someUrl 
 
 	которая выводит ссылку сформированую с выбраным языком 
 
@@ -380,7 +390,7 @@ admin/someUrl или api/someMethod
 
 В контроллере передаем переменные для пагинации в вид
 
-$page = App::request()->get('page', 1); //кол. страниц
+$page = App::$app->request->get('page', 1); //кол. страниц
 $limit = 5; //елементов на странице
 
 $users = new User; //выборка пользователей для пагинации
@@ -486,4 +496,27 @@ class Breadcrumbs extends Widget{
 	</div>
 <?php } ?>
 
-	
+******************** Кеширование  *******************
+
+use framework\core\App;
+
+Запись:
+
+App::$app->cache->set('test', ['data'=> 1, 'test' => '2'], 6000);
+
+Записать в кеш по ключу "test", 
+данные [data= > 'data'],
+на 6000 секунд
+
+Чтение:
+
+App::$app->cache->get('test') получить содержимое кеша по ключу test
+
+
+
+Пример:
+ 
+if (!$data = App::$app->cache->get('test')) {
+	$data = ['data'];
+	App::$app->cache->set('test', $data, 6000);
+}

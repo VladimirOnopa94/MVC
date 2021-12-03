@@ -17,7 +17,7 @@ class UsersListController extends Controller{
 		$this->language('index');
 		$this->setTitle('Главная');
 
-		$page = App::request()->get('page', 1);
+		$page = App::$app->request->get('page', 1);
 		$limit = 5;
 		$users = new User;
 		$users = $users->getUsers($page,$limit);

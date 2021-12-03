@@ -10,12 +10,12 @@ use app\controllers\Controller;
 class LoginController extends Controller{ 
 
 
+	public $layout = 'admin2';
 	public function Index($request)
 	{
-
+		//$this->layout = 'admin';
 		$this->setTitle('Вход');
-		echo "admin";
-		//$this->render('Auth/AuthLogin');
+		$this->render('index');
 	}
 
 

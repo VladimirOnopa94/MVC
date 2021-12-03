@@ -21,7 +21,7 @@
         <label for="exampleInputPassword1">File</label>
         <input type="file" name="file" class="form-control" id="exampleInputPassword1">
       </div>
-       <input type="hidden" name="token"  value="<?php echo getCsrfToken(); ?>">
+       <input type="hidden" name="token"  value="<?php echo csrfToken(); ?>">
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>

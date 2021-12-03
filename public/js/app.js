@@ -1,4 +1,15 @@
 $(function() {
+//
+//Файл перевода для js (js/translate.json)
+//
+const translate = translateMessege;
+//console.log(translate.ru_header);
+//
+//
+//
+//
+
+
 	//get csrf token 
 	var csrftoken = $('meta[name=csrf-token]').attr('content');
     

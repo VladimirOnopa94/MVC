@@ -14,31 +14,26 @@ class IndexController extends Controller{
 	public function index($request)
 	{
 
+		/*if (!$data = App::component('cache')->get('test')) {
+			
+		}*/
+		//var_dump(App::$app->request->isPost());
+
 		$this->language('index');
 		$this->setTitle('Главная');
 		
 		$this->render('index');
 	}
-
+	
 	public function Api($request)
 	{
+		//if ($data = App::request()->post()) {
 
-		var_dump("api");
+			//$this->logger->log($data['email'] , 'success_register');
+		//}
 	}
-
-
-	public function Product($request)
-	{
-
-		echo "Product";
-	}
-
 	public function Page($request)
 	{
-		/*$page = "Главная"; 
-		$var1 = "test2";
-		$this->language('index');
-		echo  $this->render('index' , compact('page','var1'), true);die;*/
 		
 	}
 

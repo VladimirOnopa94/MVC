@@ -32,10 +32,24 @@ class Language
 	/**
 	 * Получить фразу по ключу 
 	 * @param  string $key 
+	 * @param  array $data 
+	 * @return string Сформированая строка перевода
 	 */
-	public static function getPhrase ($key)
+	public static function getPhrase ($key, $data)
 	{
-		return isset(self::$lang_data[$key]) ? self::$lang_data[$key] : $key;
+		if (isset(self::$lang_data[$key])) {
+			$text = self::$lang_data[$key];
+		}else{
+			return $key;
+		}
+
+		if (!empty($data)) {
+			foreach ($data as $key => $value) {
+				$text = str_replace(':' . $key, $value, $text);
+			}
+		}else{
+			return $text;
+		}
 	}
 
 
@@ -207,8 +221,10 @@ class Language
 	/**
 	 * Преобразовать ссылку url в соответствии с языком
 	 * @param  string $url 
+	 * @param  boolean $short 
+	 * @return string  
 	 */
-	public static function createLink($url){
+	public static function createLink($url, $short){
 
 		$langSettings = config('kernel.language');
 
@@ -216,7 +232,9 @@ class Language
 		$isDefLang =  $_COOKIE['lang'] == $def_lang;
 
 		if (isset($url)) {
+
 			$originalUrl = $url;
+
 			if (($isDefLang && $langSettings['show_default'] === true) || $isDefLang === false) {
 
 				$url = explode('/', ltrim($url, '/'));
@@ -232,9 +250,13 @@ class Language
 			}else{
 				$resultLink = ltrim(rtrim($url,'/'), '/');
 			}
-			
-			$resultLink = siteUrl() . '/' . str_replace('/?', '?', $resultLink);
-			
+
+			if ($short === true) { //формируем ссылку без домена
+				$resultLink = '/' . str_replace('/?', '?', $resultLink);
+			}else{
+				$resultLink = siteUrl() . '/' . str_replace('/?', '?', $resultLink);
+			}
+
 			return $resultLink;
 		}
 

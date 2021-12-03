@@ -25,7 +25,7 @@ class Logger
 				
 				if (file_exists($file)) {
 					/*Очищаем файл если он превысил размер */
-					if (filesize($file) > $log_param['maxLogSize']) { 
+					if (filesize($file) > $log_param['max_log_size']) { 
 						file_put_contents($file, "");
 					}
 

@@ -46,7 +46,7 @@ class LoginController extends Controller{
 	}
 	public function TestPage($request)
 	{
-		//dd($request);
+
 		$this->setTitle('TEST');
 		
 		$this->render('Auth/AuthLogin');
@@ -58,8 +58,8 @@ class LoginController extends Controller{
 	public function Login($request)
 	{
 		
-		if ($data = App::request()->post()) {
-			
+		if ($data = App::$app->request->post()) {
+
 			$credentials = array('name' => $data['name'] , 'password' => $data['password']);
 
 			$errors = VD::load($credentials)->validate([

@@ -15,7 +15,6 @@ class Controller extends \framework\core\Controller
         //$this->cart = 'somedata';   
         //$this->cart = 'somedata';   
     	//Registry::set('cart', 'test'); //Установим свойство доступное с любой точки приложения
-
         parent::__construct();
     }
 }

@@ -22,7 +22,11 @@ abstract class Controller
 
 	function __construct($layout = '')
 	{
-		$this->layout = $layout ?: LAYOUT;
+		if (is_null($this->layout)) { //Если не установлен глобальный шаблон в контроллере 
+			$this->layout = $layout ?: LAYOUT; // Если в методе контроллера не переопределен шаблон, берем шаблон по умолчанию
+		}else{
+			$this->layout = $this->layout;
+		}
 
 		$this->logger = new Logger;
 

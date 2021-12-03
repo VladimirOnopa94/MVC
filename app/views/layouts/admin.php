@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="<?php echo getLang() ?>">
   <head>
-  	<title><?php echo $this->getTitle(); ?></title>
     <base href="<?php echo siteUrl(); ?>">
     <meta charset="utf-8">
     <meta name="csrf-token" content="<?php echo csrfToken(); ?>">
@@ -20,13 +19,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="<?php echo resource('/js/app.js') ?>"></script>
     <link rel="stylesheet" type="text/css" href="<?php echo resource('/css/style.css') ?>">
-    <script src="<?php echo resource('/js/translate.json') ?>"></script>
-    
 
+    <title><?php echo $this->getTitle(); ?></title>
   </head>
 
-  <body>
 
+  <body>
+    Admin
     <?php app\components\widgets\Header::widget(); ?>
      
 

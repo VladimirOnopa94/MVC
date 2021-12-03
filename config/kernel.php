@@ -5,11 +5,10 @@ return [
 		Параметры лога
 	*/
 	'log_param' => [
-		'log_dir' =>  ROOT . '/log' , 
-		'maxLogSize' => 10240 , // максимальный размер файла, после которогор будет очищен
+		'max_log_size' => 10240 , // максимальный размер файла, после которогор будет очищен
 		'logs' => [ //массив файлов лога
-			'error' => ROOT . '/log/error.log',
-			'success_register' => ROOT . '/log/register/success.log',
+			'error' => LOG . '/error.log',
+			'success_register' => LOG . '/success.log',
 		]
 	],
 	/*
@@ -38,6 +37,13 @@ return [
 		Префиксы в url на которые не распостраняется формирование ссылки с языком
 	*/
 	'service_prefix' => ['api','panel_adm'],
+	/*
+		Компоненты 
+	 */
+	'components' => [
+		'cache' => 'framework\core\Cache',
+		'request' => 'framework\core\Request',
+	],
 
 ];
 

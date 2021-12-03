@@ -9,15 +9,15 @@ function dd($var){
 }
 
 //Получение фразы перевода по ключу
-function __($key)
+function __($key, $data = [])
 {
-	return \framework\core\Language::getPhrase($key);
+	return \framework\core\Language::getPhrase($key, $data);
 }
 
 //Формирование ссылки с учетом языка
-function url($url) 
+function url($url, $short = false) 
 {
-	return \framework\core\Language::createLink($url);
+	return \framework\core\Language::createLink($url, $short);
 }
 
 //Текущий url
@@ -33,7 +33,7 @@ function getLang()
 }
 
 //Вернуть текущий токен
-function getCsrfToken() 
+function csrfToken() 
 {
 	return \framework\core\Csrf::getCSRFToken();
 }

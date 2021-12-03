@@ -4,39 +4,46 @@ namespace framework\core;
 
 class Registry
 { 
-	private static $_storage = array(); 
- 
+	
+	public static $storage = []; // хранилище 
+
+	protected static $instance ; // объект
+
+ 	public static $components = []; //Компоненты
+
+	/**
+	 * Создание экземпляра объекта и добавление в хранилище компонентов
+	 */
+	public static function instance()
+	{ 
+		self::$components= config('kernel.components');
+
+		if (self::$instance === null) {
+			self::$instance = new self;
+		}
+		foreach (self::$components as $key => $component) {
+			self::$storage[$key] = new $component;
+		}
+
+
+		return self::$instance;
+	}
 	/**
 	 * Установка значения.
 	 */
-	public static function set($key, $value)
+	public function __set($key, $value)
 	{ 
-		return self::$_storage[$key] = $value;
+		if(!isset(self::$storage[$key])){
+			self::$storage[$key] = new $value;    
+		}
 	}
  
 	/**
 	 * Получение значения.
 	 */
-	public static function get($key, $default = null)
+	public function __get($key)
 	{
-		return (isset(self::$_storage[$key])) ? self::$_storage[$key] : $default;
+		return (isset(self::$storage[$key])) ? self::$storage[$key] : null;
 	}
- 
-	/**
-	 * Удаление.
-	 */
-	public static function remove($key)
-	{
-		unset(self::$_storage[$key]); 
-		return true;
-	}
- 
-	/**
-	 * Очистка.
-	 */
-	public static function clean()
-	{
-		self::$_storage = array(); 
-		return true;
-	}
+	
 }

@@ -1,5 +1,5 @@
 <?php 
 
 return [
-	'api/some/test' => 'Site\IndexController@Api',
+	'api/googleFormInput' => 'Site\IndexController@Api',
 ];
