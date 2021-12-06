@@ -1,8 +1,8 @@
 /tmp/cache/*
-/tmp/cache/.gitkeep
+!/tmp/cache/.gitkeep
 
 /tmp/log/*
-/tmp/log/.gitkeep
+!/tmp/log/.gitkeep
 
 /public/image/*
-/public/image/.gitkeep
+!/public/image/.gitkeep
