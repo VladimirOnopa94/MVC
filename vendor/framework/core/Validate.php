@@ -198,13 +198,20 @@ class Validate
 	 */
 	private static function image ($field){
 		$data = self::$data[$field];
-		$info = pathinfo($data);
 
-		if (!isset($info['extension']) || !in_array($info['extension'], self::$allowedImageExtension)) {
-			$fileAllowedStr = implode(', ', self::$allowedImageExtension);
-			self::$errors[$field][] = "Поле {$field} содержит некорректное расширение файла допустимые расширения {$fileAllowedStr}";
+		if (!empty($data)) {
+			foreach ($data as $key => $img) {
+				$info = pathinfo($img['name']);
+
+				if (!isset($info['extension']) || !in_array($info['extension'], self::$allowedImageExtension)) {
+					$fileAllowedStr = implode(', ', self::$allowedImageExtension);
+					self::$errors[$field][] = "Поле {$field} содержит некорректное расширение файла допустимые расширения {$fileAllowedStr}";
+				}
+			}
 		}
+		
 	}
+	
 	/**
 	 * Валидация поля содержащего только допустимые расширения файла
 	 * @param  String $field 

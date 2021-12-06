@@ -17,7 +17,6 @@ class IndexController extends Controller{
 		/*if (!$data = App::component('cache')->get('test')) {
 			
 		}*/
-		//var_dump(App::$app->request->isPost());
 
 		$this->language('index');
 		$this->setTitle('Главная');

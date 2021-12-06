@@ -216,6 +216,12 @@ class Router
 			if (isset($request['params'])) { // Преобразовываем в объект , для доступа в контроллерах сайта 
 				$request = (object) $request['params'];
 			}
+			// Перезапишем массив $_FILES с удобной иерархией елементов
+			if (isset($_FILES['file']['name'][0]) && !empty($_FILES['file']['name'][0])) {
+				$_FILES = formateArray($_FILES['file']); 
+			}else{
+				$_FILES = [];
+			}
 
 			if (class_exists($controller)) {
 

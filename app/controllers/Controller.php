@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use framework\core\View;
 
-//use framework\core\Registry;
+
 
 class Controller extends \framework\core\Controller
 {
@@ -14,7 +14,8 @@ class Controller extends \framework\core\Controller
     function __construct(){
         //$this->cart = 'somedata';   
         //$this->cart = 'somedata';   
-    	//Registry::set('cart', 'test'); //Установим свойство доступное с любой точки приложения
+
+
         parent::__construct();
     }
 }

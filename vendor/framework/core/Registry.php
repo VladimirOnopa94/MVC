@@ -43,7 +43,13 @@ class Registry
 	 */
 	public function __get($key)
 	{
-		return (isset(self::$storage[$key])) ? self::$storage[$key] : null;
+		return (is_object(self::$storage[$key])) ? self::$storage[$key] : null;
 	}
+
+	public static  function list(){
+
+		return self::$storage;
+	}
+ 
 	
 }

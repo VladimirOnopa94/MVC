@@ -3,7 +3,6 @@ namespace framework\core;
 
 use framework\core\Mail;
 use framework\core\Csrf;
-use framework\core\Logger;
 use framework\core\Language;
 use framework\core\Auth\Authenticate;
  /**
@@ -15,7 +14,6 @@ abstract class Controller
 	public $title;
 	protected $middlewares = [];
 	public $layout;
-	public $logger;
 	public $csrf ;
 	
 	use Authenticate;
@@ -27,8 +25,6 @@ abstract class Controller
 		}else{
 			$this->layout = $this->layout;
 		}
-
-		$this->logger = new Logger;
 
 		CSRF::getCSRFToken(); // Пишем в сессию CSRFToken
 

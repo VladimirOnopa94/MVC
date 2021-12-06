@@ -133,8 +133,8 @@ vendor
 
 *******************ЛОГИРОВАНИЕ******************* 
 
-	Для логирование сообщений вызываем в коде $this->logger->log('text' , 'success_register');
-
+	Для логирование сообщений вызываем в коде App::$app->logger->log('text', 'success_register');
+											
 	где "text" текст который нужно записать,
 
 	"success_register" - файлов для записи указываем в config.php в кностанте LOG_PARAM['logs']['name_log' => 'path_to_file_log',..]
@@ -520,3 +520,16 @@ if (!$data = App::$app->cache->get('test')) {
 	$data = ['data'];
 	App::$app->cache->set('test', $data, 6000);
 }
+
+******************** Изображения  *******************
+
+Для загрзки изображений используем 
+
+use framework\core\Image;
+
+foreach ($_FILES as $key => $file) {
+	$path = CATALOG . '/image/new_img' . microtime() . '.webp';
+	Image::create($file)->encode('png', 100)->size(500, 100)->save($path);
+}
+size() - изменить размер изображения (опционально)
+encode()-  изменить формат и качество изображения (опционально) (0-100 [0 худшее качество, 100 лучшее])

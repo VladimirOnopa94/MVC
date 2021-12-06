@@ -43,6 +43,7 @@ return [
 	'components' => [
 		'cache' => 'framework\core\Cache',
 		'request' => 'framework\core\Request',
+		'logger' => 'framework\core\Logger',
 	],
 
 ];

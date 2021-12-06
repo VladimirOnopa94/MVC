@@ -62,6 +62,24 @@ function siteUrl()
 	return  (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
 }
 
+/**
+ * Сформировать иерархически правильный массив $_FILES 
+ * @param  array $array массив файлов
+ * @return array   
+ */
+function formateArray($array) 
+{
+	$result = array(); 
+    foreach($array as $key1 => $value1){
+        foreach($value1 as $key2 => $value2){
+            $result[$key2][$key1] = $value2; 
+        }
+    }
+    return $result; 
+}
+
+
+
 //Получить полный юрл текущей страницы
 function base() 
 {

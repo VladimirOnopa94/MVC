@@ -8,6 +8,7 @@ use app\controllers\Controller;
 //use app\components\events\RegisterUserEvent;
 use framework\core\Validate as VD;
 use framework\core\App;
+use framework\core\Image;
 use app\components\widgets\Breadcrumbs;
 
 
@@ -59,14 +60,21 @@ class LoginController extends Controller{
 	{
 		
 		if ($data = App::$app->request->post()) {
+	
 
-			$credentials = array('name' => $data['name'] , 'password' => $data['password']);
+			$credentials = array('name' => $data['name'] , 'password' => $data['password'] , 'file' => $_FILES);
 
 			$errors = VD::load($credentials)->validate([
 				'name' => 'required' , 
 				'password' => 'required' , 
+				'file' => 'image' , 
+
 			]); 
 
+			/*foreach ($_FILES as $key => $file) {
+				$path = CATALOG . '/image/new_img' . microtime() . '.webp';
+				Image::create($file)->save($path);
+			}*/
 
 			if (empty($errors)) {
 				$response = $this->Auth($credentials, false);

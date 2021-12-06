@@ -5,7 +5,7 @@ define("LOG", dirname(__FILE__) . '/tmp/log');
 /*Каталог кэша*/
 define("CACHE", dirname(__FILE__) . '/tmp/cache');
 /* Публичный каталог */
-define("PUBLIC", dirname(__FILE__) . '/public');
+define("CATALOG", dirname(__FILE__) . '/public');
 /* Каталог конфига */
 define("CONFIG", dirname(__FILE__) . '/config');
 /* Каталог приложения */

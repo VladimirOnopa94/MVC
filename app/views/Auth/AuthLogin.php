@@ -7,7 +7,7 @@
     <?php } ?>
   <h2 class="text-center">Вход</h2>
   <div class="row">
-    <form method="POST" action="<?php echo url('/signin') ?>" class="col-sm-4 mx-auto">
+    <form method="POST" action="<?php echo url('/signin') ?>" class="col-sm-4 mx-auto" enctype="multipart/form-data" >
       <div class="form-group">
         <label for="exampleInputEmail1">Username</label>
         <input type="text" name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter name">
@@ -19,7 +19,7 @@
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">File</label>
-        <input type="file" name="file" class="form-control" id="exampleInputPassword1">
+        <input type="file" name="file[]" class="form-control" id="exampleInputPassword1" multiple>
       </div>
        <input type="hidden" name="token"  value="<?php echo csrfToken(); ?>">
       <button type="submit" class="btn btn-primary">Submit</button>

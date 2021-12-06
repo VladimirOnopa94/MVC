@@ -51,10 +51,9 @@ class Logger
 				$f_elem = array_shift($d_t);
 				if (is_array($massage)) {
 					$massage  =  '['. date('Y-m-d H:i:s') . '] '. implode(' ', $massage);
-				}elseif (is_string($massage)) {
+				}else {
 					$massage  =  '['. date('Y-m-d H:i:s') . '] '. $f_elem['file'] . ':' . $f_elem['line']  . ' message : ' . $massage;
 				}
-				
 				error_log($massage . PHP_EOL, 3, $file);
 			}else{
 				throw new Exception("Undefined index: " . $file . ' in config "LOG_PARAM[`logs`]"'  );
