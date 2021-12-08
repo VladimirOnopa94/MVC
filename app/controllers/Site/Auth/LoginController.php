@@ -67,14 +67,16 @@ class LoginController extends Controller{
 			$errors = VD::load($credentials)->validate([
 				'name' => 'required' , 
 				'password' => 'required' , 
-				'file' => 'image' , 
+				//'file' => 'image' , 
 
 			]); 
 
-			/*foreach ($_FILES as $key => $file) {
-				$path = CATALOG . '/image/new_img' . microtime() . '.webp';
-				Image::create($file)->save($path);
-			}*/
+			foreach ($_FILES as $key => $file) {
+				$path = IMAGE;
+				$name = 'new_img' . microtime();
+				
+				Image::create($file)->encode("webp", 10)->save($path);
+			}
 
 			if (empty($errors)) {
 				$response = $this->Auth($credentials, false);

@@ -22,6 +22,7 @@ tmp
 ----cache
 public
 ----css
+----image
 ----js
 vendor
 ----composer
@@ -263,6 +264,7 @@ admin/someUrl или api/someMethod
 
 
 ******************** Title страницы *******************
+
 	Для указания заголовка страницы спользуем функцию $this->setTitle('Главная');
 		public function Index()
 		{
@@ -528,8 +530,11 @@ if (!$data = App::$app->cache->get('test')) {
 use framework\core\Image;
 
 foreach ($_FILES as $key => $file) {
-	$path = CATALOG . '/image/new_img' . microtime() . '.webp';
-	Image::create($file)->encode('png', 100)->size(500, 100)->save($path);
+
+	$path = IMAGE; путь к папке сохранения
+	$name = 'new_img' . microtime(); имя изображения (Если не указано, будет сохранен с исходным именем)
+				
+	Image::create($file)->encode("webp", 10)->size(500, 100)->save($path, $name);
 }
 size() - изменить размер изображения (опционально)
 encode()-  изменить формат и качество изображения (опционально) (0-100 [0 худшее качество, 100 лучшее])

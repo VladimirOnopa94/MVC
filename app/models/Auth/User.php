@@ -1,11 +1,11 @@
 <?php 
 namespace app\models\Auth;
-
+use app\models\Model;
 
 /**
  * 
  */
-class User extends \framework\core\Model
+class User extends Model
 {
 
 	protected $table = 'users';

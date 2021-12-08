@@ -50,9 +50,9 @@ class Logger
 				$d_t = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 				$f_elem = array_shift($d_t);
 				if (is_array($massage)) {
-					$massage  =  '['. date('Y-m-d H:i:s') . '] '. implode(' ', $massage);
+					$massage = '[' . date('Y-m-d H:i:s') . '] '. json_encode($massage);
 				}else {
-					$massage  =  '['. date('Y-m-d H:i:s') . '] '. $f_elem['file'] . ':' . $f_elem['line']  . ' message : ' . $massage;
+					$massage = '[' . date('Y-m-d H:i:s') . '] '. $f_elem['file'] . ':' . $f_elem['line']  . ' message : ' . $massage;
 				}
 				error_log($massage . PHP_EOL, 3, $file);
 			}else{

@@ -2,7 +2,7 @@
 namespace app\controllers\Site;
 
 use app\models\Auth\User;
-use app\models\Category;
+use app\models\Model as DB;
 use app\controllers\Controller;
 use framework\core\App;
 
@@ -13,7 +13,7 @@ class UsersListController extends Controller{
 
 	public function index($request)
 	{
-
+		
 		$this->language('index');
 		$this->setTitle('Главная');
 

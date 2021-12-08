@@ -6,6 +6,8 @@ define("LOG", dirname(__FILE__) . '/tmp/log');
 define("CACHE", dirname(__FILE__) . '/tmp/cache');
 /* Публичный каталог */
 define("CATALOG", dirname(__FILE__) . '/public');
+/* Каталог изображений */
+define("IMAGE", CATALOG . '/image');
 /* Каталог конфига */
 define("CONFIG", dirname(__FILE__) . '/config');
 /* Каталог приложения */

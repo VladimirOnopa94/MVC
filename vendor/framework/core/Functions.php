@@ -78,8 +78,6 @@ function formateArray($array)
     return $result; 
 }
 
-
-
 //Получить полный юрл текущей страницы
 function base() 
 {

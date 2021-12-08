@@ -16,8 +16,9 @@ class IndexController extends Controller{
 
 		/*if (!$data = App::component('cache')->get('test')) {
 			
-		}*/
+		}*/ 
 
+		
 		$this->language('index');
 		$this->setTitle('Главная');
 		
@@ -28,7 +29,7 @@ class IndexController extends Controller{
 	{
 		//if ($data = App::request()->post()) {
 
-			//$this->logger->log($data['email'] , 'success_register');
+			//App::$app->logger->log(json_encode($data) , 'success_register');
 		//}
 	}
 	public function Page($request)

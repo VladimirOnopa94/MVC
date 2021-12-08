@@ -7,11 +7,8 @@ namespace framework\core;
 class Image 
 {
 
-	private static $fileName = '';
 	private static $type = '';
 	private static $originalFile;
-	private static $realType = '';
-	private static $tmp_name = '';
 	private static $quality = 100;
 	private static $width = '';
 	private static $height = '';
@@ -24,12 +21,8 @@ class Image
 	public static function create($file){
 
 		if (isset($file['name'])) {
-			self::$fileName = $file['name'];
 			self::$originalFile = $file;
 		}
-		self::$realType = $file['type'];
-		self::$tmp_name = $file['tmp_name'];
-
 		return new static;
 	}
 	/**
@@ -61,23 +54,36 @@ class Image
 	/**
 	 * Процесс сохранения изображения
 	 * @param  string $path 
+	 * @param  string $name 
 	 */
-	public static function save($path){
+	public static function save($path, $name = ''){
 
-		list($width, $height, $type) = getimagesize(self::$tmp_name);
+		list($width, $height, $type) = getimagesize(self::$originalFile['tmp_name']);
 		
-		if (empty(self::$type)) {
-			self::$type = image_type_to_extension($type, false);
+		$path = rtrim($path, '/') . '/';
+
+		/*Если не указано новое имя файла, ставим исходное*/
+		if (empty($name) || is_null($name) || !$name) {
+			$name = pathinfo(self::$originalFile['name']);
+			$name = $name['filename'];
 		}
+
+		/*Если не указан расширение файла, ставим исходное*/
+		if (!self::$type) {
+			self::$type = pathinfo(self::$originalFile['name'], PATHINFO_EXTENSION);
+		}
+
+		/*Если не указаны размеры, сиавим исходные*/
 		if (empty(self::$width) || empty(self::$height)) {
 			self::$width = $width;
 			self::$height = $height;
 		}
 
 		$old_image = self::load_image($type);
+		
 		$image = self::resize_image_to_width_height(self::$width, self::$height, $old_image, $width, $height);
 
-		self::save_image($image, $path, self::$type, self::$quality);
+		self::save_image($image, $path, $name, self::$type, self::$quality);
 	}
 	/**
 	 * Ресайз изображения по ширине и высоте
@@ -96,6 +102,20 @@ class Image
 		$new_width = $width * $ratio;
 
 		return self::resize_image($new_width, $new_height, $image, $width, $height);
+	}
+	/**
+	 * Ресайз изображения
+	 * @param  integer $new_width  
+	 * @param  integer $new_height 
+	 * @param  $image      
+	 * @param  integer $width     
+	 * @param  integer $height    
+	 */
+	private static function resize_image($new_width, $new_height, $image, $width, $height){
+		$new_image = imagecreatetruecolor($new_width, $new_height);
+		imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+		return $new_image;
 	}
 	/**
 	 * Создание изображения
@@ -117,27 +137,16 @@ class Image
 		return $image;
 	}
 	/**
-	 * Ресайз изображения
-	 * @param  integer $new_width  
-	 * @param  integer $new_height 
-	 * @param  $image      
-	 * @param  integer $width     
-	 * @param  integer $height    
-	 */
-	private static function resize_image($new_width, $new_height, $image, $width, $height){
-		$new_image = imagecreatetruecolor($new_width, $new_height);
-		imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-
-		return $new_image;
-	}
-	/**
 	 * Создание изображения
 	 * @param  $new_image    
 	 * @param  string $new_filename 
 	 * @param  string $new_type     
 	 * @param  integer $quality     
 	 */
-	private static function save_image($new_image, $new_filename, $new_type='jpeg', $quality) {
+	private static function save_image($new_image, $path, $new_filename, $new_type='jpeg', $quality) {
+
+		$new_filename = $path . $new_filename . '.' . $new_type;
+
 		if ($new_type == 'jpeg' || $new_type == 'jpg' ){
 			imagejpeg($new_image, $new_filename, $quality);
 		}elseif ($new_type == 'png'){
