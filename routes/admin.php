@@ -1,6 +1,8 @@
 <?php 
 
-return [
-	'/panel_adm/login' 				=> 'Admin\LoginController@Index',
-];
+framework\core\Router::group(['prefix' => 'panel_adm'], function(){ 
+	return [
+		'/login' 				=> 'Admin\LoginController@Index',
+	];
+});
 

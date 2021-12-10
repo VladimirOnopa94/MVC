@@ -10,7 +10,7 @@ use app\controllers\Controller;
 class LoginController extends Controller{ 
 
 
-	public $layout = 'admin2';
+	public $layout = 'admin';
 	public function Index($request)
 	{
 		//$this->layout = 'admin';

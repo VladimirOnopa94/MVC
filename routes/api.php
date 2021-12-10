@@ -1,5 +1,8 @@
 <?php 
 
-return [
-	'api/googleFormInput' => 'Site\IndexController@Api',
-];
+framework\core\Router::group(['prefix' => 'api'], function(){ 
+	return [
+		'/googleFormInput' => 'Site\IndexController@Api',
+	];
+});
+

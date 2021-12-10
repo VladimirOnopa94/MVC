@@ -8,7 +8,7 @@ use framework\core\ErrorHandler;
  */
 class Router
 {
-	protected $router = [];
+	protected $router = []; /*Массив маршрутов*/
 	
 	function __construct()
 	{
@@ -22,8 +22,30 @@ class Router
 
 		$this->run();
 	}
+	/**
+	 * Обработка групы маршрутов
+	 * @param  array $args  аргументы групы [prefix маршутов]
+	 * @param  array $routes маршруты
+	 */
+	public function group($args = [], $routes){
 
+		$prefix =  (isset($args['prefix']) && !empty($args['prefix'])) ? $args['prefix'] : '{lang}';//Префикс в маршуртах если есть
+		
+		$routes = call_user_func($routes);
 
+		$result = array();
+		//Формируем массив маршрутов 
+		foreach ($routes as $key => $route) {
+			if (empty($key)) {
+				$key = ltrim($key , '/');
+			}else{
+				$key = '/' . ltrim($key , '/');
+			}
+			$result[$prefix . $key] = $route;
+		}
+
+		$this->router[$prefix] = $result;
+	}
 	/**
 	 * Подключаем все файлы роутинга из папки routes
 	 */
@@ -37,13 +59,12 @@ class Router
 			foreach ($files as $key => $route) {
 				$routeResult[] = require_once $path . '/' . $route ;
 			}
-			$this->router = array_reduce($routeResult, 'array_merge', array());
+			$this->router = array_reduce($this->router, 'array_merge', array());
+
 		}else{
 			throw new Exception("Can't find route files in {$path}");
 		}
 	}
-
-
 	/**
 	 * Извлекаем url
 	 * @return string
@@ -60,7 +81,6 @@ class Router
 		/*Если переключен язык производится редирект , иначе ничего не происходит*/
 		Language::isLangSwitch($url);  
 		
-		
 		if ($this->isServiceUrl($url) === false) {
 			/*Формирование url с учетом языка*/
 			$url = Language::transformUrl($url);
@@ -68,8 +88,6 @@ class Router
 
 		return $url;
 	}
-
-
 	/**
 	 * Проверяем являеться ли url сервисным
 	 * @param  string  $url 
@@ -85,9 +103,8 @@ class Router
 		}
 		return false;
 	}
-
 	/**
-	 * Ищем совпадения в файле router.php с указаным в адрес. строке url
+	 * Ищем совпадения в файле маршруте с указаным в адрес. строке url
 	 * @param  string $url 
 	 * @return array
 	 */
@@ -129,7 +146,6 @@ class Router
 					break;	
 				}
 
-				
 				if ( !empty($routeParam) && !empty($matches)  ) {
 
 					// заменяем параметр {N} параметром из url
@@ -148,7 +164,6 @@ class Router
 						$response['params'][$routeParamReplace] = $url[$k];
 					}
 
-
 					foreach ($url as $key => $value) {
 						if (!array_key_exists ($value, $langSettings['langs'])) {/*Игнорируем параметр языка в массиве*/
 							if (isset($_POST) && $_POST != '') { //Пишем POST параметры в response
@@ -166,7 +181,6 @@ class Router
 				}	
 				
 			}
-
 
 			$resultUrl = rtrim(implode('/', $resultUrl),'/');
 
@@ -194,9 +208,6 @@ class Router
 		}
 	
 	}
-
-	
-
 	/**
 	 * Извлекаем из строки route контроллер и метод.
 	 * Переменная $request содерижит свойства params (переданые параметры в url) и 
@@ -274,12 +285,10 @@ class Router
 		}
 
 	}
-
 	/**
 	 * Запуск роутинга
 	 */
 	public function run (){
-
 		if ( $url =  $this->getUrl() ) {
  			if ($response = $this->matchRoute($url)) {
  				$this->callControllerMethod ($response);
@@ -288,11 +297,6 @@ class Router
  				$controller = new Error\ErrorController();
  				$controller->ShowError();
  			}
-	
 		}
 	}
-
-
-
-
 }

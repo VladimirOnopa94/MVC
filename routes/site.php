@@ -1,22 +1,21 @@
 <?php 
-
-return [
-	'{lang}' 					=> 'Site\IndexController@Index',
-	/*login*/
-	'{lang}/login' 				=> 'Site\Auth\LoginController@Index',
-	'{lang}/category/{category}/{post}' 			=> 'Site\Auth\LoginController@TestPage',
-	'{lang}/logout' 			=> 'Site\Auth\LoginController@Logout',
-	'{lang}/signin' 			=> 'Site\Auth\LoginController@Login',
-	/*register*/
-	'{lang}/register' 			=> 'Site\Auth\RegisterController@Index', 
-	'{lang}/signup' 			=> 'Site\Auth\RegisterController@Signup',
-	/*pages*/
-	'{lang}/users' 				=> 'Site\UsersListController@Index',
-	'{lang}/phonebook' 			=> 'Site\IndexController@Page',
-	'{lang}/mycontact' 			=> 'Site\MycontactController@Index',
-	'{lang}/savecontact' 		=> 'Site\MycontactController@Store',
-	'{lang}/offline' 		    => 'Site\MaintenanceController@inWork',
-
-
-];
+framework\core\Router::group(['prefix' => ''], function(){ 
+	return [
+		'' 						=> 'Site\IndexController@Index',
+		/*login*/
+		'/login' 				=> 'Site\Auth\LoginController@Index',
+		'/category/{category}/{post}' 	=> 'Site\Auth\LoginController@TestPage',
+		'/logout' 				=> 'Site\Auth\LoginController@Logout',
+		'/signin' 				=> 'Site\Auth\LoginController@Login',
+		/*register*/
+		'/register' 			=> 'Site\Auth\RegisterController@Index', 
+		'/signup' 				=> 'Site\Auth\RegisterController@Signup',
+		/*pages*/
+		'/users' 				=> 'Site\UsersListController@Index',
+		'/phonebook' 			=> 'Site\IndexController@Page',
+		'/mycontact' 			=> 'Site\MycontactController@Index',
+		'/savecontact' 			=> 'Site\MycontactController@Store',
+		'/offline' 		    	=> 'Site\MaintenanceController@inWork',
+	];
+});
 
