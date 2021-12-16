@@ -34,7 +34,7 @@ class IndexController extends Controller{
 	}
 	public function Page($request)
 	{
-		
+		echo "page";
 	}
 
 	public function Category($request)

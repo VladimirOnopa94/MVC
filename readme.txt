@@ -176,11 +176,10 @@ vendor
 
 	url('/someUrl', true) //для формирования без домена в url  ->> /someUrl 
 
-	которая выводит ссылку сформированую с выбраным языком 
+	url('/someUrl', 'api_prefix') //для формирования префикса в url  ->> test.com/api_prefix/someUrl 
 
-	/someUrl будет преобразована в /{code}/someUrl
+	url('/someUrl', getLang()) //для формирования языка в url  ->> test.com/en/someUrl 
 
-	где {code} будет подставлен выбраный язык пользователя
 
 	----------
 	Ajax запросы нужно производить без указания в запросе метки языка 
@@ -193,25 +192,33 @@ vendor
 	  }
 	});
 
-	в массиве роутов запишем с указанием метки языка {lang}
-
-	'{lang}/page/some' 	=> 'Site\IndexController@Page'
-
-
-
-
 ******************** Роутинг *******************
 
-Для использования сервисных url без преобразования их с языковой версией
-в конфиге  добавим префиксы нужных url
+Возможно использовать группы в которые можно (необязательно) передавать префикс и суффикс, которые можно добавить в url и к ссылкам
 
-например 'service_prefix' => ['api','admin],
+use framework\core\Route\Route;
 
-при использовании к ним не будет добавлен код языка 
 
-admin/someUrl или api/someMethod  
+Route::group(['suffix' => '', 'prefix' => '')], function(){ }); //без префикса и суфикса
 
-в отличии от обычных url category/page будут преобразованы в (/{code_lang}/category/page)
+Route::group(['suffix' => '.html', 'prefix' => getLang(true)], function(){ 
+
+	Route::get('' 						, 'Site\IndexController@Index')->name('main');
+	Route::get('/category/{category}/{post}' 	, 'Site\Auth\LoginController@TestPage')->name('category.product');
+	Route::post('/signup' 				, 'Site\Auth\RegisterController@Signup');
+
+});
+
+будет сформирован роут с именем который указан в файле роутинга  и параметры подставлены в ссылку
+
+route('category.product', ['category'= > 'cat', 'post' => 'test']) ->> test.com/category/cat/test
+
+
+Либо использовать вне группы без префикса и суфикса
+
+Route::get('contact', 'Site\IndexController@Index');
+
+route('contact') ->> test.com/contact
 
 
 ********************Валидация данных*******************

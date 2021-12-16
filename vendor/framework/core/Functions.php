@@ -14,10 +14,16 @@ function __($key, $data = [])
 	return \framework\core\Language::getPhrase($key, $data);
 }
 
-//Формирование ссылки с учетом языка
-function url($url, $short = false) 
+//Формирование ссылки 
+function url($url, $prefix = '', $short = false) 
 {
-	return \framework\core\Language::createLink($url, $short);
+	return \framework\core\Language::createLink($url, $prefix, $short);
+}
+
+//Формирование роута
+function route($name, $attributes = []) 
+{
+	return \framework\core\Route\Route::generateRoute($name, $attributes);
 }
 
 //Текущий url
@@ -27,9 +33,9 @@ function currLoc()
 }
 
 //Вернуть текущий язык
-function getLang() 
+function getLang($forceHideDefaultLanguage = false) 
 {
-	return \framework\core\Language::getLang();
+	return \framework\core\Language::getLang($forceHideDefaultLanguage);
 }
 
 //Вернуть текущий токен

@@ -148,12 +148,14 @@ class Language
 	private static function SetLang($code)
 	{	
 		$langSettings = config('kernel.language');
+
 		if (array_key_exists($code, $langSettings['langs'] ) ) {
+
 			setcookie('lang' , $code, time() +3600*24*7, '/');
-		}
-		
+			$_COOKIE['lang'] = $code; //Перезапишем принудительно что бы поменять язык для этого запроса 
+
+		}	
 		//Заменяем старый язык в url на новый и редиректим
-		//
 		$url = str_replace(siteUrl(), '', $_SERVER['HTTP_REFERER']); 
 		
 		$url = ltrim($url, '/');
@@ -175,8 +177,12 @@ class Language
 
 		$url = array_filter($url);
 
-		array_unshift($url, $code);
+		$code = self::getLang(!$langSettings['show_default']); //Получаем текущую метку языка если есть, для добавления в url
 
+		if (!empty($code)) {
+			array_unshift($url, $code);
+		}
+		
 		$res_url = 	implode('/', $url);
 		$res_url = 	parse_url($res_url);
 
@@ -219,36 +225,20 @@ class Language
 	}
 
 	/**
-	 * Преобразовать ссылку url в соответствии с языком
+	 * Преобразовать ссылку url в соответствии с передаными параметрами
 	 * @param  string $url 
+	 * @param  string $prefix 
 	 * @param  boolean $short 
 	 * @return string  
 	 */
-	public static function createLink($url, $short){
-
-		$langSettings = config('kernel.language');
-
-		$def_lang = $langSettings['def_lang'];
-		$isDefLang =  $_COOKIE['lang'] == $def_lang;
+	public static function createLink($url, $prefix, $short){
 
 		if (isset($url)) {
 
-			$originalUrl = $url;
+			$resultLink = ltrim(rtrim($url,'/'), '/');
 
-			if (($isDefLang && $langSettings['show_default'] === true) || $isDefLang === false) {
-
-				$url = explode('/', ltrim($url, '/'));
-
-				$isHasLang =  array_key_exists ($url[0],  $langSettings['langs']);
-				if ($isHasLang) {
-					array_shift($url);
-					array_unshift($url, $_COOKIE['lang']);
-				}else{
-					array_unshift($url, $_COOKIE['lang']);					
-				}
-				$resultLink = rtrim(implode('/', $url),'/');
-			}else{
-				$resultLink = ltrim(rtrim($url,'/'), '/');
+			if (!empty($prefix)) {
+				$resultLink = $prefix . '/' . $resultLink;
 			}
 
 			if ($short === true) { //формируем ссылку без домена
@@ -264,14 +254,28 @@ class Language
 
 	/**
 	 * Получить текущий язык
+	 * @param  boolean $forceHideDefaultLanguage [Не отображать язык если язык по умолчанию скрыт]
 	 * @return string
 	 */
-	public static function getLang(){
+	public static function getLang($forceHideDefaultLanguage = false){
 		$langSettings = config('kernel.language');
+
 		if (isset($_COOKIE['lang'])) {
+			
+			if ($forceHideDefaultLanguage == true && ($_COOKIE['lang'] == $langSettings['def_lang'] && $langSettings['show_default'] == false) ) {
+				return '';
+			}
+
 			return $_COOKIE['lang'];
 		}else{
-			return $_COOKIE['lang'] =  $langSettings['def_lang'];
+
+			$_COOKIE['lang'] =  $langSettings['def_lang'];
+
+			if ($forceHideDefaultLanguage == true && ($_COOKIE['lang'] == $langSettings['def_lang'] && $langSettings['show_default'] == false) ) {
+				return '';
+			}
+			return $_COOKIE['lang'];
+			
 		}
 
 	}

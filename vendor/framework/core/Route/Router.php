@@ -1,115 +1,82 @@
 <?php 
-namespace framework\core;
+namespace framework\core\Route;
 use Exception;
 use framework\core\Language;
+use framework\core\App;
 use framework\core\ErrorHandler;
+use framework\core\Route\Route;
+
 /**
  * Логика роутинга приложения
  */
 class Router
 {
-	protected $router = []; /*Массив маршрутов*/
+	public static $router; /*Массив маршрутов*/
+	protected static $instance;
 	
-	function __construct()
-	{
+	protected function __construct(){
 		session_start();
 
 		new ErrorHandler();	// Устанавливаем обработчик ошибок
 
-		$this->includeRoutesFiles(); // Подключаем все файлы роутинга
+		$route = \framework\core\Route\Route::instance();
+
+		self::$router = $route->includeRoutesFiles();// Подключаем массив роутингов
 
 		$this->default_route = '' ;
 
 		$this->run();
 	}
 	/**
-	 * Обработка групы маршрутов
-	 * @param  array $args  аргументы групы [prefix маршутов]
-	 * @param  array $routes маршруты
+	 * Singleton
+	 * @return object 
 	 */
-	public function group($args = [], $routes){
-
-		$prefix =  (isset($args['prefix']) && !empty($args['prefix'])) ? $args['prefix'] : '{lang}';//Префикс в маршуртах если есть
-		
-		$routes = call_user_func($routes);
-
-		$result = array();
-		//Формируем массив маршрутов 
-		foreach ($routes as $key => $route) {
-			if (empty($key)) {
-				$key = ltrim($key , '/');
-			}else{
-				$key = '/' . ltrim($key , '/');
-			}
-			$result[$prefix . $key] = $route;
+	public static function instance() {
+		if (self::$instance === null) {
+			self::$instance = new self ;
 		}
-
-		$this->router[$prefix] = $result;
+		return self::$instance;
 	}
-	/**
-	 * Подключаем все файлы роутинга из папки routes
-	 */
-	private function includeRoutesFiles(){
-		$path  = ROOT . '/routes';
-		$files = scandir($path);
-		$files = array_diff(scandir($path), array('.', '..'));
-		$routeResult = [];
-
-		if (!empty($files)) {
-			foreach ($files as $key => $route) {
-				$routeResult[] = require_once $path . '/' . $route ;
-			}
-			$this->router = array_reduce($this->router, 'array_merge', array());
-
-		}else{
-			throw new Exception("Can't find route files in {$path}");
-		}
-	}
+	
 	/**
 	 * Извлекаем url
 	 * @return string
 	 */
 	private  function getUrl (){
-
 		$url = '';
+
 		if ( isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] != '' ) {
 			$url = trim($_SERVER['REQUEST_URI']);
-		}elseif ( $url == '' ) { // Метод по умолчанию указан в route.php как пустой ( '' => 'SomeController' )
+		}else { // Метод по умолчанию указан в route.php как пустой ( '' => 'SomeController' )
 			$url = $this->default_route;
 		}
 		
 		/*Если переключен язык производится редирект , иначе ничего не происходит*/
 		Language::isLangSwitch($url);  
-		
-		if ($this->isServiceUrl($url) === false) {
-			/*Формирование url с учетом языка*/
-			$url = Language::transformUrl($url);
-		}
 
 		return $url;
 	}
+
 	/**
-	 * Проверяем являеться ли url сервисным
-	 * @param  string  $url 
-	 * @return boolean     
+	 * Правильный ли метод в роуте и метод браузера
+	 * @param  array $route текущий роут
+	 * @return mixed
 	 */
-	private  function isServiceUrl($url){
-		if (!empty($url)) {
-			$servicePrefix = config('kernel.service_prefix');
-			$parts = explode('/', ltrim($url , '/'));
-			if (in_array($parts[0], $servicePrefix)) {
-				return true;
-			}
+	private function checkMethod ($route) {
+
+		if ($route['method'] == $_SERVER['REQUEST_METHOD']) {
+			return true;
+		}else{
+			throw new Exception("Wrong method for route, current method {$_SERVER['REQUEST_METHOD']}, method in route {$route['method']}");
 		}
-		return false;
 	}
 	/**
-	 * Ищем совпадения в файле маршруте с указаным в адрес. строке url
-	 * @param  string $url 
-	 * @return array
+	 * Поиск совпадений с url с роутом
+	 * @param  string $url
+	 * @return array    
 	 */
 	private function matchRoute ($url) {
-
+		
 		$langSettings = config('kernel.language');
 
 		// Обрабатываем $_GET параметры из url если они есть
@@ -127,7 +94,9 @@ class Router
 		$url = parse_url($url);
 		$url = explode('/', ltrim($url['path'], '/'));
 
-		foreach ($this->router as $pattern => $route) {
+		foreach (self::$router as $pattern => $route) {
+
+			$pattern = $route['pattern'];
 
 			$routePattern = explode('/', ltrim($pattern, '/'));
 
@@ -149,20 +118,20 @@ class Router
 				if ( !empty($routeParam) && !empty($matches)  ) {
 
 					// заменяем параметр {N} параметром из url
-					
-					$resultUrl[] = preg_replace('/^{\w+}/', $url[$k], $routeParam);
+
+					preg_match('/^{\w+}' . $route['suffix'] . '/', $routeParam, $matches);
+					if (!empty($matches)) {
+						$resultUrl[] = preg_replace('/^{\w+}' . $route['suffix'] . '/', $url[$k], $routeParam);
+					}else{
+						$resultUrl[] = preg_replace('/^{\w+}/', $url[$k], $routeParam);
+					}
+
 
 					$routeParamReplace = str_replace('{', '', $routeParam);	
 
 					$routeParamReplace = str_replace('}', '', $routeParamReplace);
 
-					/* Если есть $_GET параметр news ( пример /category/news )
-
-					или параметр about ( пример /page/about ) и т.п. */
-					if ($routeParamReplace != 'lang') {
-
-						$response['params'][$routeParamReplace] = $url[$k];
-					}
+					$response['params'][$routeParamReplace] = $url[$k];
 
 					foreach ($url as $key => $value) {
 						if (!array_key_exists ($value, $langSettings['langs'])) {/*Игнорируем параметр языка в массиве*/
@@ -189,13 +158,15 @@ class Router
 
 			if ( $resultUrl == $urlOriginal ) {
 
-				$response['controller'] = $route;
+				$this->checkMethod($route);
+
+				$response['controller'] = $route['action'];
 
 				return $response;
 
 			} elseif ( $urlOriginal == $this->default_route ) {
 
-				$response['controller'] = $route;
+				$response['controller'] = $route['action'];
 
 				return $response;
 
@@ -212,7 +183,7 @@ class Router
 	 * Извлекаем из строки route контроллер и метод.
 	 * Переменная $request содерижит свойства params (переданые параметры в url) и 
 	 * controller (вызываемый контроллер и метод)
-	 * @param  object $request 
+	 * @param  array $request 
 	 */
 	private function callControllerMethod ($request) {
 
@@ -294,7 +265,7 @@ class Router
  				$this->callControllerMethod ($response);
  			} else {
  				abort(404) ;
- 				$controller = new Error\ErrorController();
+ 				$controller = new \framework\core\Error\ErrorController();
  				$controller->ShowError();
  			}
 		}

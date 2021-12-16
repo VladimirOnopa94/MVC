@@ -34,10 +34,6 @@ return [
 		'show_default' =>  false 
 	],
 	/*
-		Префиксы в url на которые не распостраняется формирование ссылки с языком
-	*/
-	'service_prefix' => ['api','panel_adm'],
-	/*
 		Компоненты 
 	 */
 	'components' => [

@@ -1,8 +1,10 @@
-<?php 
 
-framework\core\Router::group(['prefix' => 'api'], function(){ 
-	return [
-		'/googleFormInput' => 'Site\IndexController@Api',
-	];
+<?php 
+use framework\core\Route\Route;
+
+Route::group(['prefix' => 'api'], function(){ 
+
+		Route::get('/googleFormInput' , 'Site\IndexController@Api');
+		
 });
 

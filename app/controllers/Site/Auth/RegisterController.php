@@ -7,6 +7,7 @@ use app\components\widgets\Breadcrumbs;
 use framework\core\Validate as VD;
 use framework\core\Mail;
 use app\models\Auth\User;
+use framework\core\App;
 
 
 class RegisterController extends Controller{ 
@@ -28,13 +29,13 @@ class RegisterController extends Controller{
 	*/
 	public function Signup($request)
 	{
-		if (isset($request->name) && isset($request->password)) {
+		$data = App::$app->request->post();
 
-			$credentials = array('name' => $request->name , 'password' => $request->password);
+		if (isset($data['name']) && isset($data['password'])) {
 
-			VD::load($credentials);
+			$credentials = array('name' => $data['name'] , 'password' => $data['password']);
 
-			$errors = VD::validate([
+			$errors = VD::load($credentials)->validate([
 				'name' => 'required' , 
 				'password' => 'required' , 
 			]); 

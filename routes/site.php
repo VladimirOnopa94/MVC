@@ -1,21 +1,28 @@
 <?php 
-framework\core\Router::group(['prefix' => ''], function(){ 
-	return [
-		'' 						=> 'Site\IndexController@Index',
+use framework\core\Route\Route;
+
+
+Route::group(['suffix' => '.html', 'prefix' => getLang(true)], function(){ 
+
+		Route::get('' 						, 'Site\IndexController@Index')->name('main');
 		/*login*/
-		'/login' 				=> 'Site\Auth\LoginController@Index',
-		'/category/{category}/{post}' 	=> 'Site\Auth\LoginController@TestPage',
-		'/logout' 				=> 'Site\Auth\LoginController@Logout',
-		'/signin' 				=> 'Site\Auth\LoginController@Login',
+		Route::get('/login' 				, 'Site\Auth\LoginController@Index');
+		Route::get('/category/{category}/{post}' 	, 'Site\Auth\LoginController@TestPage')->name('category.product');
+		Route::get('/category/{category}' 	, 'Site\Auth\LoginController@TestPage')->name('category.view');
+		Route::get('/logout' 				, 'Site\Auth\LoginController@Logout');
+		Route::post('/signin' 				, 'Site\Auth\LoginController@Login');
 		/*register*/
-		'/register' 			=> 'Site\Auth\RegisterController@Index', 
-		'/signup' 				=> 'Site\Auth\RegisterController@Signup',
+		Route::get('/register' 			, 'Site\Auth\RegisterController@Index',);
+		Route::post('/signup' 				, 'Site\Auth\RegisterController@Signup');
 		/*pages*/
-		'/users' 				=> 'Site\UsersListController@Index',
-		'/phonebook' 			=> 'Site\IndexController@Page',
-		'/mycontact' 			=> 'Site\MycontactController@Index',
-		'/savecontact' 			=> 'Site\MycontactController@Store',
-		'/offline' 		    	=> 'Site\MaintenanceController@inWork',
-	];
+		Route::get('/users' 				, 'Site\UsersListController@Index');
+		Route::get('/mycontact' 			, 'Site\MycontactController@Index');
+		Route::get('/offline' 		    	, 'Site\MaintenanceController@inWork');
 });
 
+
+
+Route::get('contact', 'Site\IndexController@Index');
+Route::get('/phonebook' 			, 'Site\IndexController@Page');
+
+Route::post('contact-post', 'Site\IndexController@Index');

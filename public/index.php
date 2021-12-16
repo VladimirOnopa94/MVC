@@ -10,6 +10,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 new framework\core\App();
 
-new framework\core\Router();
+framework\core\Route\Router::instance();
 
 
