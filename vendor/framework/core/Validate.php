@@ -211,7 +211,6 @@ class Validate
 		}
 		
 	}
-	
 	/**
 	 * Валидация поля содержащего только допустимые расширения файла
 	 * @param  String $field 
@@ -220,13 +219,41 @@ class Validate
 	 */
 	private static function mimes ($field, $arg){
 		$data = self::$data[$field];
-		$info = pathinfo($data);
-		$arg = explode(',', $arg);
 
-		if (!isset($info['extension']) || !in_array($info['extension'], $arg)) {
-			$fileAllowedStr = implode(', ', $arg);
-			self::$errors[$field][] = "Поле {$field} содержит некорректное расширение файла допустимые расширения {$fileAllowedStr}";
+		if (!empty($data)) {
+			foreach ($data as $key => $file) {
+				$info = pathinfo($file['name']);
+				$arg = explode(',', $arg);
+
+				if (!isset($info['extension']) || !in_array($info['extension'], $arg)) {
+					$fileAllowedStr = implode(', ', $arg);
+					self::$errors[$field][] = "Поле {$field} содержит некорректное расширение файла допустимые расширения {$fileAllowedStr}";
+				}
+			}
 		}
+		
+	}
+	/**
+	 * Валидация поля содержащего только допустимые расширения файла
+	 * @param  String $field 
+	 * @param  String $arg 
+	 * @return errors      
+	 */
+	private static function size ($field, $arg){
+		$data = self::$data[$field];
+
+		if (!empty($data)) {
+			foreach ($data as $key => $file) {
+				$info = pathinfo($file['name']);
+				$arg = explode(',', $arg);
+
+				if (!isset($info['extension']) || !in_array($info['extension'], $arg)) {
+					$fileAllowedStr = implode(', ', $arg);
+					self::$errors[$field][] = "Поле {$field} содержит некорректное расширение файла допустимые расширения {$fileAllowedStr}";
+				}
+			}
+		}
+		
 	}
 
 

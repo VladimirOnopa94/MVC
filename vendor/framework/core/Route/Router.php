@@ -13,6 +13,7 @@ class Router
 {
 	public static $router; /*Массив маршрутов*/
 	protected static $instance;
+	public static $prefix;
 	
 	protected function __construct(){
 		session_start();
@@ -126,7 +127,6 @@ class Router
 						$resultUrl[] = preg_replace('/^{\w+}/', $url[$k], $routeParam);
 					}
 
-
 					$routeParamReplace = str_replace('{', '', $routeParam);	
 
 					$routeParamReplace = str_replace('}', '', $routeParamReplace);
@@ -155,6 +155,8 @@ class Router
 
 			$urlOriginal = parse_url($urlOriginal);
 			$urlOriginal = $urlOriginal['path'];
+
+			self::$prefix = isset($route['prefix']) ? $route['prefix'] : '';
 
 			if ( $resultUrl == $urlOriginal ) {
 

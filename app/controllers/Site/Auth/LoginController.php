@@ -9,6 +9,7 @@ use app\controllers\Controller;
 use framework\core\Validate as VD;
 use framework\core\App;
 use framework\core\Image;
+use framework\core\File;
 use app\components\widgets\Breadcrumbs;
 
 
@@ -67,16 +68,16 @@ class LoginController extends Controller{
 			$errors = VD::load($credentials)->validate([
 				'name' => 'required' , 
 				'password' => 'required' , 
-				//'file' => 'image' , 
+				//'file' => 'mimes:pdf,doc,docx' 
 
 			]); 
-
-			foreach ($_FILES as $key => $file) {
+			
+			/*foreach ($_FILES as $key => $file) {
 				$path = IMAGE;
 				$name = 'new_img' . microtime();
-				
+
 				Image::create($file)->encode("webp", 10)->save($path);
-			}
+			}*/
 
 			if (empty($errors)) {
 				$response = $this->Auth($credentials, false);

@@ -6,3 +6,6 @@
 
 /public/image/*
 !/public/image/.gitkeep
+
+/storage/*
+!/storage/.gitkeep

@@ -31,7 +31,7 @@ return [
 			'en' => [ 'name' => 'Английский', 'image' => ''], 
 		], 
 		// отображать язык по умолчанию в url
-		'show_default' =>  false 
+		'hide_default' =>  true 
 	],
 	/*
 		Компоненты 

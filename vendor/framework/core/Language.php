@@ -52,72 +52,6 @@ class Language
 		}
 	}
 
-
-	/**
-	 * Формирование юрл с учетом языка
-	 * @param  string $url 
-	 */
-	public static function transformUrl ($url)
-	{
-		$langSettings = config('kernel.language');
-		$def_lang = $langSettings['def_lang'];
-		$langs = $langSettings['langs'];
-		$show_default = $langSettings['show_default'];
-
-		//установим язык поставим по умолчанию если не выбран 
-		if (!isset($_COOKIE['lang'])) {
-			$_COOKIE['lang'] = $def_lang;
-		}
-
-		$url = self::buildUrl(); 
-		$url = explode('/', ltrim($url, '/'));
-		
-		$isHasLang =  array_key_exists ($url[0], $langs);
-		$isDefLang =  $_COOKIE['lang'] == $def_lang;
-		
-		//для AJAX запросов 
-		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-			array_unshift($url, $_COOKIE['lang']);
-			$resultUrl = rtrim(implode('/', $url),'/');
-			return $resultUrl;
-		}
-
-
-		/*Если в $_COOKIE['lang'] язык по умолч. и отключен показ языка по умолч. 
-		и в юрл языка нет то добавим для работы роутера*/
-		if (!$isHasLang && !$show_default && $isDefLang) {
-			array_unshift($url, $_COOKIE['lang']);
-			$resultUrl = rtrim(implode('/', $url),'/');
-
-			return $resultUrl;
-		}
-
-		/*Если в $_COOKIE['lang'] язык по умолч. и отключен показ языка по умолч. 
-		и в юрл есть язык то вырежем его из url и перенаправим без него*/
-		if ($isHasLang && !$show_default && $isDefLang) {
-			array_shift($url);
-			self::redirect($url);
-		}
-
-		if(!$isHasLang && $show_default){
-			array_unshift($url, $_COOKIE['lang']);
-			self::redirect($url);
-		}
-
-		if (!$isDefLang && !$isHasLang) {
-			array_unshift($url, $_COOKIE['lang']);
-			self::redirect($url);
-		}
-
-		if ($isHasLang && ($_COOKIE['lang'] != $url[0]) ) { //  если был переключен язык
-			array_shift($url);
-			array_unshift($url, $_COOKIE['lang']);
-			self::redirect($url);
-		}
-		$resultUrl = rtrim(implode('/', $url),'/');
-		return $resultUrl;
-	}
-
 	/**
 	 * Формирование url
 	 * @return string Свормированая строка url
@@ -177,7 +111,7 @@ class Language
 
 		$url = array_filter($url);
 
-		$code = self::getLang(!$langSettings['show_default']); //Получаем текущую метку языка если есть, для добавления в url
+		$code = self::getLang($langSettings['hide_default']); //Получаем текущую метку языка если есть, для добавления в url
 
 		if (!empty($code)) {
 			array_unshift($url, $code);
@@ -262,7 +196,7 @@ class Language
 
 		if (isset($_COOKIE['lang'])) {
 			
-			if ($forceHideDefaultLanguage == true && ($_COOKIE['lang'] == $langSettings['def_lang'] && $langSettings['show_default'] == false) ) {
+			if ($forceHideDefaultLanguage == true && ($_COOKIE['lang'] == $langSettings['def_lang'] && $langSettings['hide_default'] == true) ) {
 				return '';
 			}
 
@@ -271,7 +205,7 @@ class Language
 
 			$_COOKIE['lang'] =  $langSettings['def_lang'];
 
-			if ($forceHideDefaultLanguage == true && ($_COOKIE['lang'] == $langSettings['def_lang'] && $langSettings['show_default'] == false) ) {
+			if ($forceHideDefaultLanguage == true && ($_COOKIE['lang'] == $langSettings['def_lang'] && $langSettings['hide_default'] == true) ) {
 				return '';
 			}
 			return $_COOKIE['lang'];

@@ -1,9 +1,5 @@
 <?php 
 
-/*Каталог логов*/
-define("LOG", dirname(__FILE__) . '/tmp/log');
-/*Каталог кэша*/
-define("CACHE", dirname(__FILE__) . '/tmp/cache');
 /* Публичный каталог */
 define("CATALOG", dirname(__FILE__) . '/public');
 /* Каталог изображений */
@@ -14,6 +10,12 @@ define("CONFIG", dirname(__FILE__) . '/config');
 define("APP", dirname(__FILE__) . '/app');
 /* Корень сайта */
 define("ROOT", dirname(__FILE__));
+/* Каталог хранилище */
+define("STORAGE", dirname(__FILE__) . '/storage');
+/*Каталог логов*/
+define("LOG", STORAGE . '/log');
+/*Каталог кэша*/
+define("CACHE", STORAGE . '/cache');
 /* Отладка */
 define("DEBUG", [
 	'enable' => true,

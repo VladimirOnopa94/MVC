@@ -5,16 +5,19 @@ use framework\core\Mail;
 use framework\core\Csrf;
 use framework\core\Language;
 use framework\core\Auth\Authenticate;
+
  /**
  * Класс контроллера приложения
  */
 abstract class Controller 
 {
-
 	public $title;
 	protected $middlewares = [];
 	public $layout;
 	public $csrf ;
+	public $meta = [];
+	public $style = [];
+	public $script = [] ;
 	
 	use Authenticate;
 
@@ -60,7 +63,7 @@ abstract class Controller
 	 */
 	public function render($view = '', $data = array(), $returnHtml = false)
 	{	
-		$view = new View($view, $data, $this->layout, $this->title);
+		$view = new View($view, $data, $this->layout, $this->title,  $this->meta,  $this->style,  $this->script);
 		$view->getView($returnHtml);
 	}
 
@@ -72,25 +75,8 @@ abstract class Controller
 	{
 		Language::includeLang($_COOKIE['lang'], $view);
 	}
-
-	/**
-	 * Функция отправки писем
-	 * @param  string $subject 
-	 * @param  string $message 
-	 * @param  array||String $to      
-	 * @param  string $headers 
-	 * @param  string $view    
-	 * @param  mixed $data             
-	 */
-	public function sendMail($subject, $message, $to, $headers, $view, $data)
-	{
-		$mail = new Mail($subject, $message, $to, $headers, $view, $data);
-		$mail = $mail->init();
-	}
-
 	/**
 	 * Задать заголовок
-	 * @return none
 	 */
 	public function setTitle($title)
 	{
@@ -102,7 +88,29 @@ abstract class Controller
 		return;
 		
 	}
-	
+	/**
+	 * Установить мета тег
+	 * @param  String $name 
+	 * @param  String $content 
+	 * @param  String $type 
+	 */
+	public function setMeta($name, $content, $type = 'name'){
+		$this->meta[] = array('type' => $type, 'name' => $name, 'content' => $content);
+	}
+	/**
+	 * Установить тег стилей
+	 * @param  String $style 
+	 */
+	public function setStyle($style){ 
+		$this->style[] = $style;
+	}
+	/**
+	 * Установить тег скрипта
+	 * @param  String $script 
+	 */
+	public function setScript($script){
+		$this->script[] = $script;	
+	}
 	/**
 	 * Проверка наличия и валидности переданого CSRF токена 
 	 */

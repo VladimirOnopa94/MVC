@@ -5,6 +5,7 @@
     <base href="<?php echo siteUrl(); ?>">
     <meta charset="utf-8">
     <meta name="csrf-token" content="<?php echo csrfToken(); ?>">
+    <meta name="application-name" data-prefix="<?php echo getRoutePrefix() ?>"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
      <!-- Bootstrap -->
@@ -21,7 +22,21 @@
     <script src="<?php echo resource('/js/app.js') ?>"></script>
     <link rel="stylesheet" type="text/css" href="<?php echo resource('/css/style.css') ?>">
     <script src="<?php echo resource('/js/translate.json') ?>"></script>
-    
+    <?php   if (!empty($this->getMeta())) {
+      foreach ($this->getMeta() as $key => $meta) { ?>
+        <meta  <?php echo $meta['type']; ?>="<?php echo $meta['name']; ?>" content="<?php  echo $meta['content']; ?>" >
+      <?php }
+    } ?>
+    <?php   if (!empty($this->getStyle())) {
+      foreach ($this->getStyle() as $key => $style) { ?>
+        <link rel="stylesheet" type="text/css" href="<?php echo $style ?>">
+      <?php }
+    } ?>
+    <?php   if (!empty($this->getScript())) {
+      foreach ($this->getScript() as $key => $script) { ?>
+        <script type="text/javascript" src="<?php echo $script ?>"></script>
+      <?php }
+    } ?>
 
   </head>
 

@@ -17,13 +17,13 @@ app
 --------ua
 config
 ----routes
-tmp
-----log
-----cache
 public
 ----css
 ----image
 ----js
+storage
+----log
+----cache
 vendor
 ----composer
 ----framework
@@ -56,6 +56,29 @@ vendor
 
 	echo $this->render('parts/form1', compact('var1'), true);
 	die;
+
+	-------
+
+	Добавить мета теги 
+
+	В методе контроллера 
+
+	$this->setMeta('keywords', 'somekeywords'); ->> <meta name="keywords" content="somekeywords">
+	$this->setMeta('og:url', 'some content', 'property'); ->>  <meta property="og:url" content="some content">
+	$this->setStyle(resource('/css/some.css')); ->> <link rel="stylesheet" type="text/css" href="https://site.com/css/some.css">
+	$this->setScript(resource('/js/some.js')); <script type="text/javascript" src="https://site.com/js/some.js"></script>
+
+	В шаблоне в head выводим
+
+	$this->getScript()
+	$this->getStyle()
+	$this->getMeta()
+
+	 <?php   if (!empty($this->getScript())) {
+      foreach ($this->getScript() as $key => $script) { ?>
+        <script type="text/javascript" src="<?php echo $script ?>"></script>
+      <?php }
+    } ?>
 
 
 ********СМЕНА ШАБЛОНОВ В КОНТРОЛЛЕРАХ *******
@@ -252,6 +275,23 @@ route('contact') ->> test.com/contact
 
 	в переменную $errors записываются все ошибки
 		
+
+******************** Загрузка файлов *******************
+
+use framework\core\File;
+
+foreach ($_FILES as $key => $file) {
+		
+	$path = STORAGE . '/files'; путь к сохранению
+	$type = explode('.', $file['name']);
+	$type = end($type);
+	
+	$name = 'new_file' . '.' . $type;  // имя файла (опционально) 
+
+	File::move($file, $path);
+	File::move($file, $path, $name); 
+}
+
 
 ********************Временные сообщения *******************
 

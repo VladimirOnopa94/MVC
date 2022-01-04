@@ -11,10 +11,10 @@ class Logger
 
 	/**
 	 * Запись логов в указаный файл 
-	 * @param  string|array $massage 
+	 * @param  string|array $message 
 	 * @param  string $file    
 	 */
-	public static function log ($massage , string $file)
+	public static function log ($message , string $file)
 	{
 		try{
 			$log_param = config('kernel.log_param');
@@ -49,12 +49,12 @@ class Logger
 
 				$d_t = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 				$f_elem = array_shift($d_t);
-				if (is_array($massage)) {
-					$massage = '[' . date('Y-m-d H:i:s') . '] '. json_encode($massage);
+				if (is_array($message)) {
+					$message = '[' . date('Y-m-d H:i:s') . '] '. json_encode($message, JSON_UNESCAPED_SLASHES);
 				}else {
-					$massage = '[' . date('Y-m-d H:i:s') . '] '. $f_elem['file'] . ':' . $f_elem['line']  . ' message : ' . $massage;
+					$message = '[' . date('Y-m-d H:i:s') . '] '. $f_elem['file'] . ' : ' . $f_elem['line']  . ' message : ' . $message;
 				}
-				error_log($massage . PHP_EOL, 3, $file);
+				error_log($message . PHP_EOL, 3, $file);
 			}else{
 				throw new Exception("Undefined index: " . $file . ' in config "LOG_PARAM[`logs`]"'  );
 			}

@@ -1,17 +1,18 @@
 $(function() {
-//
-//Файл перевода для js (js/translate.json)
-//
-const translate = translateMessege;
-//console.log(translate.ru_header);
-//
-//
-//
-//
-
-
+	//
+	//Файл перевода для js (js/translate.json)
+	//
+	const translate = translateMessege;
+	//console.log(translate.ru_header);
+	//
+	//
 	//get csrf token 
 	var csrftoken = $('meta[name=csrf-token]').attr('content');
+	var lang = $('meta[name=application-name]').attr('data-lang');
+	//
+	//
+	//
+	//
     
 	//set title main page
 	/*$( "#main_page" ).on( "click", function() {

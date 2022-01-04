@@ -13,15 +13,47 @@ class View
 	public $data ;
 	public $layout ;
 	public $title ;
+	public $meta ;
+	public $style ;
+	public $script ;
 
-	function __construct($view, $data, $layout, $title)
+	function __construct($view, $data, $layout, $title, $meta, $style, $script)
 	{
 		$this->view = $view;
 		$this->data = $data;
 		$this->layout = $layout;
 		$this->title = $title;
+		$this->meta = $meta;
+		$this->style = $style;
+		$this->script = $script;
 	}
-
+	/**
+	 * Получить meta
+	 * @return  array $meta 
+	 */
+	public function getMeta(){
+		if (isset($this->meta) && !empty($this->meta)) {
+			return $this->meta;
+		}		
+	}
+		/**
+	 * Получить style
+	 * @return  array $style 
+	 */
+	public function getStyle(){
+		if (isset($this->style) && !empty($this->style)) {
+			return $this->style;
+		}		
+	}
+	/**
+	 * Получить script
+	 * @return  array $script 
+	 */
+	public function getScript(){
+		if (isset($this->script) && !empty($this->script)) {
+			return $this->script;
+		}		
+	}
 	/**
 	 * Подключаем файл вида 
 	 * @param  boolean $returnHtml 
@@ -72,7 +104,6 @@ class View
 			return $this->title;
 		}
 		return '';
-		
 	}
 
 	/**

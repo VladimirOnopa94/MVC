@@ -2,7 +2,7 @@
 use framework\core\Route\Route;
 
 
-Route::group(['suffix' => '.html', 'prefix' => getLang(true)], function(){ 
+Route::group(['suffix' => '', 'prefix' => getLang(true)], function(){ 
 
 		Route::get('' 						, 'Site\IndexController@Index')->name('main');
 		/*login*/

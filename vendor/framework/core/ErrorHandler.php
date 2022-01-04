@@ -29,7 +29,7 @@ class ErrorHandler
 		Обработчик ошибок
 		*/
 		public function errorHandler($errno, $errstr, $errfile, $errline){
-			$this->logger->log(array($errfile, $errline, $errstr)  , 'error');
+			$this->logger->log(array(base(), $errfile, $errline, $errstr)  , 'error');
 
 			$this->displayError($errno, $errstr, $errfile, $errline);
 			return true;
@@ -39,7 +39,7 @@ class ErrorHandler
 		Обработчик исключений
 		*/
 		public function exeptionHandler($e){
-			$this->logger->log(array($e->getFile(), $e->getLine(), $e->getMessage())  , 'error');
+			$this->logger->log(array(base(), $e->getFile(), $e->getLine(), $e->getMessage())  , 'error');
 			$this->displayError('Исключение', $e->getMessage(), $e->getFile(), $e->getLine());
 		}
 		/*
@@ -49,7 +49,7 @@ class ErrorHandler
 			$error = error_get_last();
 
 			if (!empty($error) && ($error['type'] === E_ERROR || $error['type'] === E_PARSE || $error['type'] === E_COMPILE_ERROR || $error['type'] === E_CORE_ERROR ) ) {
-				$this->logger->log(array( $error['file'], $error['line'], $error['type'], $error['message'])  , 'error');
+				$this->logger->log(array(base(), $error['file'], $error['line'], $error['type'], $error['message'])  , 'error');
 				ob_end_clean();
 				$this->displayError($error['type'], $error['message'], $error['file'], $error['line'] );
 			}else{
