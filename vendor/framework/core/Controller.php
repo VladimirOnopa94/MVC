@@ -2,15 +2,16 @@
 namespace framework\core;
 
 use framework\core\Mail;
-use framework\core\Csrf;
+use framework\core\App;
 use framework\core\Language;
-use framework\core\Auth\Authenticate;
+
 
  /**
  * Класс контроллера приложения
  */
 abstract class Controller 
 {
+	public $global_vars = [];
 	public $title;
 	protected $middlewares = [];
 	public $layout;
@@ -19,7 +20,7 @@ abstract class Controller
 	public $style = [];
 	public $script = [] ;
 	
-	use Authenticate;
+
 
 	function __construct($layout = '')
 	{
@@ -28,8 +29,8 @@ abstract class Controller
 		}else{
 			$this->layout = $this->layout;
 		}
-
-		CSRF::getCSRFToken(); // Пишем в сессию CSRFToken
+		
+		App::$app->request->getCSRFToken(); // Пишем в сессию CSRFToken
 
 		(!isset($this->csrf)) ? $this->csrf = true : $this->csrf;
 
@@ -63,7 +64,7 @@ abstract class Controller
 	 */
 	public function render($view = '', $data = array(), $returnHtml = false)
 	{	
-		$view = new View($view, $data, $this->layout, $this->title,  $this->meta,  $this->style,  $this->script);
+		$view = new View($view, $data, $this->layout, $this->title,  $this->meta,  $this->style,  $this->script,  $this->global_vars);
 		$view->getView($returnHtml);
 	}
 

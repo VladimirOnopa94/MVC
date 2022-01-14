@@ -60,7 +60,7 @@ function getLang($forceHideDefaultLanguage = false)
  */
 function csrfToken() 
 {
-	return \framework\core\Csrf::getCSRFToken();
+	return \framework\core\App::$app->request->getCSRFToken();
 }
 /**
  * Редирект по url
@@ -68,7 +68,7 @@ function csrfToken()
  */
 function redirect($url) 
 {
-	header('Location: '.$url);
+	header('Location: ' . $url);
 }
 /**
  * Редирект назад
@@ -76,14 +76,6 @@ function redirect($url)
 function redirectBack() 
 {
 	redirect($_SERVER['HTTP_REFERER']);
-}
-/**
- * Вернет залогиненого пользователя если он вошел в систему или false
- * @return mixed 
- */
-function Auth() 
-{
-	return framework\core\Auth\Authenticate::checkAuth();
 }
 /**
  * Получить url сайта без строки запроса 

@@ -1,3 +1,8 @@
+<?php  
+  use framework\core\App;
+
+  $this->language('header');
+?>
 <header class="bg-light">
   <nav class="navbar navbar-expand-lg navbar-light  container">
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -11,7 +16,7 @@
         <li class="nav-item <?php if(currLoc() == route('/phonebook')){ echo 'active'; } ?>">
           <a class="nav-link" id="phonebook_page" href="javascript:void(0);"><?php echo __("phonebook_title"); ?></a>
         </li>
-        <?php if ($user = Auth()) { ?>
+        <?php if ($user = App::$app->user->checkAuth()) { ?>
            <li class="nav-item <?php if(currLoc() == route('/contact')){ echo 'active'; } ?>">
             <a class="nav-link" id="mycontact_page" href="javascript:void(0);"><?php echo __("contact_title"); ?></a>
           </li>
@@ -20,7 +25,7 @@
     </div>
     <div class="d-flex">
       <ul class="navbar-nav">
-        <?php if (Auth()) { ?>
+        <?php if (App::$app->user->checkAuth()) { ?>
            <li class="nav-item <?php if(currLoc() == route('/logout')){ echo 'active'; } ?>">
             <a class="nav-link" href="<?php echo route('/logout') ?>"><?php echo __("logout_title"); ?></a>
           </li>
@@ -34,9 +39,9 @@
         <?php } ?>
       </ul>
 
-       <?php app\components\widgets\Lang::widget(); ?> 
+       <?php \app\components\widgets\Lang::widget(); ?> 
     </div>
   </nav>
 </header>
 
-<?php route('/users'); ?>
+

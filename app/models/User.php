@@ -1,5 +1,5 @@
 <?php 
-namespace app\models\Auth;
+namespace app\models;
 use app\models\Model;
 
 /**
@@ -48,14 +48,26 @@ class User extends Model
 	/*
 		Создать нового пользователя
 	*/
-	public function createUser($data)
+	public function createUser($data, $role = 1)
 	{
 		
-       
-        return $this->query(
-            "INSERT {$this->table} (name, password, created_at, updated_at)  VALUES (?, ?, ?, ?)", 
-            [$data['name'], md5($data['password']), date('Y-m-d H:i:s'), date('Y-m-d H:i:s')]
+        $params = [
+            'name' => $data['name'],
+            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'role' =>  $role,
+            'created_at' =>  date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]; 
+        $id = $this->query(
+            "INSERT {$this->table} (name, password, role, created_at, updated_at)  VALUES (:name, :password, :role, :created_at, :updated_at)", 
+            $params
         );
+        if (isset($id) && !empty($id)) { 
+            return $id;
+        }
+        return false;
+        
+        
 
 	}
 

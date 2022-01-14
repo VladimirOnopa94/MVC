@@ -6,7 +6,7 @@ use app\controllers\Controller;
 use app\components\widgets\Breadcrumbs;
 use framework\core\Validate as VD;
 use framework\core\Mail;
-use app\models\Auth\User;
+use app\models\User;
 use framework\core\App;
 
 
@@ -41,15 +41,13 @@ class RegisterController extends Controller{
 			]); 
 
 			if (empty($errors)) {
-				if (empty((array) $this->getUserByName($credentials['name']))) { /*Проверка есть ли такой пользователь*/	
+				if (empty((array) App::$app->user->userByName($credentials['name']))) { /*Проверка есть ли такой пользователь*/	
 
-					$user = $this->Register($credentials);
+					$user = $this->Register($credentials, 1);
 
-					if ($user && $this->Auth($user, true)) { /*Если нет  ошибок при регистрации, логинем юзера*/
-
-						
+					if ($user && App::$app->user->login($user)) { /*Если нет  ошибок при регистрации, логинем юзера*/
 						flashMessage('success', 'Вы успешно зарегистрировались');
-						redirect('/');
+						redirect(route('main'));
 
 					}else{
 						flashMessage('error', 'Ошибка');
@@ -72,13 +70,13 @@ class RegisterController extends Controller{
 	/* 
     	Регистрация пользователя 
     */
-    public function Register($credentials) 
+    public function Register($credentials, $role) 
     {
     	$userObj = new User;
-        $id = $userObj->createUser($credentials); 
+        $id = $userObj->createUser($credentials, $role); 
         
-        if (isset($id) && !empty($id)) {           
-            return $this->userById($id);
+        if ($id !== false) {  
+            return $userObj->getUserById($id);
         }
         return false;      
     } 

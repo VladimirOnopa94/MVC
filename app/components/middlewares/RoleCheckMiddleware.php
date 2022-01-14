@@ -1,5 +1,6 @@
 <?php 
 namespace app\components\middlewares;
+use framework\core\App;
 use framework\core\Middleware;
 use framework\core\Error\ErrorController;
 use Exception;
@@ -12,7 +13,7 @@ class RoleCheckMiddleware extends Middleware
 
     	if ($user !== false) {
 
-	        if ($this->checkRole('user', 1)) {
+	        if (App::$app->user->checkRole('user', 1)) {
 	           	return true;    
 	        }else{
 

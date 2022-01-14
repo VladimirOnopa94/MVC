@@ -42,15 +42,14 @@
 
   <body>
 
-    <?php app\components\widgets\Header::widget(); ?>
-     
+    <?php $this->render('parts/header'); ?>
 
     <div class="main container" style="padding-top: 10px;">
       <?php app\components\widgets\Breadcrumbs::widget(array('name' => 'Главная', 'href' => url('/'))); ?>
       <?php echo $content; ?>
     </div>
-
-    <?php app\components\widgets\Footer::widget(); ?>
+    
+    <?php $this->render('parts/footer'); ?>
 
   </body>
 

@@ -1,7 +1,7 @@
 <?php 
 namespace app\controllers\Site;
 
-use app\models\Auth\User;
+use app\models\User;
 use app\models\Category;
 use app\controllers\Controller;
 use framework\core\App;
@@ -13,6 +13,7 @@ class IndexController extends Controller{
 
 	public function index($request)
 	{
+
 
 		//if (!$data = App::$app->cache->get('test')) {
 
@@ -31,7 +32,7 @@ class IndexController extends Controller{
 	
 	public function Api($request)
 	{
-		//if ($data = App::request()->post()) {
+		//if ($data = App::$app->request->post()) {
 
 			//App::$app->logger->log(json_encode($data) , 'success_register');
 		//}

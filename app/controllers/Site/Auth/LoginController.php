@@ -2,7 +2,7 @@
 namespace app\controllers\Site\Auth;
 
 
-use app\models\Auth\User;
+use app\models\User;
 
 use app\controllers\Controller;
 //use app\components\events\RegisterUserEvent;
@@ -59,6 +59,7 @@ class LoginController extends Controller{
 	*/	
 	public function Login($request)
 	{
+		$this->language('login');
 		
 		if ($data = App::$app->request->post()) {
 	
@@ -80,21 +81,28 @@ class LoginController extends Controller{
 			}*/
 
 			if (empty($errors)) {
-				$response = $this->Auth($credentials, false);
-				
-				if (is_bool($response) === true) {
-					flashMessage('success', 'Успешно вошли');
-					redirect('/');
-				}else{
-					(!isset($_SESSION['loginAttemptCount'])) ? $_SESSION['loginAttemptCount'] = 1 : '';
 
-					flashMessage('error', $response);
-					redirect('/login');exit;
+				$user = App::$app->user->userByName($credentials['name']);
+
+				if (App::$app->user->validatePassword($credentials['password'], $user['password'])) {
+					if (App::$app->user->login($user) === true) {
+
+						flashMessage('success', 'Успешно вошли');
+						redirect(route('main'));
+					}else{
+						(!isset($_SESSION['loginAttemptCount'])) ? $_SESSION['loginAttemptCount'] = 1 : '';
+
+						flashMessage('error', 'Что то пошло не так');
+						redirect(route('/login'));exit;
+					}
+				}else{
+					flashMessage('error',  __('wrong_pass'));
+					redirect(route('/login'));exit;
 				}
 	
 			}else{
 				flashMessage('error', implode('<br>', $errors));
-				redirect('/login');exit;
+				redirect(route('/login'));exit;
 			}
 			
 		}
@@ -103,7 +111,7 @@ class LoginController extends Controller{
 
 	public function Logout() 
 	{
-		$this->logoutUser();
+		App::$app->user->logout();
 	}
 
 

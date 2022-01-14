@@ -1,6 +1,7 @@
 <div class="container">
+
 	<footer class="pt-4 my-md-5 pt-md-5 border-top">
-		<?php echo $footer_data; ?>
+		<?php  var_dump($footer_data); ?>
 		<div class="row">
 		  <div class="col-12 col-md">
 		    <small class="d-block mb-3 text-muted">© 2017- <?php echo date("Y") ?></small>

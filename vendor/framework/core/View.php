@@ -10,6 +10,7 @@ class View
 {
 	
 	public $view ;
+	public $global_vars ;
 	public $data ;
 	public $layout ;
 	public $title ;
@@ -17,9 +18,10 @@ class View
 	public $style ;
 	public $script ;
 
-	function __construct($view, $data, $layout, $title, $meta, $style, $script)
+	function __construct($view, $data, $layout, $title, $meta, $style, $script, $global_vars)
 	{
 		$this->view = $view;
+		$this->global_vars = $global_vars;
 		$this->data = $data;
 		$this->layout = $layout;
 		$this->title = $title;
@@ -53,6 +55,14 @@ class View
 		if (isset($this->script) && !empty($this->script)) {
 			return $this->script;
 		}		
+	}
+	/**
+	 * Подключение языкового файла
+	 * @param  String $view 
+	 */
+	public function language($view)
+	{
+		Language::includeLang($_COOKIE['lang'], $view);
 	}
 	/**
 	 * Подключаем файл вида 
@@ -120,6 +130,11 @@ class View
 		
 		if (isset($data)) { //Извлекаем переменные из контроллера для view
 			extract($data);
+		}
+
+		//Извлекаем "глобальные" переменные из пользовательского контроллера /app/controllers/Controller
+		if (isset($this->global_vars)) { 
+			extract($this->global_vars);
 		}
 
 		if (is_file($file_view)){

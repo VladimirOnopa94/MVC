@@ -18,7 +18,6 @@ abstract class Model
 
 	public function query ($sql, $params)
 	{	
-		
 		return $this->pdo->execute($sql, $params);
 	}
 
@@ -40,7 +39,9 @@ abstract class Model
 
 		$sql = "SELECT * FROM {$this->table} WHERE $field = ? LIMIT 1" ;
 
-		return $this->pdo->query($sql, [$id]);
+		$result = $this->pdo->query($sql, [$id]);
+		
+		return array_shift($result);
 	}
 
 

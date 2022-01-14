@@ -2,7 +2,7 @@
 
 namespace framework\core;
 use framework\core\Language;
-use framework\core\Csrf;
+use framework\core\App;
 use Exception;
 
 /**
@@ -15,7 +15,7 @@ class Widget
 	
 	function __construct()
 	{
-		CSRF::getCSRFToken(); // Пишем в сессию CSRFToken
+		App::$app->request->getCSRFToken(); // Пишем в сессию CSRFToken
 
 		(!isset($this->csrf)) ? $this->csrf = true : $this->csrf;
 

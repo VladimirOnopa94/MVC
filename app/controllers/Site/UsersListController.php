@@ -1,7 +1,7 @@
 <?php 
 namespace app\controllers\Site;
 
-use app\models\Auth\User;
+use app\models\User;
 use app\models\Model as DB;
 use app\controllers\Controller;
 use framework\core\App;

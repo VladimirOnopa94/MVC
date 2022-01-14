@@ -30,7 +30,7 @@ return [
 			'ua' => [ 'name' => 'Украинский', 'image' => ''], 
 			'en' => [ 'name' => 'Английский', 'image' => ''], 
 		], 
-		// отображать язык по умолчанию в url
+		// скрыть язык по умолчанию в url
 		'hide_default' =>  true 
 	],
 	/*
@@ -38,6 +38,7 @@ return [
 	 */
 	'components' => [
 		'cache' => 'framework\core\Cache',
+		'user' => 'app\components\modules\Identity',
 		'request' => 'framework\core\Request',
 		'logger' => 'framework\core\Logger',
 	],
