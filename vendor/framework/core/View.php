@@ -138,7 +138,7 @@ class View
 		}
 
 		if (is_file($file_view)){
-			require_once $file_view;
+			require $file_view;
 		}else{
 			throw new Exception("View {$file_view} not found !");
 		}

@@ -124,7 +124,7 @@ class Validate
 	private static function required ($field){
 		$data = self::$data[$field];
 
-		if (!isset($data) || empty($data) ) {
+		if (!isset($data) || (empty($data) && $data !== '0') ) {
 			self::$errors[$field][] = "Поле {$field} обязательное";
 		}
 	}

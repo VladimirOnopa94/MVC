@@ -4,20 +4,20 @@
  	перед передачей запроса пользовательскому контроллеру
  */
 namespace framework\core;
-use framework\core\Auth\Authenticate;
+
 
 abstract class Middleware
 {
 
-	use Authenticate;
-
 	/**
 	 * Записать массив методов на которые действует Middleware
-	 * @param array $actions 
+	 * @param array $actions  
+	 * @param array $data опциональные данные
 	 */
-	public function __construct($actions = [])
+	public function __construct($actions = [], $data = [])
 	{
 		$this->actions = $actions;
+		$this->data = $data;
 	}
    	/**
    	 * Выполнить скрипт  
