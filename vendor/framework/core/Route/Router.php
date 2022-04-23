@@ -1,7 +1,7 @@
 <?php 
 namespace framework\core\Route;
 use Exception;
-use framework\core\Language;
+use framework\core\localization;
 use framework\core\App;
 use framework\core\ErrorHandler;
 use framework\core\Route\Route;
@@ -53,7 +53,7 @@ class Router
 		}
 		
 		/*Если переключен язык производится редирект , иначе ничего не происходит*/
-		Language::isLangSwitch($url);  
+		localization::isLangSwitch($url);  
 
 		return $url;
 	}

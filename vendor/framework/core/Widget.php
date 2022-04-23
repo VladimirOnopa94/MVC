@@ -1,7 +1,7 @@
 <?php 
 
 namespace framework\core;
-use framework\core\Language;
+use framework\core\localization;
 use framework\core\App;
 use Exception;
 
@@ -77,7 +77,7 @@ class Widget
 	 */
 	public function language($view)
 	{
-		Language::includeLang($_COOKIE['lang'], $view);
+		localization::includeLang($_COOKIE['lang'], $view);
 	}
 
 	/**

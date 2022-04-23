@@ -9,7 +9,7 @@
  */
 function __($key, $data = [])
 {
-	return \framework\core\Language::getPhrase($key, $data);
+	return \framework\core\Localization::getPhrase($key, $data);
 }
 /**
  * Формирование ссылки 
@@ -20,7 +20,7 @@ function __($key, $data = [])
  */
 function url($url, $prefix = '', $short = false) 
 {
-	return \framework\core\Language::createLink($url, $prefix, $short);
+	return \framework\core\Localization::createLink($url, $prefix, $short);
 }
 /**
  * Формирование роута
@@ -53,7 +53,7 @@ function currLoc()
  */
 function getLang($forceHideDefaultLanguage = false) 
 {
-	return \framework\core\Language::getLang($forceHideDefaultLanguage);
+	return \framework\core\Localization::getLang($forceHideDefaultLanguage);
 }
 /**
  * Вернуть текущий токен
@@ -95,7 +95,7 @@ function base()
 	return rtrim($url, '/');
 }
 /**
- * Укороченая функция дампа
+ * Вывести дамп переменной и завершить выполнение 
  * @return mixed 
  */
 function dd($var)
@@ -104,6 +104,16 @@ function dd($var)
 	var_dump($var);
 	echo '</pre>';
 	exit;
+}
+/**
+ * Вывести дамп переменной
+ * @return mixed 
+ */
+function dump($var)
+{ 
+	echo '<pre>';
+	var_dump($var);
+	echo '</pre>';
 }
 /**
  * Сформировать абсолютный путь к ресурсу
