@@ -10,8 +10,9 @@ class Controller extends \framework\core\Controller
     public $global_vars ;   
 
     function __construct(){
+        
         //$this->cart = 'somedata';   
-        $this->global_vars['footer_data'] = 'somedata';   
+        $this->global_vars['footer_data'] = 'somedata';    
 
         parent::__construct();
     }
