@@ -62,7 +62,7 @@ class View
 	 */
 	public function language($view)
 	{
-		localization::includeLang($_COOKIE['lang'], $view);
+		Language::includeLang($_COOKIE['lang'], $view);
 	}
 	/**
 	 * Подключаем файл вида 

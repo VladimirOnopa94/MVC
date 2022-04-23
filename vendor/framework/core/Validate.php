@@ -192,28 +192,6 @@ class Validate
 		}
 	}
 	/**
-	 * Проверка заполнености поля $field если поля в $args не заполнены
-	 * @param  String $fields 
-	 * @param  String $args 
-	 * @return errors      
-	 */
-	private static function required_without ($field, $args){
-		$data = (isset(self::$data[$field])) ? self::$data[$field] : '';
-		$fields_check = explode(',', $args);
-		
-		if (isset($args)) {
-			if (!isset($data) || empty($data)) {
-				foreach ($fields_check as $key => $arg) {
-					$arg = str_replace(' ', '', $arg);
-
-					if (!isset(self::$data[$arg]) || (empty(self::$data[$arg]) && self::$data[$arg] !== '0' )) {
-						self::$errors[$field][] = "Поле {$field} должно быть заполненно если не заполнены " . implode(',', $fields_check);
-					}
-				}
-			}
-		}
-	}
-	/**
 	 * Валидация поля содержащего только допустимые расширения изображения
 	 * @param  String $field 
 	 * @return errors      

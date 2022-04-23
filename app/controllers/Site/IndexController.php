@@ -25,7 +25,6 @@ class IndexController extends Controller{
 		$this->setScript(resource('/js/some.js'));*/
 
 		$this->language('index');
-
 		$this->setTitle('Главная');
 		
 		$this->render('index');

@@ -3,7 +3,7 @@ namespace framework\core;
 
 use framework\core\Mail;
 use framework\core\App;
-use framework\core\localization;
+use framework\core\Language;
 
 
  /**
@@ -74,7 +74,7 @@ abstract class Controller
 	 */
 	public function language($view)
 	{
-		localization::includeLang($_COOKIE['lang'], $view);
+		Language::includeLang($_COOKIE['lang'], $view);
 	}
 	/**
 	 * Задать заголовок

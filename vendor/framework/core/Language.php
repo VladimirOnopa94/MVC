@@ -5,7 +5,7 @@ use Exception;
 /**
  *  Класс переводов
  */
-class Localization 
+class Language 
 {
 
 	public static $lang_data = [];
@@ -35,24 +35,10 @@ class Localization
 	 * @param  array $data 
 	 * @return string Сформированая строка перевода
 	 */
-	public static function getPhrase (string $key, array $data)
+	public static function getPhrase ($key, $data)
 	{
-		$keys = explode('.', $key);
-
-		$phrase = self::$lang_data;
-		//Проходимся по всем переданым ключам
-		array_walk_recursive($keys, function($v, $k) use (&$phrase){
-			if (is_array($phrase)) {
-				if (array_key_exists($v, $phrase)) {
-					$phrase = $phrase[$v];
-				}
-			}else{
-				$phrase = false;
-			}
-		});
-
-		if ($phrase !== false) {
-			$text = $phrase;
+		if (isset(self::$lang_data[$key])) {
+			$text = self::$lang_data[$key];
 		}else{
 			return $key;
 		}
@@ -61,8 +47,9 @@ class Localization
 			foreach ($data as $key => $value) {
 				$text = str_replace(':' . $key, $value, $text);
 			}
+		}else{
+			return $text;
 		}
-		return $text;
 	}
 
 	/**
