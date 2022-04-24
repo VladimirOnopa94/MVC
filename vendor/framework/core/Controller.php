@@ -3,7 +3,7 @@ namespace framework\core;
 
 use framework\core\Mail;
 use framework\core\App;
-use framework\core\Language;
+use framework\core\Localization;
 
 
  /**
@@ -31,6 +31,8 @@ abstract class Controller
 		}
 		
 		App::$app->request->getCSRFToken(); // Пишем в сессию CSRFToken
+
+		Localization::getLang(); //Установить язык по умолчанию
 
 		(!isset($this->csrf)) ? $this->csrf = true : $this->csrf;
 
@@ -74,7 +76,9 @@ abstract class Controller
 	 */
 	public function language($view)
 	{
-		Language::includeLang($_COOKIE['lang'], $view);
+		$code = (isset($_COOKIE['lang'])) ? $_COOKIE['lang'] :  config('kernel.language')['def_lang'];
+
+		Localization::includeLang($code, $view);
 	}
 	/**
 	 * Задать заголовок
@@ -118,7 +122,9 @@ abstract class Controller
 	private function checkCSRF ()
 	{
 		if ($this->csrf) { 
+
 			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
 				if (!isset($_POST['token'])) {
 					die("CSRF not passed");
 				}

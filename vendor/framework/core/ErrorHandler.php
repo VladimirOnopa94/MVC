@@ -67,6 +67,7 @@ class ErrorHandler
  				$controller = new Error\ErrorController();
  				$controller->ShowError();
 			}
+			
 			if (DEBUG['enable'] && (!empty(DEBUG['ip']) && in_array($_SERVER['REMOTE_ADDR'], DEBUG['ip']))) {
 				echo $errno . ' ' . $errfile . ':' . $errline . ' ' . $errstr;
 			}elseif (DEBUG['enable'] && (empty(DEBUG['ip']) && !in_array($_SERVER['REMOTE_ADDR'], DEBUG['ip']))) {

@@ -1,6 +1,7 @@
 <?php 
-
 namespace framework\core;
+
+use framework\core\Localization;
 use Exception;
 
 /**
@@ -62,7 +63,9 @@ class View
 	 */
 	public function language($view)
 	{
-		Language::includeLang($_COOKIE['lang'], $view);
+		$code = (isset($_COOKIE['lang'])) ? $_COOKIE['lang'] :  config('kernel.language')['def_lang'];
+		
+		Localization::includeLang($code, $view);
 	}
 	/**
 	 * Подключаем файл вида 

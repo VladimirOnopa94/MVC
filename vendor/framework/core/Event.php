@@ -20,7 +20,7 @@ abstract class Event
     	$this->eventVariables = get_object_vars($this);//получим переменные из пользовательского события
 
     	if (!array_key_exists($event, $this->eventsList)) {
-    		throw new Exception("Event not exist in events.php" );
+    		throw new Exception("Event not exist in kernel.php" );
     	}else{
     		$this->callListener($event);
     	}

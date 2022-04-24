@@ -1,5 +1,7 @@
 <?php 
 namespace framework\core;
+
+use framework\core\Localization;
 use Exception;
 
 /**
@@ -111,6 +113,15 @@ class Mail
         }
         
         mail($mailTo, $this->subject, $content, $this->headers);
+	}
+
+	/**
+	 * Подключение языкового файла
+	 * @param  String $view 
+	 */
+	public function language($view)
+	{
+		Localization::includeLang($_COOKIE['lang'], $view);
 	}
 	
 

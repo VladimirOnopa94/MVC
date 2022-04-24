@@ -37,7 +37,7 @@ class Logger
 
 					try{
 						if (!file_exists($dir)) {
-							if (!mkdir($dir, 0777, true)){
+							if (!mkdir($dir, 0755, true)){
 									throw new Exception("Impossible to create dir " . $dir );
 								}
 							} 

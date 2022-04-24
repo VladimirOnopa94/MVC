@@ -221,6 +221,7 @@ class Pagination
     private function amount()
     {
         # Делим и возвращаем
+      
         return round($this->total / $this->limit);
     }
 
