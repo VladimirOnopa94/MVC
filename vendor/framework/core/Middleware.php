@@ -5,6 +5,7 @@
  */
 namespace framework\core;
 
+use framework\core\Localization;
 
 abstract class Middleware
 {
@@ -23,6 +24,17 @@ abstract class Middleware
    	 * Выполнить скрипт  
    	 */
     abstract public function execute();
+
+    /**
+	 * Подключение языкового файла
+	 * @param  String $view 
+	 */
+	public function language($view)
+	{
+		$code = (isset($_COOKIE['lang'])) ? $_COOKIE['lang'] :  config('kernel.language')['def_lang'];
+
+		Localization::includeLang($code, $view);
+	}
     
 
     
